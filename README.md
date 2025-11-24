@@ -1,8 +1,7 @@
 # Domain-Specific LLM for Reliability Engineering
 
 **Research Project** | CentraleSupélec - LGI Laboratory  
-**Supervisor**: Zhiguo Zeng
-**Group Members**: Alex Dalban, Elora
+**Supervisor**: Zhiguo Zeng | **Group Members**: Alex Dalban, Elora
 
 Fine-tuning Large Language Models for reliability engineering through self-instruct synthetic data generation.
 
