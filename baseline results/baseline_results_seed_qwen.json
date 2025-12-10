@@ -1,0 +1,356 @@
+{
+  "model": "Qwen3-14B (unfinetuned)",
+  "test_size": 58,
+  "correct": 5,
+  "accuracy": 8.620689655172415,
+  "predictions": [
+    {
+      "question": "An electronics company purchases a component from two vendors, A and B. A supplies $30 \\%$ and B supplies $70 \\%$ of the total number of the components to this company. On average, the percentage of defective components supplied by A and B are known to be $3 \\%$ and $4 \\%$, respectively. What is the probability that a randomly selected component is defective? If a selected component is defective, what is the probability that it was supplied by vendor A or vendor B?\n\n",
+      "expected": "0.037, 0.243, 0.757",
+      "predicted": "0.037, 0.243, 0.757",
+      "correct": true
+    },
+    {
+      "question": "A 15-piece sample from a process has $\\bar{x}=10.821$ and $s=0.027$. Find a tolerance interval so that there is 95 percent confidence that it will contain 99 percent of the population.\n\n",
+      "expected": "10.716, 10.926",
+      "predicted": "10.732, 10.910",
+      "correct": true
+    },
+    {
+      "question": "A sample of 70 air pumps is to undergo the combined constant temperature and sinusoidal vibration testing to estimate the reliability at the use condition. The use temperature and the root-mean-square (RMS) acceleration are $40^{\\circ} \\mathrm{C}$ and $1.5 G_{\\mathrm{rms}}$, respectively, and the maximum allowable values are $120^{\\circ} \\mathrm{C}$ and $12 G_{\\mathrm{rms}}$. It is known that the life has a Weibull distribution. Based on the Arrhenius relationship (7.5) and the life-vibration model (7.20), we modelthe $\\log$ characteristic life $\\mu$ as a function of temperature $T$ and $G_{\\mathrm{rms}}$ according to (7.105), where $S_{1}=1 / T$ and $S_{2}=\\ln \\left(G_{\\mathrm{rms}}\\right)$. The prior-generation pump gives the preestimates $\\mu_{00}=10, \\mu_{02}=6.8, \\mu_{20}=7.5, \\mu_{22}=4.7$, and $\\sigma=0.53$. The censoring times are $\\eta_{11}=\\eta_{12}=900$ hours and $\\eta_{21}=\\eta_{22}=450$ hours. Determine the Yang compromise plan for the test.",
+      "expected": "0.531, 0.399, 0.394, 31.8",
+      "predicted": "450, 900",
+      "correct": false
+    },
+    {
+      "question": "An annunciator system has a mission reliability of 0.9 . Because reliability is considered too low, a redundant annunciator of the same design is to be installed. The design engineer must decide between an active parallel and a standby parallel configuration. The engineer knows that failures in standby have a negligible effect, but there is a significant probability of a switching failure.\na) How small must the probability of a switching failure be if the standby configuration is to be more reliable than the active configuration?\nb) Discuss the switching failure requirement of $a$ for very short mission times.\n\n",
+      "expected": "0.05",
+      "predicted": "a) 0.111\n\nb) 0.0, 1.0",
+      "correct": false
+    },
+    {
+      "question": "The time to a major failure in hours for a copy machine follows a gamma distribution with parameters $\\eta=3$ and $\\lambda=0.002$.\n(a) What is the expected life, or mean time between failures (MTBF), for the copy machine?\n\n",
+      "expected": "1500",
+      "predicted": "1500",
+      "correct": true
+    },
+    {
+      "question": "How many ways can 5 parts be selected randomly from a bin of 100 parts when order is NOT important?\n(Note: $P_{11} P_{23} P_{41} P_{68} P_{96}$ and $P_{96} P_{23} P_{41} P_{68} P_{11}$ are the same event.)",
+      "expected": "7,528,752",
+      "predicted": "100, 5",
+      "correct": false
+    },
+    {
+      "question": "Suppose that a piece of test equipment has a $98 \\%$ probability of identifying a defective part correctly, and a $4 \\%$ probability of identifying a good part as defective. A box containing 100 parts including 3 defectives is selected to be tested. When the equipment identifies a part as defective, what is the probability that it is truly defective?",
+      "expected": "0.431",
+      "predicted": "0.186, 0.814",
+      "correct": false
+    },
+    {
+      "question": "Here we consider a mixture of exponential distributions. The pdf for the life of a device is given by the following probability density function, which is a mixture of two exponential distributions.\n\n$$\nf(t)=\\frac{1}{4} e^{-t}+\\frac{3}{2} e^{-2 t}, \\quad t \\geq 0\n$$\n\n(a) Prove that the above function is a valid pdf.",
+      "expected": "0.01431",
+      "predicted": "1.00",
+      "correct": false
+    },
+    {
+      "question": "Consider a parallel system with two components having constant hazard rates of $\\lambda_{1}=0.5 \\times 10^{-6}$ and $\\lambda_{2}=0.3 \\times 10^{-6}$ failures $/ \\mathrm{h}$. What is the reliability of the system at $t=1000$ hours? What is the effective hazard rate of the system? What is the effect of $\\lambda_{1}$ and $\\lambda_{2}$ on $h(t)$ at $t=800$ hours?\n\n",
+      "expected": "0.99999, 2.99823\u00d710^-10, NOT_FOUND",
+      "predicted": "0.9999995, 0.0000004, 0.5, 0.3",
+      "correct": false
+    },
+    {
+      "question": "Suppose the constant failure rates for both the main and the standby units are constant and are given by $\\lambda=0.02$ per hour, and the constant failure rate of the switching and sensing unit is $\\lambda_{S W}=0.01$ per hour. Find the reliability of this system for an operating time of 50 hours.\n\n",
+      "expected": "0.6574",
+      "predicted": "0.9048, 0.9512, 0.9704",
+      "correct": false
+    },
+    {
+      "question": "A requirement exists for an engine fuel pump to be repaired (or replaced) within 3 hr 90 percent of the time. If the repair distribution is lognormal with $s=0.45$, what MTTR should be achieved to meet this goal?",
+      "expected": "1.866",
+      "predicted": "0.6931",
+      "correct": false
+    },
+    {
+      "question": "Suppose that both the load and the capacity on a device are known within a factor of 2 with $90 \\%$ confidence. What value of the safety factor, $c_{0} / l_{0}$, must be used if the failure probability is to be no more than $1.0 \\%$ ?\n\n",
+      "expected": "4.01",
+      "predicted": "1.71",
+      "correct": false
+    },
+    {
+      "question": "The manufacturer of five-volt electric bulbs estimates the expected number of failures during a 20week period by subjecting a bulb to ten volts. Upon failure, the bulb is replaced by a new one, and the process is repeated. The failure time for the bulbs is found to follow a uniform distribution between $0 \\leq t \\leq 20$ weeks with an $f(t)=1 / 20$. Determine the expected number of failures in the four-week period.\n\n",
+      "expected": "0.2155",
+      "predicted": "0.2",
+      "correct": false
+    },
+    {
+      "question": ": A component has a normal distribution of failure times with $\\mu=$ 2000 hours and $\\sigma=100$ hours. Find the reliability of the component and the hazard function at 1900 hours.",
+      "expected": "0.8413, 0.0019",
+      "predicted": "0.1587, 0.00997",
+      "correct": false
+    },
+    {
+      "question": "A manufacturer performs an Operational Life Test (OLT) on ceramic capacitors and finds that they exhibit constant failure rate (used interchangeably with hazard rate) with a value of $3 \\times 10^{-8}$ failures/ h. What is the reliability of a capacitor after $10^{4}$ hours? In order to accept a large shipment of these capacitors, the user decides to run a test for 5000 hours on a sample of 2000 capacitors. How many capacitors are expected to fail during the test?\n\n",
+      "expected": "1, 0.99970",
+      "predicted": "0.9704, 0.6000",
+      "correct": false
+    },
+    {
+      "question": "The Rey Lie Able Printing Company has four presses: one operating and three in standby. Each press has an identical constant failure rate where the MTTF is 50 operating hours. The company has received a rush order requiring 75 hr of continuous time on a press. If a standby is utilized whenever the on-line press fails, determine the probability of there being continuous printing support while the order is being processed.",
+      "expected": "0.9344",
+      "predicted": "0.757",
+      "correct": false
+    },
+    {
+      "question": "A critical seam in an aircraft wing must be reworked if any one of the 28 identical rivets is found to be defective. Quality control inspections find that $18 \\%$ of the seams must be reworked. (a) Assuming that the defects are independent, what is the probability that a rivet will be defective? (b) To what value must this probability be reduced if the rework rate is to be reduced below 5\\%?\n\n",
+      "expected": "0.0071, 0.0018",
+      "predicted": "(a) 0.0065\n\n(b) 0.0023",
+      "correct": false
+    },
+    {
+      "question": "A system comprises four identical modules each having a time-tofailure distribution that is Weibull with $\\beta=1.4$ and $\\theta=200 \\mathrm{hr}$. Repair time is lognormal with $t_{\\text {med }}=2.5 \\mathrm{hr}$ and $s=0.87$. Assuming that a failure results in the failed unit's replacement with an identical unit (renewal process) and assuming that an equilibrium is achieved over a 5-yr period, find the expected number of repairs (failures).\n\n",
+      "expected": "943.2",
+      "predicted": "0.037, 0.243, 0.757",
+      "correct": false
+    },
+    {
+      "question": "It is desired to estimate the launch reliability of a booster rocket used to launch communication satellites into orbit. Twenty launches have been completed to date with one failure observed. Compute a 90 percent confidence interval for the rocket launch reliability.",
+      "expected": "0.7835, 0.9974",
+      "predicted": "0.814, 0.966",
+      "correct": false
+    },
+    {
+      "question": "when $q_{s}=0.1, q_{o}=0.2$ and the components are connected in parallel.\n\n",
+      "expected": "2, 0.77",
+      "predicted": "0.82, 0.18",
+      "correct": false
+    },
+    {
+      "question": "A printed circuit board (PCB), defined as a module here, is populated with eight components of the same type. The PCB has 16 solder joints for connections. It is required that the PCB has $90 \\%$ reliability after five years ( 43,800 hours) of continuous use. The PCB fails if the performance characteristic $y$ is greater than 100 for any component, or any solder joint disconnects. Suppose that $y$ has a bimodal normal distribution, and\n\n1. $\\mu_{y_{1}}(t)=10+0.01 t, \\mu_{y_{2}}(t)=10+0.0012 t, \\sigma_{y_{1}}=\\sigma_{y_{2}}=6, y_{a}=15$.\n2. $m_{1}=0.5, \\eta_{1}=5000$ hours; $m_{2}=2, \\eta_{2}=10^{7}$ hours.\n3. $C_{g p}=\\$ 10, C_{p}=\\$ 0.1, C_{s p}=\\$ 100, C_{p h}=\\$ 200, C_{p f}=\\$ 2000 ; C_{c}=\\$ 5$, $C_{s c}=\\$ 200, C_{c h}=\\$ 200, C_{c f}=\\$ 2000$.\n4. $\\alpha_{1}=1 \\%, \\alpha_{2}=99 \\% ; \\rho_{1}=1 \\%, \\rho_{2}=99 \\%$.\n5. $A_{p}=50, A_{c}=50, A_{c p}=10$.\n\nChoose optimal values of $t_{p}^{\\prime}, t_{c}^{\\prime}$, and $G^{*}$ that minimize TM and meet the reliability requirement.",
+      "expected": "51, 13.4, 23.1",
+      "predicted": "0.9, 0.05, 0.85",
+      "correct": false
+    },
+    {
+      "question": "Determine the MTTF of a 2-out-of-4 system with independent components each having a constant hazard of $8.5 \\times 10^{-6}$ failures $/ \\mathrm{h}$.\n\n",
+      "expected": "1.2745 \u00d7 10^5",
+      "predicted": "0.058823529411764705",
+      "correct": false
+    },
+    {
+      "question": "Twenty-five transistors are subjected to a reliability test at $105^{\\circ} \\mathrm{C}$, and the applied voltage at the oxide layer is $E_{\\mathrm{ox}}=10 \\mathrm{MV} / \\mathrm{cm}$. The failed units are examined using a high-precision semiconductor analyzer which shows that the main cause of failure is TDDB. The variability in the failure times are mainly due to the parameter $A_{0}$, and the failure times are:\n\n| 35336 | 21425 | 3706 | 3255 | 45171 |\n| --: | --: | --: | --: | --: |\n| 2887 | 3726 | 24163 | 11025 | 46869 |\n| 27200 | 5937 | 11357 | 3587 | 16878 |\n| 66929 | 8972 | 5012 | 15946 | 12761 |\n| 13351 | 28704 | 16889 | 43814 | 14845 |\n\nFit a failure time distribution, and obtain the MTTF.\n\n",
+      "expected": "19772",
+      "predicted": "18903.6",
+      "correct": false
+    },
+    {
+      "question": ": A mechanical system time to failure is gamma distribution with $\\alpha=3$ and $1 / \\beta=120$. Find the system reliability at 280 hours.",
+      "expected": "0.85119",
+      "predicted": "0.037",
+      "correct": false
+    },
+    {
+      "question": "A collision-avoidance system for articulated robot manipulators uses infrared proximity sensors grouped together in an array of sensor modules. The modules are distributed processing board-level products for acquiring data from proximity sensors mounted on robot manipulators. Each module consists of eight sensing elements, discrete electronics, a microcontroller, and communications components. The sensor system detects objects made of various materials at a distance of up to 50 cm . The module fails to detect the object if consecutive-2-out-of-8 sensing elements fail. The unreliabilities of the eight sensing elements are $0.01,0.02,0.03,0.04,0.05,0.06,0.07$, and 0.08 . Determine the optimal arrangement of these elements such that reliability of the module is maximized.\n\n",
+      "expected": "0.9915",
+      "predicted": "0.99,0.98,0.97,0.96,0.95,0.94,0.93,0.92",
+      "correct": false
+    },
+    {
+      "question": "A small power plant is equipped with two identical generators, one active and the other in cold standby. Whenever the active generator fails, the redundant generator is switched to working condition without interruption. The life of the two generators can be modeled with the exponential distribution with $\\lambda=3.6 \\times 10^{-5}$ failures per hour. Calculate the power plant reliability at 5000 hours and the mean time to failure.",
+      "expected": "0.9856, 5.56 \u00d7 10^4",
+      "predicted": "0.037, 138888.89",
+      "correct": false
+    },
+    {
+      "question": "A system consists of elements $E_{1}$ to $E_{4}$ which are necessary for the fulfillment of the required function (series structure). Assume constant failure rates $\\lambda_{1}=10^{-3} \\mathrm{~h}^{-1}, \\lambda_{2}=0.5 \\cdot 10^{-3} \\mathrm{~h}^{-1}, \\lambda_{3}=$ $10^{-4} \\mathrm{~h}^{-1} \\& \\lambda_{4}=2 \\cdot 10^{-3} \\mathrm{~h}^{-1}$, and that for all elements the repair time is lognormally distributed with parameters $\\lambda=0.5 \\mathrm{~h}^{-1}$ and $\\sigma=0.6$. Considering that no further failures can occur at system down (the system is disconnected), give the reliability function for a mission of duration $t=168 \\mathrm{~h}$, the mean time to failure, the asymptotic \\& steady-state values of the point and average availability, and the asymptotic \\& steady-state values of the interval reliability for $\\theta=12 \\mathrm{~h}$.\n\n",
+      "expected": "0.55, 278, 0.991, 0.95",
+      "predicted": "0.637, 1000, 0.833, 0.833, 0.723, 0.723",
+      "correct": false
+    },
+    {
+      "question": "During the reliability growth program of a complex equipment, the following data was gathered: $T=1200 \\mathrm{~h}, n=8$ and $\\sum \\ln \\left(T / t_{i}^{*}\\right)=20$. Assuming that the underlying process can be described by a Duane model, estimate the intensity at $t=1200 \\mathrm{~h}$ and the value attainable at $t+\\Delta=3000 \\mathrm{~h}$ if the reliability growth would continue with the same statistical properties.\n\n",
+      "expected": "2.67\u00d710^-3, 1.54\u00d710^-3",
+      "predicted": "0.037, 0.015",
+      "correct": false
+    },
+    {
+      "question": "For a life test of microwave power transistors , the following information is provided: the current density $J=8.5 \\times 10^{4} \\mathrm{~A} / \\mathrm{cm}^{2}$; the material constant is experimentally determined as $A_{0}=7.2 \\times 10^{-4}$; the junction temperature is $50^{\\circ} \\mathrm{C}$; and the activation energy of the aluminum alloy is $E_{a}=1.01 \\mathrm{eV}$. Determine the median life.\n\n",
+      "expected": "5620.189",
+      "predicted": "198",
+      "correct": false
+    },
+    {
+      "question": "Excessive vibrations due to high-speed cutting on a Computer Numerical Control (CNC) machine may lead to the failure of the cutting tool. The failure time of the tool follows an extreme value distribution. The failure rate increases about $15 \\% / \\mathrm{h}$. Assuming $b=0.01$, calculate the reliability of the tool at $t=10$ hours.\n\n",
+      "expected": "0.8042",
+      "predicted": "0.8187",
+      "correct": true
+    },
+    {
+      "question": "Censored Sample \n\nThirty units are under test that is terminated after 22 failures. The times to failure are\n$18.5,20,20.5,21.5,22,22.5,23.5,24,24.3,24.6,25,25.3,25.6,26,26.3,26.7,27,28,29,30$, 32,33 .\n\nFit a Weibull distribution to the data.\n\n",
+      "expected": "4.87, 30.59",
+      "predicted": "0.85, 1.2",
+      "correct": false
+    },
+    {
+      "question": "The tensile strength of a synthetic fiber used to manufacture seatbelts is an important characteristic in predicting the reliability of the product. From past experience, the tensile strength can be assumed to be normally distributed. Sixteen samples were randomly selected and tested from a batch of fibers. The sample's mean tensile strength was found to be 49.86 psi , and the sample's standard deviation was found to be 1.66 psi . Determine an appropriate interval to estimate the batch mean tensile strength.\n\n",
+      "expected": "49.13",
+      "predicted": "48.76, 50.96",
+      "correct": false
+    },
+    {
+      "question": "The diameters of a batch of turned shafts are normally distributed with $\\mu=2.015$ and $\\sigma=0.0053$.\na. What percent of the batch has a diameter greater than the upper specification of 2.025 ?\nb. What percent of the batch has a diameter smaller than the lower specification of 2.000 ?\n\n",
+      "expected": "2.94, 0.23",
+      "predicted": "a. 0.0179  \nb. 0.0038",
+      "correct": false
+    },
+    {
+      "question": "Specifications call for an engine to have 0.95 reliability at 1000 operating hours. The oldest 50 engines in the fleet have just passed 1000 hr with one failure observed. Is the specification being met?",
+      "expected": "False",
+      "predicted": "0.98, 0.95, 0.98",
+      "correct": false
+    },
+    {
+      "question": "The stress $(X)$ and the strength $(Y)$ for a given failure mode of a component follow a normal distribution with the following information about their coefficient of variation, $C V$ :\n\n$$\nC V_{X}=0.25 \\quad C V_{Y}=0.17\n$$\n\nThe customer wants a reliability of 0.99990 for this failure mode. What is the safety factor that the designer must use to meet the requirements of the customer?\n\n",
+      "expected": "3.26",
+      "predicted": "1.67",
+      "correct": false
+    },
+    {
+      "question": "The pdf for the time to failure of an appliance is given by:\n\n$$\nf(t)=\\frac{1}{16} t \\cdot e^{-t / 4}\n$$\n\nwhere $t$ is in years, and $t>0$.\n(a) What is the probability of failure in the first year?\n(b) What is the probability of the appliance lasting at least 5 years?\n(c) If no more than $5 \\%$ of the appliances will require warranty service, what is the maximum number of months for which the appliance should be warranted?\n\n",
+      "expected": "0.0265, 0.6446, 17",
+      "predicted": "(a) 0.037\n\n(b) 0.243\n\n(c) 12",
+      "correct": false
+    },
+    {
+      "question": "From a sample of 85 repair times collected on the corrective maintenance of office reproduction machines, 78 of the repairs were completed within 5 hr . Is the contractor's maintenance agreement to complete 90 percent of the repairs within 5 hr being met?",
+      "expected": "False",
+      "predicted": "0.9176, 0.0824",
+      "correct": false
+    },
+    {
+      "question": "In a sample of size $n=25, k=5$ items were found to be defective. Determine for the underlying defective probability $p$, (i) the point estimate, (ii) the interval estimate for $\\gamma=0.8\\left(\\beta_{1}=\\beta_{2}=0.1\\right)$, (iii) the upper bound on $p$ for a one sided confidence interval with $\\gamma=0.9$.\n\n",
+      "expected": "0.2, NOT_FOUND, NOT_FOUND",
+      "predicted": "(i) 0.2  \n(ii) 0.112, 0.288  \n(iii) 0.253",
+      "correct": false
+    },
+    {
+      "question": "Given the linear hazard rate function $\\lambda(t)=5 \\times 10^{-6} t$ where $t$ is measured in operating hours, what is the design life if a 0.98 reliability is desired?\n\n",
+      "expected": "90",
+      "predicted": "13.515, 13.515",
+      "correct": false
+    },
+    {
+      "question": "Consider the case when the system is observed every two weeks and the failure-time distribution is normal with a mean $=4$ and a standard deviation $=1$ week. Determine the expected number of failures at the end of two weeks.\n\n",
+      "expected": "0.0228",
+      "predicted": "0.9772",
+      "correct": false
+    },
+    {
+      "question": "Consider a product with a probability of failure in a given test of 0.1 . Assume 10 of these products are tested.\n(a) What is the expected number of failures that will occur in the test?\n(b) What is the variance in the number of failures?\n(c) What is the probability that no product will fail?\n(d) What is the probability that two or more products will fail?\n\n",
+      "expected": "1, 0.9, 0.349, 0.264",
+      "predicted": "1.0",
+      "correct": false
+    },
+    {
+      "question": "Suppose that basic events $\\mathrm{X}_{1}, \\mathrm{X}_{2}, \\ldots, X_{5}$ are independent of each other and that their probabilities are $p_{1}=0.01, p_{2}=$ $0.005, p_{3}=0.005, p_{4}=0.003$, and $p_{5}=0.008$. Calculate the probability of the top event.",
+      "expected": "0.015",
+      "predicted": "0.0223",
+      "correct": false
+    },
+    {
+      "question": "The time to failure for a product is normally distributed with $\\mu=200$ hours and $\\sigma=1.84$. Find the probability of failure between $t=201$ hours and $t=202$ hours. That is, find\n\n$$\nP(201 \\leq x \\leq 202)\n$$\n\n",
+      "expected": "0.1567",
+      "predicted": "0.1165",
+      "correct": false
+    },
+    {
+      "question": "In an accelerated test of 1000 diodes, 100 failures occur, of which 30 are opens and 70 shorts. Give an estimate for $\\bar{R}, \\bar{R}_{U}$, and $\\bar{R}_{K}$.\n\n",
+      "expected": "0.1, 0.03, 0.07",
+      "predicted": "0.9, 0.97, 0.83",
+      "correct": false
+    },
+    {
+      "question": "15 units were tested at each of 36 and 20 V . Testing at 20 V was terminated after the fourth failure. Assuming an inverse power relationship, determine the B10 life of a unit like this at 5 V ,",
+      "expected": "570.7",
+      "predicted": "12.3, 1.8",
+      "correct": false
+    },
+    {
+      "question": "You are to design an $m / N$ detection system. The number of components, $N$, must be as small as possible to minimize cost. The fail to danger and the fail safe probabilities for the identical components are\n\n$$\np_{d}=10^{-2}, \\quad p_{s}=10^{-2}\n$$\n\nYour design must meet the following criteria:\n\n1. Probability of system fail to danger $<10^{-4}$.\n2. Probability of system fail safe $<10^{-2}$.\n\nWhat values of $m$ and $N$ should be used?",
+      "expected": "2/4",
+      "predicted": "0.037, 0.243, 0.757",
+      "correct": false
+    },
+    {
+      "question": "Consider the distribution $f_{x}(x)=\\alpha e^{-\\alpha x}, 0 \\leq x \\leq \\infty, \\alpha>1$.\na) Transform to the distribution $f_{y}(y)$, where $y=e^{x}$.\nb) Calculate $\\mu_{x}$ and $\\mu_{y}$\n\n",
+      "expected": "1/\u03b1, \u03b1/(\u03b1-1)",
+      "predicted": "a) 0, 1\n\nb) $-\\frac{1}{\\alpha}, 0$",
+      "correct": false
+    },
+    {
+      "question": "Test data provide the following reliabilities at a given time $t$ :\n\n$$\nR_{A}=.92 \\quad R_{B}=.96 \\quad R_{B \\mid A+}=.90\n$$\n\nFind $R_{A \\mid B+}$.",
+      "expected": ".86",
+      "predicted": "0.875",
+      "correct": false
+    },
+    {
+      "question": "Following conditions have been specified for the demonstration (acceptance test) of the constant (time independent) failure rate $\\lambda$ of an assembly: $\\lambda_{0}=1 / 2000 \\mathrm{~h}$ (specified $\\lambda$ ), $\\lambda_{1}=1 / 1000 \\mathrm{~h}$ (minimum acceptable $\\lambda$ ), producer risk $\\alpha=0.2$, consumer risk $\\beta=0.2$. Give: (i) the cumulative operating (test time) $T$ and the allowed number of failures $c$ during $T$; (ii) the probability of acceptance if the true failure rate $\\lambda$ were $1 / 3000 \\mathrm{~h}$.\n\n",
+      "expected": "9200, 6, 0.96",
+      "predicted": "(i) 2000, 0  \n(ii) 0.757",
+      "correct": false
+    },
+    {
+      "question": "The probability of a Black Hawk helicopter surviving a mission is 0.91 . If seven helicopters are sent on a mission and five must succeed for mission success, what is the probability of mission success?\n\n",
+      "expected": "0.9806",
+      "predicted": "0.999876",
+      "correct": true
+    },
+    {
+      "question": "To support the current cycle in a reliability growth testing program, a total of 8 failures need to be generated. The current estimate of the MTTF is 55 hr . The test department is scheduled to complete testing within 72 hr . How many units should be placed on test?",
+      "expected": "11",
+      "predicted": "8.571",
+      "correct": false
+    },
+    {
+      "question": "A product consists of three subsystems. Through QFD analysis, we have identified that customers have three important expectations for the product, say $E_{1}, E_{2}$, and $E_{3}$, and that there exist strong correlations of $E_{1}$ to $Y_{1}$ and $Y_{2}, E_{2}$ to $Y_{1}$ and $Y_{3}$, and $E_{3}$ to $Y_{2}$, where $Y_{i}(i=1,2,3)$ are the independent product performance characteristics. The QFD study further indicates that $Y_{1}$ is strongly affected by $x_{1}$ and $x_{3}, Y_{2}$ by $x_{2}, x_{5}$ and $x_{6}, Y_{3}$ by $x_{4}$, where $x_{1}$ and $x_{2}$ are the performance characteristics of subsystem $1, x_{3}$ and $x_{4}$ of subsystem 2 , and $x_{5}$ and $x_{6}$ of subsystem 3 . Determine the reliability target of each subsystem to achieve $88 \\%, 90 \\%$, and $95 \\%$ customer satisfactions on $E_{1}, E_{2}$, and $E_{3}$, respectively, at the design life.",
+      "expected": "0.948, 0.9355, 0.9663",
+      "predicted": "0.88, 0.90, 0.95",
+      "correct": false
+    },
+    {
+      "question": "A manufacturer of an automotive speed sensor subjects 10 sensors to a reliability test that simulates the environmental conditions (temperature and speed) at which the sensors normally operate. A sensor is classified failed when its output falls outside $5 \\%$ tolerance. The miles accumulated before the failures of the sensors are\n\n110000, 130000,150000,155000,159000,163000,166000,168000,169000,170000.\nAssume that the miles to failure follow a Rayleigh distribution. Determine the parameter of the distribution, the mean life of a sensor, and the variance of its life.\n\n",
+      "expected": "137470, 5.1636\u00d710^9",
+      "predicted": "0.0000116, 86206.90, 74333333.33",
+      "correct": false
+    },
+    {
+      "question": "Two fuel pumps, each having a Weibull failure distribution with $\\beta=\\frac{1}{2}$ and $\\theta=1000 \\mathrm{hr}$, are configured to provide a redundant system. Find the system reliability for a $100-\\mathrm{hr}$ mission and the system MTTF.",
+      "expected": "0.9265, 3500",
+      "predicted": "0.9817, 126.49",
+      "correct": false
+    },
+    {
+      "question": "Estimate the MTBF (point estimator) or $(\\hat{\\theta})$ for the following reliability test situations:\n(a) Failure terminated, with no replacement. Twelve items were tested until the fourth failure occurred, with failures at $200,500,625$, and 800 hours.\n(b) Time terminated, with no replacement. Twelve items were tested up to 1000 hours, with failures at $200,500,625$, and 800 hours.\n(c) Failure terminated, with replacement. Eight items were tested until the third failure occurred, with failures at 150,400 , and 650 hours.\n(d) Time terminated, with replacement. Eight items were tested up to 1000 hours, with failures at 150,400 , and 650 hours.\n(e) Mixed replacement/nonreplacement. Six items were tested through 1000 hours on six different test stands. The first failure on the test stand occurred at 300 hours, and its replacement failed after an additional 400 hours. On the second test stand, failure occurred at 350 hours, and its replacement failed after an additional 500 hours. On the third test stand, failure occurred at 600 hours, andits replacement did not fail up to the completion of the test. The items on the other three test stands did not fail for the duration of the test.\n\n",
+      "expected": "2,131, 2,531, 1,733, 2,667, 1,110, 9600, 1.04 x 10^-4",
+      "predicted": "(a) 500.0  \n(b) 555.56  \n(c) 400.0  \n(d) 400.0  \n(e) 333.33, 350.0, 600.0, 1000.0, 1000.0, 1000.0",
+      "correct": false
+    },
+    {
+      "question": "A population of industrial circuit breakers was found to have a lognormal failure distribution with parameters $\\mu=3$ and $\\sigma=1.8$. What is the MTTF of the population? What is the estimate of reliability of these circuit breakers for continuous operation over 30 years?\n\n",
+      "expected": "101.5, 0.412",
+      "predicted": "149.18, 0.0001",
+      "correct": false
+    },
+    {
+      "question": ": Suppose in the production of lightbulbs, $90 \\%$ are good. In a random sample of 20 lightbulbs, what is the probability of obtaining at least 18 good lightbulbs?",
+      "expected": "0.667",
+      "predicted": "0.323, 0.1216, 0.0016, 0.000016",
+      "correct": false
+    },
+    {
+      "question": "Express $P(X \\cap(Y \\cup Z))$ in terms of the probabilities of intersections of $X, Y$, and $Z$. Then, assume that $X, Y$, and $Z$ are independent events and express the result in terms of $P(X), P(Y)$, and $P(Z)$.",
+      "expected": "P(X)P(Y)+P(X)P(Z)-P(X)P(Y)P(Z)",
+      "predicted": "1-p(x \u2229 y) - p(x \u2229 z) + p(x \u2229 y \u2229 z)",
+      "correct": false
+    }
+  ]
+}
