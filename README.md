@@ -2,7 +2,7 @@
 
 **Research Project** | CentraleSupélec - LGI Laboratory  
 **Supervisor**: Zhiguo Zeng
-**Group Members**: Alex Dalban, Elora
+**Group Members**: Alex Dalban, Elora Drouilhet
 
 Fine-tuning Large Language Models for reliability engineering through self-instruct synthetic data generation.
 
