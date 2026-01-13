@@ -5239,10 +5239,9 @@ Wu and Huang (2017) considered planning of two or more level CSALTs with competi
 
 In this section, CSALT with competing failure modes proposed by Wu and Huang (2017) has been described briefly for illustration purpose.
 
-Consider a CSALT with $L$ levels of stress and let $y_{1}$ be the lth stress level, $l=1$, $2, \ldots, L$. Each unit is run at a constant-stress and may fail due to $J$ failure modes. Assume that at $y_{1}$, the latent failure times $X_{i 1 l}, X_{i 2 l}, \ldots, X_{i J l}$ are independent and exponentially distributed with hazard rate $\lambda_{j l}(>0), i=1,2, \ldots, n, l=1,2, \ldots, L$, and $j=1$, $2, \ldots, J$. The failure time of the $i$ th test unit is:$$
+Consider a CSALT with $L$ levels of stress and let $y_{1}$ be the lth stress level, $l=1$, $2, \ldots, L$. Each unit is run at a constant-stress and may fail due to $J$ failure modes. Assume that at $y_{1}$, the latent failure times $X_{i 1 l}, X_{i 2 l}, \ldots, X_{i J l}$ are independent and exponentially distributed with hazard rate $\lambda_{j l}(>0), i=1,2, \ldots, n, l=1,2, \ldots, L$, and $j=1$, $2, \ldots, J$. The failure time of the $i$ th test unit is:
+$$
 X*{i l}=\operatorname{mim}\left\{X*{i 1 l}, X*{i 2 l}, \ldots, X*{i J l}\right\}
-
-
 $$
 
 It is assumed that at the $l$ th stress level, the mean life time of a test unit is a log-linear function of standardized stress:
