@@ -43,6 +43,85 @@ RECOMMENDED_MODELS = {
 DEFAULT_MODEL = "anthropic/claude-opus-4.5"
 
 
+def detect_input_format(file_path: str) -> str:
+    """
+    Detect if input file is JSON or JSONL format.
+    
+    Args:
+        file_path: Path to the input file
+        
+    Returns:
+        'json' or 'jsonl'
+    """
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read().strip()
+    
+    # Try parsing as JSON array first
+    try:
+        data = json.loads(content)
+        if isinstance(data, list):
+            return 'json'
+    except json.JSONDecodeError:
+        pass
+    
+    # Assume JSONL if not a valid JSON array
+    return 'jsonl'
+
+
+def load_items(file_path: str) -> list:
+    """
+    Load items from either JSON or JSONL file.
+    
+    Args:
+        file_path: Path to the input file
+        
+    Returns:
+        List of item dictionaries
+    """
+    input_format = detect_input_format(file_path)
+    logger.info(f"Detected input format: {input_format.upper()}")
+    
+    items = []
+    
+    if input_format == 'json':
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            if isinstance(data, list):
+                items = data
+            else:
+                # Single object, wrap in list
+                items = [data]
+    else:  # jsonl
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        items.append(json.loads(line))
+                    except json.JSONDecodeError as e:
+                        logger.warning(f"Skipping invalid JSON line: {e}")
+    
+    return items
+
+
+def save_items(items: list, file_path: str, output_format: str = 'json'):
+    """
+    Save items to either JSON or JSONL file.
+    
+    Args:
+        items: List of item dictionaries
+        file_path: Path to the output file
+        output_format: 'json' or 'jsonl'
+    """
+    if output_format == 'json':
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(items, f, ensure_ascii=False, indent=2)
+    else:  # jsonl
+        with open(file_path, 'w', encoding='utf-8') as f:
+            for item in items:
+                f.write(json.dumps(item, ensure_ascii=False) + '\n')
+
+
 def create_solving_prompt(question: str) -> str:
     """Create a prompt that asks the model to solve the problem step by step."""
     return f"""You are an expert in reliability engineering, statistics, and probability theory.
@@ -237,22 +316,24 @@ def solve_and_verify(
         return f"REASONING_FAILED: Model answer did not match expected answer '{expected_answer}'\n\nModel's attempted solution:\n{model_solution}", False
 
 
-def process_jsonl_file(
+def process_file(
     input_path: str,
     output_path: str,
     api_key: str,
     model: str = DEFAULT_MODEL,
+    output_format: str = 'json',
     skip_existing: bool = True,
     delay_between_items: float = 1.0
 ) -> dict:
     """
-    Process a JSONL file and regenerate reasoning for each question.
+    Process a JSON or JSONL file and regenerate reasoning for each question.
     
     Args:
-        input_path: Path to input JSONL file
-        output_path: Path to output JSONL file
+        input_path: Path to input file (JSON or JSONL)
+        output_path: Path to output file
         api_key: OpenRouter API key
         model: Model to use
+        output_format: Output format ('json' or 'jsonl')
         skip_existing: Skip items that already have valid reasoning
         delay_between_items: Delay between processing items (to avoid rate limits)
     
@@ -267,19 +348,12 @@ def process_jsonl_file(
         "skipped": 0
     }
     
-    # Read all items
-    items = []
-    with open(input_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                try:
-                    items.append(json.loads(line))
-                except json.JSONDecodeError as e:
-                    logger.warning(f"Skipping invalid JSON line: {e}")
+    # Load items (auto-detects format)
+    items = load_items(input_path)
     
     stats["total"] = len(items)
     logger.info(f"Loaded {len(items)} items from {input_path}")
+    logger.info(f"Output format: {output_format.upper()}")
     
     # Process each item
     processed_items = []
@@ -334,9 +408,7 @@ def process_jsonl_file(
         processed_items.append(item)
         
         # Save progress after each item (in case of interruption)
-        with open(output_path, 'w', encoding='utf-8') as f:
-            for processed_item in processed_items:
-                f.write(json.dumps(processed_item, ensure_ascii=False) + '\n')
+        save_items(processed_items, output_path, output_format)
         
         # Delay between items to avoid rate limiting
         if i < len(items) - 1:
@@ -371,25 +443,33 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Basic usage with default model (Claude Sonnet 4.5)
-  python reasoning_processor.py input.jsonl output.jsonl --api-key YOUR_KEY
+  # Basic usage with default model (Claude Sonnet 4.5) - outputs JSON by default
+  python reasoning_processor.py input.jsonl output.json --api-key YOUR_KEY
+  
+  # Input can be JSON or JSONL (auto-detected)
+  python reasoning_processor.py input.json output.json --api-key YOUR_KEY
+  
+  # Output as JSONL instead of JSON
+  python reasoning_processor.py input.json output.jsonl --api-key YOUR_KEY --output-format jsonl
   
   # Use a specific model
-  python reasoning_processor.py input.jsonl output.jsonl --api-key YOUR_KEY --model google/gemini-2.5-pro
+  python reasoning_processor.py input.jsonl output.json --api-key YOUR_KEY --model google/gemini-2.5-pro
   
   # Process all items (don't skip existing reasoning)
-  python reasoning_processor.py input.jsonl output.jsonl --api-key YOUR_KEY --no-skip
+  python reasoning_processor.py input.jsonl output.json --api-key YOUR_KEY --no-skip
   
   # List available models
   python reasoning_processor.py --list-models
         """
     )
     
-    parser.add_argument("input_file", nargs="?", help="Input JSONL file path")
-    parser.add_argument("output_file", nargs="?", help="Output JSONL file path")
+    parser.add_argument("input_file", nargs="?", help="Input file path (JSON or JSONL, auto-detected)")
+    parser.add_argument("output_file", nargs="?", help="Output file path")
     parser.add_argument("--api-key", "-k", help="OpenRouter API key (or set OPENROUTER_API_KEY env var)")
     parser.add_argument("--model", "-m", default=DEFAULT_MODEL, 
                         help=f"Model to use (default: {DEFAULT_MODEL})")
+    parser.add_argument("--output-format", "-f", choices=['json', 'jsonl'], default='json',
+                        help="Output format: 'json' (default) or 'jsonl'")
     parser.add_argument("--no-skip", action="store_true",
                         help="Process all items, don't skip existing valid reasoning")
     parser.add_argument("--delay", "-d", type=float, default=1.0,
@@ -429,14 +509,16 @@ Examples:
     logger.info(f"Using model: {model}")
     logger.info(f"Input file: {args.input_file}")
     logger.info(f"Output file: {args.output_file}")
+    logger.info(f"Output format: {args.output_format.upper()}")
     logger.info(f"Skip existing: {not args.no_skip}")
     
     # Process the file
-    process_jsonl_file(
+    process_file(
         input_path=args.input_file,
         output_path=args.output_file,
         api_key=api_key,
         model=model,
+        output_format=args.output_format,
         skip_existing=not args.no_skip,
         delay_between_items=args.delay
     )
