@@ -12,12 +12,16 @@ Process:
 import json
 import os
 import re
+import sys
 import time
 import argparse
 import logging
 from typing import Optional
 import requests
 from pathlib import Path
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from utils.data_io import load_dataset, save_dataset
 
 # Configure logging
 logging.basicConfig(
@@ -43,83 +47,17 @@ RECOMMENDED_MODELS = {
 DEFAULT_MODEL = "anthropic/claude-opus-4.5"
 
 
-def detect_input_format(file_path: str) -> str:
-    """
-    Detect if input file is JSON or JSONL format.
-    
-    Args:
-        file_path: Path to the input file
-        
-    Returns:
-        'json' or 'jsonl'
-    """
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read().strip()
-    
-    # Try parsing as JSON array first
-    try:
-        data = json.loads(content)
-        if isinstance(data, list):
-            return 'json'
-    except json.JSONDecodeError:
-        pass
-    
-    # Assume JSONL if not a valid JSON array
-    return 'jsonl'
-
-
 def load_items(file_path: str) -> list:
-    """
-    Load items from either JSON or JSONL file.
-    
-    Args:
-        file_path: Path to the input file
-        
-    Returns:
-        List of item dictionaries
-    """
-    input_format = detect_input_format(file_path)
-    logger.info(f"Detected input format: {input_format.upper()}")
-    
-    items = []
-    
-    if input_format == 'json':
-        with open(file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            if isinstance(data, list):
-                items = data
-            else:
-                # Single object, wrap in list
-                items = [data]
-    else:  # jsonl
-        with open(file_path, 'r', encoding='utf-8') as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    try:
-                        items.append(json.loads(line))
-                    except json.JSONDecodeError as e:
-                        logger.warning(f"Skipping invalid JSON line: {e}")
-    
+    """Load items from either JSON or JSONL file (auto-detected)."""
+    items = load_dataset(file_path)
+    fmt = 'JSONL' if Path(file_path).suffix == '.jsonl' else 'JSON'
+    logger.info(f"Detected input format: {fmt}")
     return items
 
 
 def save_items(items: list, file_path: str, output_format: str = 'json'):
-    """
-    Save items to either JSON or JSONL file.
-    
-    Args:
-        items: List of item dictionaries
-        file_path: Path to the output file
-        output_format: 'json' or 'jsonl'
-    """
-    if output_format == 'json':
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(items, f, ensure_ascii=False, indent=2)
-    else:  # jsonl
-        with open(file_path, 'w', encoding='utf-8') as f:
-            for item in items:
-                f.write(json.dumps(item, ensure_ascii=False) + '\n')
+    """Save items to either JSON or JSONL file."""
+    save_dataset(items, file_path, fmt=output_format)
 
 
 def create_solving_prompt(question: str) -> str:
