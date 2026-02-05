@@ -18,6 +18,8 @@ def clean_text(text: str) -> str:
         return ""
     # Normalize whitespace
     text = re.sub(r'\n{3,}', '\n\n', text)
+    # Strip trailing # markers (orphaned headings from parse_generated_output)
+    text = re.sub(r'\s*#{1,6}\s*$', '', text)
     return text.strip()
 
 
@@ -63,6 +65,18 @@ def format_reasoning(reasoning: str) -> str:
         adjusted_lines.append(line)
     
     return '\n'.join(adjusted_lines)
+
+
+def title_from_question(question: str) -> str:
+    """Generate a short title from the first ~60 chars of question text."""
+    text = clean_text(question)
+    # Collapse whitespace to single spaces
+    text = re.sub(r'\s+', ' ', text)
+    if len(text) <= 60:
+        return text
+    # Truncate at a word boundary
+    truncated = text[:60].rsplit(' ', 1)[0]
+    return truncated + "..."
 
 
 def format_answer(answer: str) -> str:
@@ -126,7 +140,7 @@ def jsonl_to_markdown(
         md_lines.append("## Table of Contents")
         md_lines.append("")
         for i, item in enumerate(items, 1):
-            problem_title = item.get("title", f"Problem {i}")
+            problem_title = item.get("title") or title_from_question(item.get("question", "")) or f"Problem {i}"
             # Create anchor-friendly slug
             slug = re.sub(r'[^a-z0-9\s-]', '', problem_title.lower())
             slug = re.sub(r'\s+', '-', slug).strip('-')
@@ -140,7 +154,7 @@ def jsonl_to_markdown(
     
     # Problems
     for i, item in enumerate(items, 1):
-        problem_title = item.get("title", f"Problem {i}")
+        problem_title = item.get("title") or title_from_question(item.get("question", "")) or f"Problem {i}"
         question = item.get("question", "")
         reasoning = item.get("reasoning", "")
         answer = item.get("answer", "")
@@ -180,8 +194,22 @@ def jsonl_to_markdown(
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(md_lines))
     
-    print(f"✓ Converted {len(items)} problems to {output_path}")
+    print(f"Done: Converted {len(items)} problems to {output_path}")
     return len(items)
+
+
+PRESETS = {
+    "verified": {
+        "input_file": "../data/cross_model_verified.jsonl",
+        "output_file": "../data/cross_model_verified.md",
+        "title": "Cross-Model Verified Problems",
+    },
+    "rejected": {
+        "input_file": "../data/cross_model_rejected.jsonl",
+        "output_file": "../data/cross_model_rejected.md",
+        "title": "Cross-Model Rejected Problems",
+    },
+}
 
 
 def main():
@@ -192,21 +220,27 @@ def main():
 Examples:
   # Basic conversion
   python jsonl_to_markdown.py problems.jsonl problems.md
-  
+
   # Custom title
   python jsonl_to_markdown.py problems.jsonl problems.md --title "Reliability Engineering Problems"
-  
+
+  # Use a preset for cross-model files
+  python jsonl_to_markdown.py --preset verified
+  python jsonl_to_markdown.py --preset rejected
+
   # Without table of contents
   python jsonl_to_markdown.py problems.jsonl problems.md --no-toc
-  
+
   # Without reasoning (questions and answers only)
   python jsonl_to_markdown.py problems.jsonl problems.md --no-reasoning
         """
     )
-    
-    parser.add_argument("input_file", help="Input JSONL file path")
-    parser.add_argument("output_file", help="Output Markdown file path")
-    parser.add_argument("--title", "-t", default="Problem Set",
+
+    parser.add_argument("input_file", nargs="?", help="Input JSONL file path")
+    parser.add_argument("output_file", nargs="?", help="Output Markdown file path")
+    parser.add_argument("--preset", choices=PRESETS.keys(),
+                        help="Use preset paths for cross-model files (verified/rejected)")
+    parser.add_argument("--title", "-t", default=None,
                         help="Document title (default: 'Problem Set')")
     parser.add_argument("--no-toc", action="store_true",
                         help="Don't include table of contents")
@@ -214,14 +248,30 @@ Examples:
                         help="Don't include reasoning/solution section")
     parser.add_argument("--no-numbers", action="store_true",
                         help="Don't number problems")
-    
+
     args = parser.parse_args()
-    
+
+    # Apply preset defaults, then let explicit args override
+    if args.preset:
+        preset = PRESETS[args.preset]
+        if args.input_file is None:
+            args.input_file = preset["input_file"]
+        if args.output_file is None:
+            args.output_file = preset["output_file"]
+        if args.title is None:
+            args.title = preset["title"]
+
+    if args.title is None:
+        args.title = "Problem Set"
+
+    if not args.input_file or not args.output_file:
+        parser.error("input_file and output_file are required (or use --preset)")
+
     # Validate input
     if not Path(args.input_file).exists():
         print(f"Error: Input file not found: {args.input_file}")
         return
-    
+
     # Convert
     jsonl_to_markdown(
         input_path=args.input_file,
