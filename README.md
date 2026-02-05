@@ -37,3 +37,32 @@ This project develops a domain-specific LLM for reliability engineering by:
 - Comprehensive evaluation against baseline
 - Research paper (if results warrant publication)
 - Complete codebase and documentation
+
+---
+
+## Repository Structure
+
+```
+├── utils/                  # Shared Python modules
+│   ├── api_client.py       #   OpenRouter client factory
+│   └── data_io.py          #   JSON/JSONL load/save helpers
+├── data/                   # Datasets
+│   ├── seed_dataset.json   #   Primary cleaned dataset (56 items)
+│   ├── seed_extended.jsonl #   Extended JSONL version (66 items)
+│   ├── seed_latex_cleaned.jsonl  # After LaTeX/unicode fix (63 items)
+│   ├── seed_subset_49.jsonl      # Filtered subset (49 items)
+│   └── archive/            #   Earlier extraction iterations
+├── extractors/             # Data extraction from textbooks
+│   ├── textbook_qa_extractor.ipynb
+│   └── fix_unicode_latex_llm.ipynb
+├── generators/             # Synthetic data generation
+│   ├── synthetic_data_generation.ipynb
+│   ├── jsonl_to_markdown.py
+│   └── reasoning_processor.py
+├── evaluators/             # Model evaluation
+│   └── model_evaluation.ipynb
+├── results/                # Evaluation results
+├── literature/             # Reference papers
+├── ocr_output/             # OCR-extracted textbook markdown
+└── textbooks/              # Source textbook PDFs (git-ignored)
+```
