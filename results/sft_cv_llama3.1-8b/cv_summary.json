@@ -1,0 +1,817 @@
+{
+  "model_tag": "llama3.1-8b",
+  "n_folds": 5,
+  "baseline": {
+    "mean_accuracy": 37.49,
+    "std_accuracy": 3.22,
+    "per_fold": [
+      40.38461538461539,
+      37.254901960784316,
+      31.372549019607842,
+      39.21568627450981,
+      39.21568627450981
+    ]
+  },
+  "finetuned": {
+    "mean_accuracy": 39.85,
+    "std_accuracy": 4.08,
+    "per_fold": [
+      38.46153846153847,
+      43.13725490196079,
+      33.33333333333333,
+      45.09803921568628,
+      39.21568627450981
+    ]
+  },
+  "delta_mean": 2.36,
+  "wilcoxon_statistic": 1.0,
+  "wilcoxon_p_value": 0.25,
+  "significant": false,
+  "accuracy_by_type": {
+    "numeric": {
+      "total": 215,
+      "baseline_correct": 89,
+      "baseline_accuracy": 41.4,
+      "finetuned_correct": 86,
+      "finetuned_accuracy": 40.0,
+      "delta": -1.4
+    },
+    "formula": {
+      "total": 21,
+      "baseline_correct": 7,
+      "baseline_accuracy": 33.33,
+      "finetuned_correct": 13,
+      "finetuned_accuracy": 61.9,
+      "delta": 28.57
+    },
+    "text": {
+      "total": 19,
+      "baseline_correct": 0,
+      "baseline_accuracy": 0.0,
+      "finetuned_correct": 3,
+      "finetuned_accuracy": 15.79,
+      "delta": 15.79
+    },
+    "boolean": {
+      "total": 1,
+      "baseline_correct": 0,
+      "baseline_accuracy": 0.0,
+      "finetuned_correct": 0,
+      "finetuned_accuracy": 0.0,
+      "delta": 0.0
+    }
+  },
+  "question_flips": [
+    {
+      "fold": 0,
+      "question": "An automatic misting system in an agricultural study follows a Poisson process with rate λ = 0.2 mistings per hour. What",
+      "answer_type": "numeric",
+      "ground_truth": "15",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 15.",
+      "finetuned_answer": "10.44"
+    },
+    {
+      "fold": 0,
+      "question": "A sock drawer contains 12 socks, 4 black and 8 red, all mixed together. In the process of randomly selecting two socks i",
+      "answer_type": "numeric",
+      "ground_truth": "14/33",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is $\\boxed{\\frac{14}{33}}$.",
+      "finetuned_answer": "0.4242"
+    },
+    {
+      "fold": 0,
+      "question": "Suppose that a population of components follows the life-distribution model: F(t) = 1 - e^{-(t/2000)^{0.5}}. What is the",
+      "answer_type": "numeric",
+      "ground_truth": "0.7062",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.6988.",
+      "finetuned_answer": "0.1139"
+    },
+    {
+      "fold": 0,
+      "question": "Suppose that a population of components follows the life-distribution model: F(t) = 1 - e^{-(t/2000)^{0.5}}. What is the",
+      "answer_type": "numeric",
+      "ground_truth": "0.3127",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 0.8958.",
+      "finetuned_answer": "0.3123"
+    },
+    {
+      "fold": 0,
+      "question": "The lot acceptance criteria allows a maximum of three failures on 300 devices inspected (c = 3, n = 300, producer's risk",
+      "answer_type": "numeric",
+      "ground_truth": "0.029",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 0.067.",
+      "finetuned_answer": "2"
+    },
+    {
+      "fold": 0,
+      "question": "A reliability test is conducted on 8 identical components under accelerated stress conditions. At the end of the test, e",
+      "answer_type": "numeric",
+      "ground_truth": "56",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "Since there are 3 failed components, we can think of this as choosing 3 positions out of 8, which is",
+      "finetuned_answer": "56"
+    },
+    {
+      "fold": 0,
+      "question": "A communication system component has a reliability function (survival function) given by $R(t) = e^{-0.5t}$ for $t \\geq ",
+      "answer_type": "numeric",
+      "ground_truth": "2",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is $\\boxed{2}$.",
+      "finetuned_answer": "1"
+    },
+    {
+      "fold": 0,
+      "question": "Consider a reliability test where five identical components are tested simultaneously. The failure times (in hours) are ",
+      "answer_type": "numeric",
+      "ground_truth": "0.004105",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.00411.",
+      "finetuned_answer": "0.00492"
+    },
+    {
+      "fold": 0,
+      "question": "A data center uses a redundant power supply system with three independent power modules arranged in a 2-out-of-3 configu",
+      "answer_type": "numeric",
+      "ground_truth": "0.9818",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 0.7967.",
+      "finetuned_answer": "0.941"
+    },
+    {
+      "fold": 0,
+      "question": "A production batch contains 30 semiconductor chips destined for a high-reliability application. Quality testing has reve",
+      "answer_type": "numeric",
+      "ground_truth": "0.4495",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.455.",
+      "finetuned_answer": "0.4218"
+    },
+    {
+      "fold": 0,
+      "question": "A system consists of three independent subsystems connected in series (all must function for system success). Each subsy",
+      "answer_type": "numeric",
+      "ground_truth": "49505",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "However, we can find the MTTF of Subsystem A if we know the failure rate λ.",
+      "finetuned_answer": "49397"
+    },
+    {
+      "fold": 1,
+      "question": "For the distribution function $F(t) = 1 - \\left(\\frac{b}{b+t}\\right)^a$, $0 \\le t < \\infty$, $a > 1$, find the Residual ",
+      "answer_type": "formula",
+      "ground_truth": "$ResidualMTTF(T_0) = \\frac{b+T_0}{a-1}$",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is $\\boxed{\\frac{b}{a+1} \\left(\\frac{b+T_0}{b}\\right)^{a+1}}$.",
+      "finetuned_answer": "$h(T_0) = \\frac{a}{b} \\left(\\frac{b}{b+T_0}\\right)^{a-1}$"
+    },
+    {
+      "fold": 1,
+      "question": "Suppose that a population of components follows the life-distribution model: F(t) = 1 - e^{-(t/2000)^{0.5}}. What propor",
+      "answer_type": "numeric",
+      "ground_truth": "0.2057",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 0.226.",
+      "finetuned_answer": "0.2039"
+    },
+    {
+      "fold": 1,
+      "question": "From a well-shuffled deck of 52 cards, let drawing an ace be event A and let drawing a black card be event B. Determine ",
+      "answer_type": "numeric",
+      "ground_truth": "1/26",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is $\\boxed{\\frac{1}{26}}$.",
+      "finetuned_answer": "0.0385"
+    },
+    {
+      "fold": 1,
+      "question": "A software development team is tracking defects in two different modules of their application. Module A has 50,000 lines",
+      "answer_type": "numeric",
+      "ground_truth": "0.36",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.36.",
+      "finetuned_answer": "0.00036"
+    },
+    {
+      "fold": 1,
+      "question": "A manufacturer monitors the defect rate in production batches. Historical data from 20 batches (each containing 100 item",
+      "answer_type": "formula",
+      "ground_truth": "Beta(46, 1956)",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "** The posterior distribution parameters are α = 47 and β = 2054.",
+      "finetuned_answer": "46, 1956"
+    },
+    {
+      "fold": 1,
+      "question": "Electronic control units in automotive applications are found to have lifetimes that follow a Weibull distribution with ",
+      "answer_type": "numeric",
+      "ground_truth": "0.0621",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 3.47%.",
+      "finetuned_answer": "0.0623"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications server has a constant failure rate of 0.0015 failures per day. Assuming the exponential distributio",
+      "answer_type": "numeric",
+      "ground_truth": "0.0104",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "P(T + t <",
+      "finetuned_answer": "0.0105"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications server has a constant failure rate of 0.0015 failures per day. Assuming the exponential distributio",
+      "answer_type": "numeric",
+      "ground_truth": "0.9912",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.9634.",
+      "finetuned_answer": "0.9144"
+    },
+    {
+      "fold": 1,
+      "question": "A critical avionics system uses a hybrid redundancy configuration with 4 identical processors. The system operates in a ",
+      "answer_type": "numeric",
+      "ground_truth": "0.9101",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "** The final answer is 0.8955.",
+      "finetuned_answer": "0.984"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "0.256",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 25.5%.",
+      "finetuned_answer": "0.255"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications company uses a redundant server system with three independent backup servers to ensure continuous o",
+      "answer_type": "numeric",
+      "ground_truth": "0.999712",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.997696.",
+      "finetuned_answer": "0.9408"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications satellite contains a critical oscillator component whose lifetime follows a Weibull distribution wi",
+      "answer_type": "numeric",
+      "ground_truth": "44311",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 25,000.",
+      "finetuned_answer": "44310"
+    },
+    {
+      "fold": 1,
+      "question": "A satellite communication system consists of three redundant transmitters arranged in a 2-out-of-3 configuration. Engine",
+      "answer_type": "numeric",
+      "ground_truth": "0.9880",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 0.6344.",
+      "finetuned_answer": "0.953"
+    },
+    {
+      "fold": 2,
+      "question": "An automatic misting system in an agricultural study follows a Poisson process with rate λ = 0.2 mistings per hour. Give",
+      "answer_type": "numeric",
+      "ground_truth": "0.6703",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 1.34064.",
+      "finetuned_answer": "0.6703"
+    },
+    {
+      "fold": 2,
+      "question": "For the distribution function $F(t) = 1 - \\left(\\frac{b}{b+t}\\right)^a$, $0 \\le t < \\infty$, $a > 1$, find the MTTF (Mea",
+      "answer_type": "formula",
+      "ground_truth": "$MTTF = \\frac{b}{a-1}$",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is $\\boxed{\\frac{1}{a-1}}$.",
+      "finetuned_answer": "$b^{a-1}$"
+    },
+    {
+      "fold": 2,
+      "question": "Consider the exponential distribution with MTTF = 50,000 hours. What is the time to 10% failure?",
+      "answer_type": "numeric",
+      "ground_truth": "5268",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 5267.53.",
+      "finetuned_answer": "114130"
+    },
+    {
+      "fold": 2,
+      "question": "Determine the nearly minimum sample size (allowing at most 1 failure, i.e., acceptance number c = 1) to provide protecti",
+      "answer_type": "numeric",
+      "ground_truth": "23717",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 25000.",
+      "finetuned_answer": "3"
+    },
+    {
+      "fold": 2,
+      "question": "For a random variable having a beta density function defined on the unit interval with parameters a and b, the mean is $",
+      "answer_type": "formula",
+      "ground_truth": "$a = b$",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is a = b.",
+      "finetuned_answer": "a = b"
+    },
+    {
+      "fold": 2,
+      "question": "From a well-shuffled deck of 52 cards, let drawing an ace be event A and let drawing a black card be event B. There are ",
+      "answer_type": "text",
+      "ground_truth": "$P(A \\cap B) = \\frac{1}{26} = P(A) \\times P(B) = \\frac{1}{13} \\times \\frac{1}{2}$, so A and B are independent",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The events A and B are independent.",
+      "finetuned_answer": "Independent"
+    },
+    {
+      "fold": 2,
+      "question": "A sample of 50 units per lot is drawn from successive lots of manufactured components and life tested at stress for 24 h",
+      "answer_type": "numeric",
+      "ground_truth": "31, 521",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is $\\boxed{31, 521}$.",
+      "finetuned_answer": "Beta(9, 93)"
+    },
+    {
+      "fold": 2,
+      "question": "A system has a linearly increasing hazard rate given by h(t) = αt, where α is a positive constant and t ≥ 0. The cumulat",
+      "answer_type": "formula",
+      "ground_truth": "$f(t) = \\alpha t \\, e^{-\\alpha t^2 / 2}$",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is αt e^(-αt²/2).",
+      "finetuned_answer": "$f(t) = \\alpha t e^{-\\alpha t^2/2}$"
+    },
+    {
+      "fold": 2,
+      "question": "A reliability engineer is comparing two suppliers for a critical electronic component. A sample of 25 components from Su",
+      "answer_type": "numeric",
+      "ground_truth": "8333",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 8333.33.",
+      "finetuned_answer": "333.33"
+    },
+    {
+      "fold": 2,
+      "question": "A reliability engineer is comparing two suppliers for a critical electronic component. A sample of 30 components from Su",
+      "answer_type": "numeric",
+      "ground_truth": "3750",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 3743.",
+      "finetuned_answer": "37400"
+    },
+    {
+      "fold": 2,
+      "question": "A communication system component has a reliability function (survival function) given by $R(t) = e^{-0.5t}$ for $t \\geq ",
+      "answer_type": "numeric",
+      "ground_truth": "0.211",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$\\boxed{4.61}$",
+      "finetuned_answer": "0.211"
+    },
+    {
+      "fold": 2,
+      "question": "A manufacturing facility experiences machine breakdowns that follow a Poisson process with a rate of 1.2 breakdowns per ",
+      "answer_type": "numeric",
+      "ground_truth": "0.209",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.21733.",
+      "finetuned_answer": "0.1793"
+    },
+    {
+      "fold": 2,
+      "question": "A reliability engineer is analyzing a new type of industrial sensor. The cumulative distribution function (CDF) for the ",
+      "answer_type": "formula",
+      "ground_truth": "$f(t) = 0.25t e^{-0.5t}$",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is $0.25te^{-0.5t}$.",
+      "finetuned_answer": "$f(t) = 0.5e^{-0.5t}$"
+    },
+    {
+      "fold": 2,
+      "question": "A software testing team is conducting defect analysis on a newly developed module containing 5,000 lines of code. During",
+      "answer_type": "numeric",
+      "ground_truth": "17",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 17.",
+      "finetuned_answer": "0.017"
+    },
+    {
+      "fold": 2,
+      "question": "A reliability engineer is testing a new type of LED light bulb. A batch of 150 bulbs is placed on life test, and the tes",
+      "answer_type": "numeric",
+      "ground_truth": "8.780",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 8.047.",
+      "finetuned_answer": "9.095"
+    },
+    {
+      "fold": 3,
+      "question": "Assume that the lifetime follows a Weibull distribution, find the characteristic life necessary for 10% failures by 168 ",
+      "answer_type": "numeric",
+      "ground_truth": "518",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 516.35.",
+      "finetuned_answer": "98.5"
+    },
+    {
+      "fold": 3,
+      "question": "Could the function At^{-3}, A > 0, be a CDF, probability density function (PDF), or hazard function for a life-distribut",
+      "answer_type": "text",
+      "ground_truth": "hazard function only",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "** The function \\(f(t) = At^{-3}\\), \\(A > 0\\), can be a hazard function for a life-distribution func",
+      "finetuned_answer": "Hazard function only"
+    },
+    {
+      "fold": 3,
+      "question": "100 units from a population of measurements believed to be normally distributed are randomly selected and measured. Howe",
+      "answer_type": "numeric",
+      "ground_truth": "79.3",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "the mean of the smallest 30 units is:\n\nμ - 1.28σ = μ - 1.28(5.0) = 72.9\n\nNow, we need to find the me",
+      "finetuned_answer": "79.31"
+    },
+    {
+      "fold": 3,
+      "question": "A sock drawer contains 12 socks, 4 black and 8 red, all mixed together. In the process of randomly selecting two socks i",
+      "answer_type": "numeric",
+      "ground_truth": "17/33",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is $\\boxed{\\frac{17}{33}}$.",
+      "finetuned_answer": "0.5152"
+    },
+    {
+      "fold": 3,
+      "question": "A critical aerospace component follows a Weibull distribution for its failure time. The characteristic life (scale param",
+      "answer_type": "numeric",
+      "ground_truth": "4.47e-6",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 0.000625.",
+      "finetuned_answer": "0.00000447"
+    },
+    {
+      "fold": 3,
+      "question": "A data center cooling system consists of 4 independent chillers arranged in a 2-out-of-4 active redundancy configuration",
+      "answer_type": "numeric",
+      "ground_truth": "0.610",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 0.7275.",
+      "finetuned_answer": "0.5947"
+    },
+    {
+      "fold": 3,
+      "question": "A manufacturing facility produces circuit boards and conducts a life test on 10 identical boards. The test is terminated",
+      "answer_type": "numeric",
+      "ground_truth": "5040",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "P(6,",
+      "finetuned_answer": "5040"
+    },
+    {
+      "fold": 3,
+      "question": "A manufacturing facility experiences machine breakdowns that follow a Poisson process with a rate of 1.2 breakdowns per ",
+      "answer_type": "numeric",
+      "ground_truth": "0.337",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.3378.",
+      "finetuned_answer": "0.3976"
+    },
+    {
+      "fold": 3,
+      "question": "A system consists of three independent subsystems connected in series (all must function for system success). Each subsy",
+      "answer_type": "numeric",
+      "ground_truth": "0.9025",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The overall system reliability at 1,000 hours is approximately 0.918.",
+      "finetuned_answer": "0.893"
+    },
+    {
+      "fold": 4,
+      "question": "Let $F(t) = 1 - (1+t)^{-1}$ for $0 \\le t \\le \\infty$. Find the PDF $f(t)$ for this distribution.",
+      "answer_type": "formula",
+      "ground_truth": "$f(t) = \\frac{1}{(1+t)^2}$ for $t \\geq 0$",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 1/(1+t)^2.",
+      "finetuned_answer": "$f(t) = \\frac{1}{(1+t)^2}$"
+    },
+    {
+      "fold": 4,
+      "question": "An automatic misting system in an agricultural study follows a Poisson process with rate λ = 0.2 mistings per hour. What",
+      "answer_type": "numeric",
+      "ground_truth": "2.4",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 2.4.",
+      "finetuned_answer": "2"
+    },
+    {
+      "fold": 4,
+      "question": "Assume the lifetime follows a lognormal distribution, find the time to achieve 10% failures, given $T_{50}$ of 100,000 h",
+      "answer_type": "numeric",
+      "ground_truth": "38245",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 34600.",
+      "finetuned_answer": "38130"
+    },
+    {
+      "fold": 4,
+      "question": "A data center has 5 independent cooling units arranged in a k-out-of-n configuration where at least 3 units must be oper",
+      "answer_type": "numeric",
+      "ground_truth": "0.924",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.9290.",
+      "finetuned_answer": "0.9705"
+    },
+    {
+      "fold": 4,
+      "question": "A quality control inspector is examining a batch of electronic components. The batch contains 15 components: 9 are from ",
+      "answer_type": "numeric",
+      "ground_truth": "0.070",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.07.",
+      "finetuned_answer": "Verification 24: P(A) = 9/15 = 0.60, P(B) = 6/15 = 0.40. P(D) = 0.05 ×"
+    },
+    {
+      "fold": 4,
+      "question": "A system has a linearly increasing hazard rate given by h(t) = αt, where α is a positive constant and t ≥ 0. Derive the ",
+      "answer_type": "formula",
+      "ground_truth": "$F(t) = 1 - e^{-\\alpha t^2 / 2}$",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is αt^2 / 2.",
+      "finetuned_answer": "$F(t) = 1 - e^{-\\frac{\\alpha t^2}{2}}$"
+    },
+    {
+      "fold": 4,
+      "question": "A power supply unit has a constant failure rate of λ = 0.004 failures per 1000 hours. The unit operates continuously and",
+      "answer_type": "numeric",
+      "ground_truth": "0.00109",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.0010893.",
+      "finetuned_answer": "0.0405887"
+    },
+    {
+      "fold": 4,
+      "question": "A component follows a lognormal distribution for its time-to-failure. Reliability testing shows that 10% of components f",
+      "answer_type": "numeric",
+      "ground_truth": "7.70",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 6.904.",
+      "finetuned_answer": "7.646"
+    },
+    {
+      "fold": 4,
+      "question": "A mechanical component has a lifetime that follows a Weibull distribution with shape parameter β = 2.5 and characteristi",
+      "answer_type": "numeric",
+      "ground_truth": "0.757",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.768.",
+      "finetuned_answer": "0.8067"
+    },
+    {
+      "fold": 4,
+      "question": "Consider a reliability test where five identical components are tested simultaneously, with failure times following an e",
+      "answer_type": "text",
+      "ground_truth": "Memoryless property: the conditional probability of surviving an additional time period equals the unconditional probability of surviving that period, regardless of prior operating time",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is e^(-450λ).",
+      "finetuned_answer": "memoryless property"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications company is testing the reliability of fiber optic transceivers under accelerated stress conditions.",
+      "answer_type": "numeric",
+      "ground_truth": "2500",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 250,000.",
+      "finetuned_answer": "2500"
+    },
+    {
+      "fold": 4,
+      "question": "A semiconductor manufacturer is evaluating the reliability of a new integrated circuit design. Field data shows that the",
+      "answer_type": "numeric",
+      "ground_truth": "52429",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 2,323.",
+      "finetuned_answer": "52044"
+    },
+    {
+      "fold": 4,
+      "question": "A manufacturer produces industrial control units whose lifetimes follow a lognormal distribution with a median life (T₅₀",
+      "answer_type": "numeric",
+      "ground_truth": "11104",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "The final answer is 72,000.",
+      "finetuned_answer": "11300"
+    },
+    {
+      "fold": 4,
+      "question": "A wind turbine blade monitoring system uses a 2-out-of-4 voting configuration for vibration sensors (the system fails if",
+      "answer_type": "numeric",
+      "ground_truth": "0.982",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.968.",
+      "finetuned_answer": "0.8815"
+    },
+    {
+      "fold": 4,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a shape param",
+      "answer_type": "numeric",
+      "ground_truth": "0.9208",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.9493.",
+      "finetuned_answer": "0.836"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications satellite contains a critical oscillator component whose lifetime follows a Weibull distribution wi",
+      "answer_type": "numeric",
+      "ground_truth": "0.4493",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The final answer is 0.449.",
+      "finetuned_answer": "0.2449"
+    }
+  ],
+  "per_fold_comparison": [
+    {
+      "fold": 0,
+      "total": 52,
+      "baseline_correct": 21,
+      "baseline_accuracy": 40.38,
+      "finetuned_correct": 20,
+      "finetuned_accuracy": 38.46,
+      "delta": -1.92
+    },
+    {
+      "fold": 1,
+      "total": 51,
+      "baseline_correct": 19,
+      "baseline_accuracy": 37.25,
+      "finetuned_correct": 22,
+      "finetuned_accuracy": 43.14,
+      "delta": 5.88
+    },
+    {
+      "fold": 2,
+      "total": 51,
+      "baseline_correct": 16,
+      "baseline_accuracy": 31.37,
+      "finetuned_correct": 17,
+      "finetuned_accuracy": 33.33,
+      "delta": 1.96
+    },
+    {
+      "fold": 3,
+      "total": 51,
+      "baseline_correct": 20,
+      "baseline_accuracy": 39.22,
+      "finetuned_correct": 23,
+      "finetuned_accuracy": 45.1,
+      "delta": 5.88
+    },
+    {
+      "fold": 4,
+      "total": 51,
+      "baseline_correct": 20,
+      "baseline_accuracy": 39.22,
+      "finetuned_correct": 20,
+      "finetuned_accuracy": 39.22,
+      "delta": 0.0
+    }
+  ]
+}

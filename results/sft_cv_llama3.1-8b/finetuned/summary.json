@@ -1,0 +1,69 @@
+{
+  "model": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
+  "adapter_dir": "/gpfs/workdir/dalbanal/reliability-sft/results/sft_cv/adapters",
+  "n_folds": 5,
+  "mean_accuracy": 39.84917043740573,
+  "per_fold": [
+    {
+      "fold": 0,
+      "total": 52,
+      "correct": 20,
+      "accuracy": 38.46153846153847,
+      "accuracy_by_type": {
+        "numeric": 41.86046511627907,
+        "formula": 40.0,
+        "text": 0.0,
+        "boolean": 0.0
+      },
+      "elapsed_seconds": 373.4483597278595
+    },
+    {
+      "fold": 1,
+      "total": 51,
+      "correct": 22,
+      "accuracy": 43.13725490196079,
+      "accuracy_by_type": {
+        "formula": 100.0,
+        "text": 0.0,
+        "numeric": 41.86046511627907
+      },
+      "elapsed_seconds": 551.4813232421875
+    },
+    {
+      "fold": 2,
+      "total": 51,
+      "correct": 17,
+      "accuracy": 33.33333333333333,
+      "accuracy_by_type": {
+        "numeric": 30.23255813953488,
+        "formula": 75.0,
+        "text": 25.0
+      },
+      "elapsed_seconds": 508.42441272735596
+    },
+    {
+      "fold": 3,
+      "total": 51,
+      "correct": 23,
+      "accuracy": 45.09803921568628,
+      "accuracy_by_type": {
+        "text": 25.0,
+        "numeric": 48.837209302325576,
+        "formula": 25.0
+      },
+      "elapsed_seconds": 503.22206449508667
+    },
+    {
+      "fold": 4,
+      "total": 51,
+      "correct": 20,
+      "accuracy": 39.21568627450981,
+      "accuracy_by_type": {
+        "numeric": 37.2093023255814,
+        "formula": 75.0,
+        "text": 25.0
+      },
+      "elapsed_seconds": 613.3207714557648
+    }
+  ]
+}

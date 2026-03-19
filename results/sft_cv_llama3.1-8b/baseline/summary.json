@@ -1,0 +1,68 @@
+{
+  "model": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
+  "n_folds": 5,
+  "mean_accuracy": 37.48868778280543,
+  "per_fold": [
+    {
+      "fold": 0,
+      "total": 52,
+      "correct": 21,
+      "accuracy": 40.38461538461539,
+      "accuracy_by_type": {
+        "numeric": 44.18604651162791,
+        "formula": 40.0,
+        "text": 0.0,
+        "boolean": 0.0
+      },
+      "elapsed_seconds": 977.2459151744843
+    },
+    {
+      "fold": 1,
+      "total": 51,
+      "correct": 19,
+      "accuracy": 37.254901960784316,
+      "accuracy_by_type": {
+        "formula": 50.0,
+        "text": 0.0,
+        "numeric": 39.53488372093023
+      },
+      "elapsed_seconds": 928.3077735900879
+    },
+    {
+      "fold": 2,
+      "total": 51,
+      "correct": 16,
+      "accuracy": 31.372549019607842,
+      "accuracy_by_type": {
+        "numeric": 34.883720930232556,
+        "formula": 25.0,
+        "text": 0.0
+      },
+      "elapsed_seconds": 881.0291187763214
+    },
+    {
+      "fold": 3,
+      "total": 51,
+      "correct": 20,
+      "accuracy": 39.21568627450981,
+      "accuracy_by_type": {
+        "text": 0.0,
+        "numeric": 44.18604651162791,
+        "formula": 25.0
+      },
+      "elapsed_seconds": 1111.2122230529785
+    },
+    {
+      "fold": 4,
+      "total": 51,
+      "correct": 20,
+      "accuracy": 39.21568627450981,
+      "accuracy_by_type": {
+        "numeric": 44.18604651162791,
+        "formula": 25.0,
+        "text": 0.0
+      },
+      "elapsed_seconds": 820.7531349658966
+    }
+  ]
+}
