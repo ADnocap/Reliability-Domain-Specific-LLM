@@ -26,10 +26,25 @@ from training.config import (
 # ---------------------------------------------------------------------------
 def normalize_answer(answer: str) -> str:
     answer = answer.lower().strip()
+    # Strip LaTeX wrappers
+    answer = re.sub(r'\$\\boxed\{(.*?)\}\$', r'\1', answer)
+    answer = re.sub(r'\\boxed\{(.*?)\}', r'\1', answer)
+    answer = re.sub(r'\$(.*?)\$', r'\1', answer)
+    answer = re.sub(r'\\frac\{(\d+)\}\{(\d+)\}', r'\1/\2', answer)
     answer = answer.replace(" ", "")
     answer = answer.replace("\u00d7", "x")
     answer = answer.replace("^", "**")
     return answer
+
+
+def _eval_fraction(s: str):
+    """Try to evaluate a fraction string like '14/33' to a float."""
+    m = re.match(r'^(-?\d+)/(\d+)$', s.strip())
+    if m:
+        num, den = int(m.group(1)), int(m.group(2))
+        if den != 0:
+            return num / den
+    return None
 
 
 def compare_answers(predicted: str, ground_truth: str) -> dict:
@@ -38,11 +53,35 @@ def compare_answers(predicted: str, ground_truth: str) -> dict:
 
     exact_match = pred_norm == truth_norm
 
-    pred_numbers = re.findall(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?", predicted)
-    truth_numbers = re.findall(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?", ground_truth)
+    # Try fraction evaluation for both sides
+    pred_frac = _eval_fraction(pred_norm)
+    truth_frac = _eval_fraction(truth_norm)
+
+    # Extract numbers (including from percentage strings)
+    pred_clean = re.sub(r'(\d+\.?\d*)%', lambda m: str(float(m.group(1))/100), predicted)
+    truth_clean = re.sub(r'(\d+\.?\d*)%', lambda m: str(float(m.group(1))/100), ground_truth)
+
+    pred_numbers = re.findall(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?", pred_clean)
+    truth_numbers = re.findall(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?", truth_clean)
 
     numerical_match = False
-    if pred_numbers and truth_numbers:
+
+    # Case 1: fraction vs decimal (e.g., "14/33" vs "0.4242")
+    if pred_frac is not None and truth_numbers:
+        try:
+            truth_val = float(truth_numbers[0])
+            numerical_match = abs(pred_frac - truth_val) / max(abs(truth_val), 1e-10) < 0.05
+        except ValueError:
+            pass
+    elif truth_frac is not None and pred_numbers:
+        try:
+            pred_val = float(pred_numbers[0])
+            numerical_match = abs(pred_val - truth_frac) / max(abs(truth_frac), 1e-10) < 0.05
+        except ValueError:
+            pass
+
+    # Case 2: standard number-to-number comparison
+    if not numerical_match and pred_numbers and truth_numbers:
         try:
             pred_nums = [float(x) for x in pred_numbers]
             truth_nums = [float(x) for x in truth_numbers]
@@ -52,6 +91,12 @@ def compare_answers(predicted: str, ground_truth: str) -> dict:
                     for p, t in zip(pred_nums, truth_nums)
                 ]
                 numerical_match = all(matches)
+            elif len(truth_nums) == 1:
+                # Ground truth is single number, check if any predicted number matches
+                numerical_match = any(
+                    abs(p - truth_nums[0]) / max(abs(truth_nums[0]), 1e-10) < 0.05
+                    for p in pred_nums
+                )
         except (ValueError, ZeroDivisionError):
             pass
 

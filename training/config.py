@@ -9,8 +9,8 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 # Model config — change these to train a different model
 # ---------------------------------------------------------------------------
-MODEL_NAME = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
-MODEL_TAG = "llama3.1-8b"  # Short name used in output paths
+MODEL_NAME = "unsloth/qwen3-8b-unsloth-bnb-4bit"
+MODEL_TAG = "qwen3-8b"  # Short name used in output paths
 
 # ---------------------------------------------------------------------------
 # Paths (derived from MODEL_TAG)
@@ -46,7 +46,7 @@ GENERATION_CONFIG = dict(
 
 LORA_CONFIG = dict(
     r=16,
-    lora_alpha=16,
+    lora_alpha=32,
     lora_dropout=0,
     target_modules=[
         "q_proj", "k_proj", "v_proj", "o_proj",
@@ -59,11 +59,11 @@ LORA_CONFIG = dict(
 TRAIN_CONFIG = dict(
     per_device_train_batch_size=2,
     gradient_accumulation_steps=4,
-    num_train_epochs=3,
-    learning_rate=2e-4,
-    warmup_steps=5,
+    num_train_epochs=4,
+    learning_rate=5e-5,
+    warmup_steps=10,
     weight_decay=0.01,
-    lr_scheduler_type="linear",
+    lr_scheduler_type="cosine",
     optim="adamw_8bit",
     bf16=True,
     logging_steps=5,

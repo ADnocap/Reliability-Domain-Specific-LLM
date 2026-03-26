@@ -8,6 +8,7 @@ For each fold (0-4):
 """
 
 import sys
+from functools import partial
 from pathlib import Path
 
 import torch
@@ -23,18 +24,11 @@ from training.config import (
 )
 
 
-def _format_convo(convo):
-    """Format a single conversation into a Llama 3.1 chat template string."""
-    parts = ["<|begin_of_text|>"]
-    for msg in convo:
-        role = msg["role"]
-        content = msg["content"]
-        parts.append(f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>")
-    return "".join(parts)
+def formatting_func(examples, tokenizer):
+    """Format examples into chat template strings (model-agnostic).
 
-
-def formatting_func(examples):
-    """Format examples into chat template strings.
+    Uses tokenizer.apply_chat_template() so the pipeline works with any model
+    (Llama, Qwen, Gemma, etc.).
 
     Unsloth calls this in two ways:
     - Test call: single example (dict with conversations as list of messages)
@@ -43,9 +37,17 @@ def formatting_func(examples):
     """
     conversations = examples["conversations"]
     if conversations and isinstance(conversations[0], dict):
-        return [_format_convo(conversations)]
+        convos = [conversations]
     else:
-        return [_format_convo(convo) for convo in conversations]
+        convos = conversations
+
+    results = []
+    for convo in convos:
+        text = tokenizer.apply_chat_template(
+            convo, tokenize=False, add_generation_prompt=False
+        )
+        results.append(text)
+    return results
 
 
 def main():
@@ -87,7 +89,7 @@ def main():
             tokenizer=tokenizer,
             train_dataset=hf_dataset,
             args=sft_config,
-            formatting_func=formatting_func,
+            formatting_func=partial(formatting_func, tokenizer=tokenizer),
         )
 
         print("Starting training...")

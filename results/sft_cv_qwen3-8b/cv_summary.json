@@ -1,0 +1,661 @@
+{
+  "model_tag": "qwen3-8b",
+  "n_folds": 5,
+  "baseline": {
+    "mean_accuracy": 67.91,
+    "std_accuracy": 6.48,
+    "per_fold": [
+      65.11627906976744,
+      74.4186046511628,
+      62.7906976744186,
+      60.46511627906976,
+      76.74418604651163
+    ]
+  },
+  "finetuned": {
+    "mean_accuracy": 66.98,
+    "std_accuracy": 5.77,
+    "per_fold": [
+      62.7906976744186,
+      76.74418604651163,
+      69.76744186046511,
+      60.46511627906976,
+      65.11627906976744
+    ]
+  },
+  "delta_mean": -0.93,
+  "wilcoxon_statistic": 4.0,
+  "wilcoxon_p_value": 0.875,
+  "significant": false,
+  "accuracy_by_type": {
+    "numeric": {
+      "total": 215,
+      "baseline_correct": 146,
+      "baseline_accuracy": 67.91,
+      "finetuned_correct": 144,
+      "finetuned_accuracy": 66.98,
+      "delta": -0.93
+    }
+  },
+  "question_flips": [
+    {
+      "fold": 0,
+      "question": "Suppose we want to be 60% confident of meeting an MTTF of at least 2,000,000 hours (in other words, a failure rate of 50",
+      "answer_type": "numeric",
+      "ground_truth": "2023",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the probability of a single unit failing during the test is p = 1 - e^{-λT} = 1 - e^{-500 * 10^-9 * ",
+      "finetuned_answer": "$$n = \\frac{-0"
+    },
+    {
+      "fold": 0,
+      "question": "Using the Goal Seek function, find the necessary sample size n for an LTPD = 2.21% and a beta risk of 0.1 for the accept",
+      "answer_type": "numeric",
+      "ground_truth": "175",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "using the Goal Seek function in Excel would be appropriate here. \n\nBut since I don't have Excel in f",
+      "finetuned_answer": "$$\\frac{p_0}{p_1} = \\frac{0.0221}{0.01} = 2.2"
+    },
+    {
+      "fold": 0,
+      "question": "Let us assume the lifetime follows a Weibull distribution, find the shape parameter necessary for 5% failures in the fir",
+      "answer_type": "numeric",
+      "ground_truth": "1.10",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "-ln(0.95) ≈ 0.051293.\n\nSo, (2000/30000)^β ≈ 0.051293\n\nLet me compute 2000 divided by 30000. That's 2",
+      "finetuned_answer": "1.291"
+    },
+    {
+      "fold": 0,
+      "question": "Consider the exponential distribution with MTTF = 50,000 hours. What is the time to 50% failure?",
+      "answer_type": "numeric",
+      "ground_truth": "34657",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "solving for t:\n\nt = -ln(0.5) / λ\n\nI know that ln(0.5) is a negative number, so the negatives will ca",
+      "finetuned_answer": "34655"
+    },
+    {
+      "fold": 0,
+      "question": "A radar system consists of a critical power amplifier component that fails according to a Weibull distribution with shap",
+      "answer_type": "numeric",
+      "ground_truth": "3",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the number of failures in a given time period isn't a Poisson process, but rather a non-homogeneous ",
+      "finetuned_answer": "4"
+    },
+    {
+      "fold": 0,
+      "question": "Consider a reliability test where five identical components are tested simultaneously. The failure times (in hours) are ",
+      "answer_type": "numeric",
+      "ground_truth": "52.47",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "Now, since this is a sample standard deviation, we divide by n-1, which is 5-1=4. So variance is 110",
+      "finetuned_answer": "52.07"
+    },
+    {
+      "fold": 0,
+      "question": "A reliability engineer is analyzing failure data for hydraulic pumps. A sample of 150 pumps is put on test, and testing ",
+      "answer_type": "numeric",
+      "ground_truth": "493.7",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "(0.1625)^(1/1.8) ≈ 0.367.\n\nTherefore, η ≈ 180 / 0.367 ≈ ?\n\nLet me compute 180 divided by 0.367. Let ",
+      "finetuned_answer": "$$\\Rightarrow \\eta = \\frac{180}{0.1625^{0.5"
+    },
+    {
+      "fold": 0,
+      "question": "A semiconductor manufacturer is evaluating the reliability of a new integrated circuit design. Field data shows that the",
+      "answer_type": "numeric",
+      "ground_truth": "52429",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "μ can be calculated by taking the natural logarithm of 120,000. Let me write that down:\n\nμ = ln(t₅₀)",
+      "finetuned_answer": "54000"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "53174",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "the gamma function Γ(1 + 0.5) = Γ(1.5). Now, I need to recall the value of Γ(1.5). \n\nI remember that",
+      "finetuned_answer": "53172"
+    },
+    {
+      "fold": 0,
+      "question": "A satellite communication system has a critical transponder subsystem consisting of 5 independent channels in a 3-out-of",
+      "answer_type": "numeric",
+      "ground_truth": "0.9712",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the spare's reliability at the mission time would be the probability that it hasn't failed by the ti",
+      "finetuned_answer": "0.8473"
+    },
+    {
+      "fold": 0,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a shape param",
+      "answer_type": "numeric",
+      "ground_truth": "0.9208",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "e^(-2.5 + 0.0047) = e^(-2.5) * e^(0.0047). \n\nWe know e^(-2.5) ≈ 0.08208. Then e^0.0047 is approximat",
+      "finetuned_answer": "0.9153"
+    },
+    {
+      "fold": 0,
+      "question": "A manufacturing facility produces automotive sensors using two production lines. Line 1 produces 70% of the total output",
+      "answer_type": "numeric",
+      "ground_truth": "0.0747",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the probability of testing positive given that the sensor is non-defective is P(T+|N) = 1 - specific",
+      "finetuned_answer": "0.94855"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications satellite contains a critical oscillator component whose lifetime follows a Weibull distribution wi",
+      "answer_type": "numeric",
+      "ground_truth": "44311",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "(β/η)*(t/η)^{β-1} dt = du. \n\nSo, the integral becomes ∫ t * e^{-u} * (du). But t = η * u^{1/β}. Ther",
+      "finetuned_answer": "44310"
+    },
+    {
+      "fold": 0,
+      "question": "A data center monitors server failures across its infrastructure. Server crashes follow a Poisson process with a rate of",
+      "answer_type": "numeric",
+      "ground_truth": "0.4493",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the probability we need is the probability that the time until failure is greater than 25 days, give",
+      "finetuned_answer": "0.1353"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications company is designing a redundant power supply system for a cell tower. The system consists of 5 ind",
+      "answer_type": "numeric",
+      "ground_truth": "0.9955",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the total reliability R is:\n\nR = P(3) + P(4) + P(5)\n\nLet me compute each term step by step.\n\nFirst, ",
+      "finetuned_answer": "1.4435"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications company is designing a redundant power supply system for a cell tower. The system consists of 5 ind",
+      "answer_type": "numeric",
+      "ground_truth": "0.2866",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "(0.92)^4 = 0.778688.\n\nWait, but hold on. Wait, (0.92)^4 is (0.92)^2 * (0.92)^2 = 0.8464 * 0.8464. Wa",
+      "finetuned_answer": "0.2866"
+    },
+    {
+      "fold": 0,
+      "question": "A system consists of three independent subsystems connected in series (all must function for system success). Each subsy",
+      "answer_type": "numeric",
+      "ground_truth": "49505",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": ":\n\nλ ≈ -(-0.0202) / 1000 = 0.0202 / 1000 = 0.0000202 per hour.\n\nThen, MTTF is 1/λ. So:\n\nMTTF = 1 / 0",
+      "finetuned_answer": "49500"
+    },
+    {
+      "fold": 0,
+      "question": "A data center operates three independent cooling systems (A, B, and C) in parallel to maintain server temperatures. Each",
+      "answer_type": "numeric",
+      "ground_truth": "13624",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "the probability that all three systems have failed by time t is the product of their individual fail",
+      "finetuned_answer": "13615"
+    },
+    {
+      "fold": 0,
+      "question": "A power supply unit has a lifetime that follows a Weibull distribution with shape parameter β = 2.5 and scale parameter ",
+      "answer_type": "numeric",
+      "ground_truth": "0.5929",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the conditional probability is indeed R(t) / R(t0). \n\nSo, in this case, t is 4000 hours, and t0 is 1",
+      "finetuned_answer": "0.696"
+    },
+    {
+      "fold": 1,
+      "question": "Consider the exponential distribution with MTTF = 50,000 hours. What is the time to 10% failure?",
+      "answer_type": "numeric",
+      "ground_truth": "5268",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "solving for t:\n\nt = -ln(0.90) / λ\n\nBut we already have λ in terms of MTTF. Since λ = 1 / MTTF, subst",
+      "finetuned_answer": "5268.03"
+    },
+    {
+      "fold": 1,
+      "question": "A component failure distribution is exponential with mean rate λ = 6.0%/K. For a renewal process involving a single-comp",
+      "answer_type": "numeric",
+      "ground_truth": "2",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "the failure rate is 6 per 1000 hours, which is 0.006 per hour. Wait, but the problem says \"mean rate",
+      "finetuned_answer": "2"
+    },
+    {
+      "fold": 1,
+      "question": "Electronic control units in automotive applications are found to have lifetimes that follow a Weibull distribution with ",
+      "answer_type": "numeric",
+      "ground_truth": "0.0621",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "e^0.0642 ≈ 1.0663, so e^-0.0642 ≈ 1 / 1.0663 ≈ 0.938. \n\nSo, approximately 0.938. Therefore, the CDF ",
+      "finetuned_answer": "17.6%"
+    },
+    {
+      "fold": 1,
+      "question": "A data center uses a redundant power supply system with three independent power modules arranged in a 2-out-of-3 configu",
+      "answer_type": "numeric",
+      "ground_truth": "0.9818",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the probability that a module fails is 1 - R = 0.08.\n\nNow, let's compute the probability for each ca",
+      "finetuned_answer": "1.760"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "13590",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "T ≥ η * [ -ln(0.95) ]^(1/β)\n\nBut wait, the question asks for the maximum T that maintains reliabilit",
+      "finetuned_answer": "13590"
+    },
+    {
+      "fold": 1,
+      "question": "A satellite communication system has a critical transponder subsystem consisting of 5 independent channels. Each channel",
+      "answer_type": "numeric",
+      "ground_truth": "0.9711",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "We know that e^-1.3 ≈ 0.2725, e^-1.3233",
+      "finetuned_answer": "0.9336"
+    },
+    {
+      "fold": 1,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a shape param",
+      "answer_type": "numeric",
+      "ground_truth": "2916",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "Δ ≈ 0.0174. Therefore, ln(0.1625) ≈ -1.8 - 0.0174 ≈ -1.8174. \n\nSo, ln(0.1625) ≈ -1.8174. Therefore, ",
+      "finetuned_answer": "3664"
+    },
+    {
+      "fold": 2,
+      "question": "Three assembly plants produce the same parts. Plant A produces 25% of the volume and has a shipment defect rate of 1%. P",
+      "answer_type": "numeric",
+      "ground_truth": "0.2841",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "Yes, so I think my answer",
+      "finetuned_answer": "0.2847"
+    },
+    {
+      "fold": 2,
+      "question": "Consider the case of four interarrival times (labeled 1, 2, 3, 4). There are 24 permutations of four objects. A reversal",
+      "answer_type": "numeric",
+      "ground_truth": "0.042",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "18. [3, 4, 2, 1]: Pairs are",
+      "finetuned_answer": "0.0417"
+    },
+    {
+      "fold": 2,
+      "question": "Assume the lifetime follows a lognormal distribution, find the time to achieve 10% failures, given $T_{50}$ of 100,000 h",
+      "answer_type": "numeric",
+      "ground_truth": "38245",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "μ = ln(100,000). Let me compute that. ln(10^5) is 5*ln(10) ≈ 5*2.302585 ≈ 11.5129. So μ ≈ 11.5129.\n\n",
+      "finetuned_answer": "16480"
+    },
+    {
+      "fold": 2,
+      "question": "100 units from a population of measurements believed to be normally distributed are randomly selected and measured. Howe",
+      "answer_type": "numeric",
+      "ground_truth": "79.3",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "solving for μ:\n\nμ = 72.9 + 6.4 = 79.3\n\nWait, but hold on. Is this correct? Because the data we have ",
+      "finetuned_answer": "66.5"
+    },
+    {
+      "fold": 2,
+      "question": "A power supply unit has a lifetime that follows a lognormal distribution with a median life T₅₀ of 80,000 hours. Quality",
+      "answer_type": "numeric",
+      "ground_truth": "0.769",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "I can solve for μ by taking the natural logarithm of 80,000. Let me write that down:\n\nT₅₀ = e^μ → μ ",
+      "finetuned_answer": "0.768"
+    },
+    {
+      "fold": 2,
+      "question": "Consider a reliability test where five identical components are tested simultaneously. The failure times (in hours) are ",
+      "answer_type": "numeric",
+      "ground_truth": "0.004105",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the MLE for λ is n divided by the sum, which is 5 / 1218. \n\nLet me compute that. \n\nFirst, 5 divided ",
+      "finetuned_answer": "0.00447"
+    },
+    {
+      "fold": 2,
+      "question": "A manufacturer conducts accelerated life testing on electronic components. Due to time constraints, testing is stopped a",
+      "answer_type": "numeric",
+      "ground_truth": "173.1",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "-ln(0.8) ≈ 0.22314\n\nSo:\n\n(95/η)^2.5 = 0.22314\n\nNow, solve for η. Let me rearrange:\n\n(95/η) = (0.2231",
+      "finetuned_answer": "149"
+    },
+    {
+      "fold": 2,
+      "question": "A data center uses a redundant power supply system with independent power modules. Each power module has a reliability o",
+      "answer_type": "numeric",
+      "ground_truth": "0.9981",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "But wait, that seems extremely high. Let me think: if each",
+      "finetuned_answer": "0.9987"
+    },
+    {
+      "fold": 2,
+      "question": "A data center operates a critical storage system with 5 independent hard drives in a RAID configuration. The system can ",
+      "answer_type": "numeric",
+      "ground_truth": "0.3915",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "(17/20)^2 * (17/20)^2 = (17/20)^4. But maybe that's complicating.\n\nAlternatively, just compute 0.722",
+      "finetuned_answer": "0.3915"
+    },
+    {
+      "fold": 2,
+      "question": "A quality control engineer is using a single sampling plan for incoming batches of automotive sensors with acceptance nu",
+      "answer_type": "numeric",
+      "ground_truth": "0.420",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "total probability = 2.925 * (0.975)^{77}\n\nBut (0.975)^{77} = e^{77 * ln(0.975)}. Let me compute that",
+      "finetuned_answer": "0.420"
+    },
+    {
+      "fold": 2,
+      "question": "A semiconductor manufacturer is performing reliability qualification testing on a new integrated circuit design. A sampl",
+      "answer_type": "numeric",
+      "ground_truth": "0.0001315",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "when calculating the MLE for the exponential distribution, we need to consider both the failure time",
+      "finetuned_answer": "0.000125"
+    },
+    {
+      "fold": 3,
+      "question": "A system consists of 20 serially connected independent components, each of which has a lifetime described by the exponen",
+      "answer_type": "numeric",
+      "ground_truth": "0.736",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the probability that the system fails by 100 hours is 1 minus that value.\n\nLet me compute that. Firs",
+      "finetuned_answer": "0.6867"
+    },
+    {
+      "fold": 3,
+      "question": "A component follows a lognormal distribution for its time-to-failure. Reliability testing shows that 10% of components f",
+      "answer_type": "numeric",
+      "ground_truth": "7.70",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "for the first equation:\n\nΦ( (ln(500) - μ) / σ ) = 0.10\n\nSimilarly, for the second equation:\n\nΦ( (ln(",
+      "finetuned_answer": "7.6956"
+    },
+    {
+      "fold": 3,
+      "question": "A manufacturer produces industrial control units whose lifetimes follow a lognormal distribution with a median life (T₅₀",
+      "answer_type": "numeric",
+      "ground_truth": "2.08",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "μ = ln(80,000). Let me calculate that. \n\nBut wait, maybe I don't need to compute μ numerically right",
+      "finetuned_answer": "2.24"
+    },
+    {
+      "fold": 3,
+      "question": "A production batch contains 30 semiconductor chips destined for a high-reliability application. Quality testing has reve",
+      "answer_type": "numeric",
+      "ground_truth": "0.4495",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "we can divide numerator and denominator by 7:\n\nNumerator: 1,232 / 7 = 176\n\nDenominator: 5,481 / 7 = ",
+      "finetuned_answer": "0.4495"
+    },
+    {
+      "fold": 3,
+      "question": "A manufacturing facility produces circuit boards and tests them before shipment. A batch of 30 circuit boards contains 8",
+      "answer_type": "numeric",
+      "ground_truth": "0.3779",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "So putting it all together, the probability is [C(18,3) * C(12,2)] / C(30,5) = (816 * 66)",
+      "finetuned_answer": "0.378"
+    },
+    {
+      "fold": 3,
+      "question": "A quality control engineer is designing a single sampling plan for incoming batches of automotive sensors. Historical da",
+      "answer_type": "numeric",
+      "ground_truth": "78",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "n=78 is the minimal n for RQL condition.\n\nNow, check the AQL condition. For AQL, p=0.8%, so λ_AQL = ",
+      "finetuned_answer": "$$P(X \\leq 1) = e^{-15.0} + 15.0 e^{-15.0} = 16.0e^{-15.0} = 0.0000000000000000000000000000000000000"
+    },
+    {
+      "fold": 3,
+      "question": "A quality control engineer is designing a single sampling plan for incoming batches of automotive sensors with AQL = 0.8",
+      "answer_type": "numeric",
+      "ground_truth": "0.130",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the probability of acceptance is P(X ≤ 1), where X follows a Poisson distribution with λ = 0.624. Th",
+      "finetuned_answer": "0.4647"
+    },
+    {
+      "fold": 3,
+      "question": "A satellite communication system consists of three redundant transmitters arranged in a 2-out-of-3 configuration (the sy",
+      "answer_type": "numeric",
+      "ground_truth": "0.9393",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "system reliability is 1 -",
+      "finetuned_answer": "0.939"
+    },
+    {
+      "fold": 4,
+      "question": "Using the Goal Seek function, find the necessary sample size n for an LTPD = 2.21% and a beta risk of 0.1 for the accept",
+      "answer_type": "numeric",
+      "ground_truth": "103",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": ":\n\nn = ln(0.1) / ln(1 - 0.0221)\n\nLet me compute that. First, calculate ln(0.1). That's approximately",
+      "finetuned_answer": "48"
+    },
+    {
+      "fold": 4,
+      "question": "A communication system component has a reliability function (survival function) given by $R(t) = e^{-0.5t}$ for $t \\geq ",
+      "answer_type": "numeric",
+      "ground_truth": "0.211",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the reliability at time T90 should be 90%, because 90% of the units are still working. Wait, let me ",
+      "finetuned_answer": "4.61"
+    },
+    {
+      "fold": 4,
+      "question": "A mechanical component has a lifetime that follows a Weibull distribution with shape parameter β = 2.5 and characteristi",
+      "answer_type": "numeric",
+      "ground_truth": "0.407",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "the probability we need is R(2000 + 3000) / R(2000) = R(5000)/R(2000). \n\nLet me verify that formula.",
+      "finetuned_answer": "0.475"
+    },
+    {
+      "fold": 4,
+      "question": "An aerospace company is conducting life testing on a new hydraulic actuator design. They place 50 actuators on test at n",
+      "answer_type": "numeric",
+      "ground_truth": "0.0001272",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "λ = r / [sum_{i=1}^r ti + (n - r) * T]\n\nWait, so that's the formula. Let me check if that's correct.",
+      "finetuned_answer": "0.00188"
+    },
+    {
+      "fold": 4,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a scale param",
+      "answer_type": "numeric",
+      "ground_truth": "0.8272",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "4^{-0.2} ≈ 1 / 1.3195 ≈ 0.7578. Then multiply by 1/4: 0.7578 * 0.25 ≈ 0.18945. So, approximately 0.1",
+      "finetuned_answer": "$$R(2000) = e^{-0.25^{1.2}} = e^{-0.25^{1.2}} = e^{-"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications satellite contains a critical oscillator component whose lifetime follows a Weibull distribution wi",
+      "answer_type": "numeric",
+      "ground_truth": "3",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "we need to find the smallest integer k such that the probability that the number of failures in 60,0",
+      "finetuned_answer": "3"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications company is designing a redundant power supply system for a cell tower. The system consists of 5 ind",
+      "answer_type": "numeric",
+      "ground_truth": "0.945",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "I might need to use numerical methods to approximate the value of R. \n\nAlternatively, maybe I can si",
+      "finetuned_answer": "0.9998"
+    }
+  ],
+  "per_fold_comparison": [
+    {
+      "fold": 0,
+      "total": 43,
+      "baseline_correct": 28,
+      "baseline_accuracy": 65.12,
+      "finetuned_correct": 27,
+      "finetuned_accuracy": 62.79,
+      "delta": -2.33
+    },
+    {
+      "fold": 1,
+      "total": 43,
+      "baseline_correct": 32,
+      "baseline_accuracy": 74.42,
+      "finetuned_correct": 33,
+      "finetuned_accuracy": 76.74,
+      "delta": 2.33
+    },
+    {
+      "fold": 2,
+      "total": 43,
+      "baseline_correct": 27,
+      "baseline_accuracy": 62.79,
+      "finetuned_correct": 30,
+      "finetuned_accuracy": 69.77,
+      "delta": 6.98
+    },
+    {
+      "fold": 3,
+      "total": 43,
+      "baseline_correct": 26,
+      "baseline_accuracy": 60.47,
+      "finetuned_correct": 26,
+      "finetuned_accuracy": 60.47,
+      "delta": 0.0
+    },
+    {
+      "fold": 4,
+      "total": 43,
+      "baseline_correct": 33,
+      "baseline_accuracy": 76.74,
+      "finetuned_correct": 28,
+      "finetuned_accuracy": 65.12,
+      "delta": -11.63
+    }
+  ]
+}

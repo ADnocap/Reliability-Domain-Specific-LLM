@@ -7,7 +7,7 @@ Output: data/cv_splits/fold_{0-4}_train.jsonl  (chat format for SFT)
 
 import sys
 from pathlib import Path
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import KFold
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from utils.data_io import load_dataset, save_dataset
@@ -34,20 +34,18 @@ def format_train_example(item: dict) -> dict:
 
 
 def main():
-    dataset = load_dataset(str(DATASET_PATH))
-    print(f"Loaded {len(dataset)} items from {DATASET_PATH}")
+    full_dataset = load_dataset(str(DATASET_PATH))
+    print(f"Loaded {len(full_dataset)} items from {DATASET_PATH}")
 
-    answer_types = [item.get("answer_type", "unknown") for item in dataset]
-    type_counts = {}
-    for t in answer_types:
-        type_counts[t] = type_counts.get(t, 0) + 1
-    print(f"Answer type distribution: {type_counts}")
+    # Filter to numeric questions only
+    dataset = [item for item in full_dataset if item.get("answer_type") == "numeric"]
+    print(f"Filtered to {len(dataset)} numeric questions (from {len(full_dataset)} total)")
 
     CV_SPLITS_DIR.mkdir(parents=True, exist_ok=True)
 
-    skf = StratifiedKFold(n_splits=N_FOLDS, shuffle=True, random_state=RANDOM_STATE)
+    kf = KFold(n_splits=N_FOLDS, shuffle=True, random_state=RANDOM_STATE)
 
-    for fold_idx, (train_indices, test_indices) in enumerate(skf.split(dataset, answer_types)):
+    for fold_idx, (train_indices, test_indices) in enumerate(kf.split(dataset)):
         train_items = [format_train_example(dataset[i]) for i in train_indices]
         train_path = CV_SPLITS_DIR / f"fold_{fold_idx}_train.jsonl"
         save_dataset(train_items, str(train_path))
@@ -56,21 +54,9 @@ def main():
         test_path = CV_SPLITS_DIR / f"fold_{fold_idx}_test.jsonl"
         save_dataset(test_items, str(test_path))
 
-        train_types = {}
-        for i in train_indices:
-            t = dataset[i].get("answer_type", "unknown")
-            train_types[t] = train_types.get(t, 0) + 1
-
-        test_types = {}
-        for i in test_indices:
-            t = dataset[i].get("answer_type", "unknown")
-            test_types[t] = test_types.get(t, 0) + 1
-
         print(f"Fold {fold_idx}: {len(train_indices)} train / {len(test_indices)} test")
-        print(f"  Train types: {train_types}")
-        print(f"  Test types:  {test_types}")
 
-    total = sum(len(list(skf.split(dataset, answer_types))[i][1]) for i in range(N_FOLDS))
+    total = sum(len(list(kf.split(dataset))[i][1]) for i in range(N_FOLDS))
     print(f"\nTotal test samples across folds: {total} (should be {len(dataset)})")
     print(f"Output directory: {CV_SPLITS_DIR}")
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=reliability-sft
 #SBATCH --nodes=1
-#SBATCH --time=06:00:00
+#SBATCH --time=14:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpua100
 #SBATCH --exclude=ruche-gpu11,ruche-gpu16,ruche-gpu17,ruche-gpu19,ruche-gpu12
