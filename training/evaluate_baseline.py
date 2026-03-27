@@ -156,7 +156,8 @@ def main():
                 {"role": "user", "content": question},
             ]
             input_ids = tokenizer.apply_chat_template(
-                messages, add_generation_prompt=True, return_tensors="pt"
+                messages, add_generation_prompt=True, return_tensors="pt",
+                enable_thinking=False,
             ).to(model.device)
 
             with torch.no_grad():

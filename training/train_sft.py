@@ -44,7 +44,8 @@ def formatting_func(examples, tokenizer):
     results = []
     for convo in convos:
         text = tokenizer.apply_chat_template(
-            convo, tokenize=False, add_generation_prompt=False
+            convo, tokenize=False, add_generation_prompt=False,
+            enable_thinking=False,
         )
         results.append(text)
     return results

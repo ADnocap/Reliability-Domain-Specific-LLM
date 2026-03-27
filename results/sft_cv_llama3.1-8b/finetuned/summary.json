@@ -1,6 +1,6 @@
 {
   "model": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
-  "adapter_dir": "/gpfs/workdir/dalbanal/reliability-sft/results/sft_cv/adapters",
+  "adapter_dir": "./results/sft_cv/adapters",
   "n_folds": 5,
   "mean_accuracy": 39.84917043740573,
   "per_fold": [

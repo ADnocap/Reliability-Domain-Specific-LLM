@@ -2,15 +2,30 @@
 
 Change MODEL_NAME and MODEL_TAG to train a different model.
 All output paths are derived from MODEL_TAG.
+Override settings via environment variables (SFT_*) for experiments.
 """
 
+import os
 from pathlib import Path
 
+
+def _env_float(key, default):
+    """Read a float from an environment variable, or return default."""
+    v = os.environ.get(key)
+    return float(v) if v else default
+
+
+def _env_int(key, default):
+    """Read an int from an environment variable, or return default."""
+    v = os.environ.get(key)
+    return int(v) if v else default
+
+
 # ---------------------------------------------------------------------------
-# Model config — change these to train a different model
+# Model config
 # ---------------------------------------------------------------------------
-MODEL_NAME = "unsloth/qwen3-8b-unsloth-bnb-4bit"
-MODEL_TAG = "qwen3-8b"  # Short name used in output paths
+MODEL_NAME = os.environ.get("SFT_MODEL", "unsloth/qwen3-8b-unsloth-bnb-4bit")
+MODEL_TAG = os.environ.get("SFT_TAG", "qwen3-8b-v2")
 
 # ---------------------------------------------------------------------------
 # Paths (derived from MODEL_TAG)
@@ -38,16 +53,18 @@ SYSTEM_PROMPT = (
 )
 
 GENERATION_CONFIG = dict(
-    max_new_tokens=2048,
+    max_new_tokens=_env_int("SFT_MAX_TOKENS", 4096),
     temperature=0.1,
     top_p=0.95,
     do_sample=True,
 )
 
+_neftune = _env_float("SFT_NEFTUNE", 5)
+
 LORA_CONFIG = dict(
-    r=16,
-    lora_alpha=32,
-    lora_dropout=0,
+    r=_env_int("SFT_LORA_R", 16),
+    lora_alpha=_env_int("SFT_LORA_ALPHA", 32),
+    lora_dropout=_env_float("SFT_LORA_DROPOUT", 0.05),
     target_modules=[
         "q_proj", "k_proj", "v_proj", "o_proj",
         "gate_proj", "up_proj", "down_proj",
@@ -59,9 +76,9 @@ LORA_CONFIG = dict(
 TRAIN_CONFIG = dict(
     per_device_train_batch_size=2,
     gradient_accumulation_steps=4,
-    num_train_epochs=4,
-    learning_rate=5e-5,
-    warmup_steps=10,
+    num_train_epochs=_env_int("SFT_EPOCHS", 3),
+    learning_rate=_env_float("SFT_LR", 2e-4),
+    warmup_steps=5,
     weight_decay=0.01,
     lr_scheduler_type="cosine",
     optim="adamw_8bit",
@@ -70,4 +87,5 @@ TRAIN_CONFIG = dict(
     save_strategy="epoch",
     report_to="none",
     seed=42,
+    neftune_noise_alpha=_neftune if _neftune > 0 else None,
 )

@@ -28,13 +28,13 @@ All output paths are derived from `MODEL_TAG`, so results for different models a
 
 ```bash
 rsync -avz --exclude '.git' --exclude '__pycache__' --exclude '*.pyc' \
-  . dalbanal@ruche.mesocentre.universite-paris-saclay.fr:/gpfs/workdir/dalbanal/reliability-sft/
+  . <username>@ruche.mesocentre.universite-paris-saclay.fr:$WORKDIR/reliability-sft/
 ```
 
 ### 2. SSH and setup
 
 ```bash
-ssh dalbanal@ruche.mesocentre.universite-paris-saclay.fr
+ssh <username>@ruche.mesocentre.universite-paris-saclay.fr
 bash $WORKDIR/reliability-sft/training/setup_laruche.sh
 ```
 
@@ -43,13 +43,13 @@ bash $WORKDIR/reliability-sft/training/setup_laruche.sh
 ```bash
 cd $WORKDIR/reliability-sft
 sbatch training/run_pipeline.slurm
-squeue -u dalbanal
+squeue -u <username>
 ```
 
 ### 4. Download results
 
 ```bash
-scp -r dalbanal@ruche.mesocentre.universite-paris-saclay.fr:/gpfs/workdir/dalbanal/reliability-sft/results/ results/
+scp -r <username>@ruche.mesocentre.universite-paris-saclay.fr:$WORKDIR/reliability-sft/results/ results/
 ```
 
 ## Output Structure

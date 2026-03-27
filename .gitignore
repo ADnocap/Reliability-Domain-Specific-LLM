@@ -1,4 +1,40 @@
+# Secrets
 .env
+
+# Textbooks (copyrighted)
 textbooks/
+
+# Claude Code
 .claude
+
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model weights (too large for git)
+*.pt
+*.pth
+*.safetensors
+*.bin
+
+# Data intermediates
+data/archive/
+data/cleaning_checkpoint.jsonl

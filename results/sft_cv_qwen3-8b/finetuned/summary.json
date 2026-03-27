@@ -1,7 +1,7 @@
 {
   "model": "unsloth/qwen3-8b-unsloth-bnb-4bit",
   "model_tag": "qwen3-8b",
-  "adapter_dir": "/gpfs/workdir/dalbanal/reliability-sft/results/sft_cv_qwen3-8b/adapters",
+  "adapter_dir": "./results/sft_cv_qwen3-8b/adapters",
   "n_folds": 5,
   "mean_accuracy": 66.97674418604652,
   "per_fold": [
