@@ -1,0 +1,540 @@
+{
+  "model_tag": "qwen3-8b-lr1e4",
+  "n_folds": 5,
+  "baseline": {
+    "mean_accuracy": 68.84,
+    "std_accuracy": 3.15,
+    "per_fold": [
+      69.76744186046511,
+      69.76744186046511,
+      72.09302325581395,
+      62.7906976744186,
+      69.76744186046511
+    ]
+  },
+  "finetuned": {
+    "mean_accuracy": 68.37,
+    "std_accuracy": 5.01,
+    "per_fold": [
+      65.11627906976744,
+      69.76744186046511,
+      72.09302325581395,
+      60.46511627906976,
+      74.4186046511628
+    ]
+  },
+  "delta_mean": -0.47,
+  "wilcoxon_statistic": 3.0,
+  "wilcoxon_p_value": 1.0,
+  "significant": false,
+  "accuracy_by_type": {
+    "numeric": {
+      "total": 215,
+      "baseline_correct": 148,
+      "baseline_accuracy": 68.84,
+      "finetuned_correct": 147,
+      "finetuned_accuracy": 68.37,
+      "delta": -0.47
+    }
+  },
+  "question_flips": [
+    {
+      "fold": 0,
+      "question": "Suppose we want to be 60% confident of meeting an MTTF of at least 2,000,000 hours (in other words, a failure rate of 50",
+      "answer_type": "numeric",
+      "ground_truth": "2023",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{13,500}\n$$\n\nYou need **13,500 units** to be **60% confident** of meeting an **MTTF of ",
+      "finetuned_answer": "$$\\chi^2(0.40,"
+    },
+    {
+      "fold": 0,
+      "question": "Let us assume the lifetime follows a Weibull distribution, find the shape parameter necessary for 5% failures in the fir",
+      "answer_type": "numeric",
+      "ground_truth": "1.10",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{1.095}\n$$\n\nSo, the **shape parameter** $ \\beta $ is approximately **1.095**.",
+      "finetuned_answer": "1.864"
+    },
+    {
+      "fold": 0,
+      "question": "Consider the exponential distribution with MTTF = 50,000 hours. What is the time to 50% failure?",
+      "answer_type": "numeric",
+      "ground_truth": "34657",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{34,655 \\text{ hours}}\n$$",
+      "finetuned_answer": "34655"
+    },
+    {
+      "fold": 0,
+      "question": "A radar system consists of a critical power amplifier component that fails according to a Weibull distribution with shap",
+      "answer_type": "numeric",
+      "ground_truth": "3",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{2}\n$$",
+      "finetuned_answer": "For a Weibull distribution with β = 1.5 and η = 8,000 hours, the CDF is F(t) = 1 - e^{-(t/η)^β}. The"
+    },
+    {
+      "fold": 0,
+      "question": "A reliability engineer is analyzing failure data for hydraulic pumps. A sample of 150 pumps is put on test, and testing ",
+      "answer_type": "numeric",
+      "ground_truth": "493.7",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{\\eta \\approx 406.32 \\text{ hours}}\n$$",
+      "finetuned_answer": "489.5"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "53174",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{53,175} \\text{ hours}\n$$",
+      "finetuned_answer": "53172"
+    },
+    {
+      "fold": 0,
+      "question": "A satellite communication system has a critical transponder subsystem consisting of 5 independent channels in a 3-out-of",
+      "answer_type": "numeric",
+      "ground_truth": "0.9712",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.9884}\n$$",
+      "finetuned_answer": "$$R_{sys} = 0."
+    },
+    {
+      "fold": 0,
+      "question": "A manufacturing facility produces automotive sensors using two production lines. Line 1 produces 70% of the total output",
+      "answer_type": "numeric",
+      "ground_truth": "0.0747",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.07465}\n$$\n\nSo, the probability that a randomly selected sensor will test positive is",
+      "finetuned_answer": "0.94855"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications satellite contains a critical oscillator component whose lifetime follows a Weibull distribution wi",
+      "answer_type": "numeric",
+      "ground_truth": "44311",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{44,312.5 \\text{ hours}}\n$$",
+      "finetuned_answer": "44310"
+    },
+    {
+      "fold": 0,
+      "question": "A data center monitors server failures across its infrastructure. Server crashes follow a Poisson process with a rate of",
+      "answer_type": "numeric",
+      "ground_truth": "0.4493",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.4493}\n$$",
+      "finetuned_answer": "0.1353"
+    },
+    {
+      "fold": 0,
+      "question": "A manufacturer conducts accelerated life testing on electronic components. Five components are tested simultaneously, an",
+      "answer_type": "numeric",
+      "ground_truth": "182",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{182}\n$$",
+      "finetuned_answer": "1"
+    },
+    {
+      "fold": 0,
+      "question": "A power supply unit has a lifetime that follows a Weibull distribution with shape parameter β = 2.5 and scale parameter ",
+      "answer_type": "numeric",
+      "ground_truth": "0.5929",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.5927}\n$$\n\nThe probability that the power supply will survive to at least 4000 hours, giv",
+      "finetuned_answer": "0.693"
+    },
+    {
+      "fold": 1,
+      "question": "An automatic misting system in an agricultural study follows a Poisson process with rate λ = 0.2 mistings per hour. Give",
+      "answer_type": "numeric",
+      "ground_truth": "0.6703",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.6703}\n$$",
+      "finetuned_answer": "e^{-1.2} ≈ 0.3012"
+    },
+    {
+      "fold": 1,
+      "question": "Consider the exponential distribution with MTTF = 50,000 hours. What is the time to 10% failure?",
+      "answer_type": "numeric",
+      "ground_truth": "5268",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{5,268.03 \\text{ hours}}\n$$",
+      "finetuned_answer": "5268"
+    },
+    {
+      "fold": 1,
+      "question": "Let us assume the lifetime follows a Weibull distribution, find the time to achieve 20% failures, given a characteristic",
+      "answer_type": "numeric",
+      "ground_truth": "11157",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{11,157 \\text{ hours}}\n$$",
+      "finetuned_answer": "11155"
+    },
+    {
+      "fold": 1,
+      "question": "A sample of 50 units per lot is drawn from successive lots of manufactured components and life tested at stress for 24 h",
+      "answer_type": "numeric",
+      "ground_truth": "31, 521",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{a = 31, \\quad b = 521}\n$$",
+      "finetuned_answer": "Beta(20, 80)"
+    },
+    {
+      "fold": 1,
+      "question": "A communication system component has a reliability function (survival function) given by $R(t) = e^{-0.5t}$ for $t \\geq ",
+      "answer_type": "numeric",
+      "ground_truth": "0.5",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{h(t) = 0.5}\n$$",
+      "finetuned_answer": "-0.5"
+    },
+    {
+      "fold": 1,
+      "question": "Electronic control units in automotive applications are found to have lifetimes that follow a Weibull distribution with ",
+      "answer_type": "numeric",
+      "ground_truth": "0.0621",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{6.2\\%}\n$$\n\nThe expected cumulative percent failure at 50,000 hours of operation is **6",
+      "finetuned_answer": "0.176"
+    },
+    {
+      "fold": 1,
+      "question": "A manufacturing facility operates a critical production line that requires at least 2 out of 4 parallel pumps to maintai",
+      "answer_type": "numeric",
+      "ground_truth": "0.9978",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.9977}\n$$",
+      "finetuned_answer": "0.0039"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "13590",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{13,590 \\text{ hours}}\n$$",
+      "finetuned_answer": "13590"
+    },
+    {
+      "fold": 1,
+      "question": "A component manufacturer claims their new microprocessor has a failure rate not exceeding 1000 FITs. To verify this clai",
+      "answer_type": "numeric",
+      "ground_truth": "4000",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{4,000,000 \\text{ FITs}}\n$$",
+      "finetuned_answer": "4000"
+    },
+    {
+      "fold": 1,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a shape param",
+      "answer_type": "numeric",
+      "ground_truth": "2916",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{3328}\n$$\n\nMaintenance should be scheduled at approximately **3328 hours** to ensure th",
+      "finetuned_answer": "3016"
+    },
+    {
+      "fold": 2,
+      "question": "What is the minimum sample size that will allow us to verify a 500,000-hour MTTF with 85% confidence, given that the tes",
+      "answer_type": "numeric",
+      "ground_truth": "380",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "** The minimum sample size required is **379**.",
+      "finetuned_answer": "For a reliability demonstration test with a specified MTTF (θ₀ = 500,000 hours), we use the chi-squa"
+    },
+    {
+      "fold": 2,
+      "question": "Consider the case of four interarrival times (labeled 1, 2, 3, 4). There are 24 permutations of four objects. A reversal",
+      "answer_type": "numeric",
+      "ground_truth": "0.042",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{\\frac{1}{24}}\n$$",
+      "finetuned_answer": "0.0417"
+    },
+    {
+      "fold": 2,
+      "question": "Assume the lifetime follows a lognormal distribution, find the time to achieve 10% failures, given $T_{50}$ of 100,000 h",
+      "answer_type": "numeric",
+      "ground_truth": "38245",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{38,000 \\text{ hours}}\n$$",
+      "finetuned_answer": "38000"
+    },
+    {
+      "fold": 2,
+      "question": "Assume the lifetime follows a lognormal distribution, find the expected cumulative percent fallout at 2,000 hours, given",
+      "answer_type": "numeric",
+      "ground_truth": "0.135",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{13.45\\%}\n$$",
+      "finetuned_answer": "0.1371"
+    },
+    {
+      "fold": 2,
+      "question": "100 units from a population of measurements believed to be normally distributed are randomly selected and measured. Howe",
+      "answer_type": "numeric",
+      "ground_truth": "79.3",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{79.3}\n$$",
+      "finetuned_answer": "$$\\mu = 72.9 - 5.0 \\cdot \\frac{0.0000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "fold": 2,
+      "question": "A manufacturer conducts accelerated life testing on electronic components. Due to time constraints, testing is stopped a",
+      "answer_type": "numeric",
+      "ground_truth": "173.1",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{173.5}\n$$\n\nThe estimated **characteristic life (η)** of the Weibull distribution for t",
+      "finetuned_answer": "149"
+    },
+    {
+      "fold": 2,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a shape param",
+      "answer_type": "numeric",
+      "ground_truth": "0.2915",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.270}\n$$\n\nSo, the probability that a pump fails between 3,000 and 6,000 hours is **0.",
+      "finetuned_answer": "0.291"
+    },
+    {
+      "fold": 2,
+      "question": "A quality control engineer is using a single sampling plan for incoming batches of automotive sensors with acceptance nu",
+      "answer_type": "numeric",
+      "ground_truth": "0.420",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.419}\n$$",
+      "finetuned_answer": "0.689"
+    },
+    {
+      "fold": 3,
+      "question": "Suppose that a population of components follows the life-distribution model: F(t) = 1 - e^{-(t/2000)^{0.5}}. If we use 2",
+      "answer_type": "numeric",
+      "ground_truth": "62.54",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{63}\n$$",
+      "finetuned_answer": "135"
+    },
+    {
+      "fold": 3,
+      "question": "A power supply unit has a constant failure rate of λ = 0.004 failures per 1000 hours. The unit operates continuously and",
+      "answer_type": "numeric",
+      "ground_truth": "0.0067",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.0067}\n$$\n\nSo, the probability of having **2 or more additional failures** in the next 30",
+      "finetuned_answer": "1"
+    },
+    {
+      "fold": 3,
+      "question": "A semiconductor manufacturing facility operates a fleet of 15 identical robotic handling systems. A reliability study tr",
+      "answer_type": "numeric",
+      "ground_truth": "3603600",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{3,603,600}\n$$",
+      "finetuned_answer": "3603600"
+    },
+    {
+      "fold": 4,
+      "question": "Assume the lifetime follows a Weibull distribution, find the expected cumulative percent fallout at 1,000 hours, given a",
+      "answer_type": "numeric",
+      "ground_truth": "0.0311",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{3.11\\%}\n$$",
+      "finetuned_answer": "0.0311"
+    },
+    {
+      "fold": 4,
+      "question": "A reliability engineer is comparing two suppliers for a critical electronic component. A sample of 25 components from Su",
+      "answer_type": "numeric",
+      "ground_truth": "8333",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{1000} \\text{ hours}\n$$",
+      "finetuned_answer": "8333.33"
+    },
+    {
+      "fold": 4,
+      "question": "A quality control inspector has a box containing 20 electronic components: 5 are defective and 15 are functional. Due to",
+      "answer_type": "numeric",
+      "ground_truth": "0.4605",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{\\frac{35}{76}}\n$$",
+      "finetuned_answer": "0.4598"
+    },
+    {
+      "fold": 4,
+      "question": "A communication system component has a reliability function (survival function) given by $R(t) = e^{-0.5t}$ for $t \\geq ",
+      "answer_type": "numeric",
+      "ground_truth": "0.211",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{T_{90} \\approx 0.211 \\text{ years}}\n$$",
+      "finetuned_answer": "4.61"
+    },
+    {
+      "fold": 4,
+      "question": "A mechanical component has a lifetime that follows a Weibull distribution with shape parameter β = 2.5 and characteristi",
+      "answer_type": "numeric",
+      "ground_truth": "0.407",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.4069}\n$$\n\nSo, the probability that the component will survive an additional 3000 hours, ",
+      "finetuned_answer": "0.429"
+    },
+    {
+      "fold": 4,
+      "question": "A satellite communication system has a critical transponder subsystem consisting of 5 independent channels. The mission ",
+      "answer_type": "numeric",
+      "ground_truth": "0.9150",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{0.866}\n$$\n\nThe **reliability of the transponder subsystem** for a 5-year mission is approx",
+      "finetuned_answer": "0.910"
+    },
+    {
+      "fold": 4,
+      "question": "A manufacturer produces industrial control units whose lifetimes follow a lognormal distribution with a median life (T₅₀",
+      "answer_type": "numeric",
+      "ground_truth": "11104",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{10,300} \\text{ hours}\n$$",
+      "finetuned_answer": "10800"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications company is designing a redundant power supply system for a cell tower using independent battery bac",
+      "answer_type": "numeric",
+      "ground_truth": "6",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n$$\n\\boxed{6}\n$$",
+      "finetuned_answer": "0.9874"
+    }
+  ],
+  "per_fold_comparison": [
+    {
+      "fold": 0,
+      "total": 43,
+      "baseline_correct": 30,
+      "baseline_accuracy": 69.77,
+      "finetuned_correct": 28,
+      "finetuned_accuracy": 65.12,
+      "delta": -4.65
+    },
+    {
+      "fold": 1,
+      "total": 43,
+      "baseline_correct": 30,
+      "baseline_accuracy": 69.77,
+      "finetuned_correct": 30,
+      "finetuned_accuracy": 69.77,
+      "delta": 0.0
+    },
+    {
+      "fold": 2,
+      "total": 43,
+      "baseline_correct": 31,
+      "baseline_accuracy": 72.09,
+      "finetuned_correct": 31,
+      "finetuned_accuracy": 72.09,
+      "delta": 0.0
+    },
+    {
+      "fold": 3,
+      "total": 43,
+      "baseline_correct": 27,
+      "baseline_accuracy": 62.79,
+      "finetuned_correct": 26,
+      "finetuned_accuracy": 60.47,
+      "delta": -2.33
+    },
+    {
+      "fold": 4,
+      "total": 43,
+      "baseline_correct": 30,
+      "baseline_accuracy": 69.77,
+      "finetuned_correct": 32,
+      "finetuned_accuracy": 74.42,
+      "delta": 4.65
+    }
+  ]
+}

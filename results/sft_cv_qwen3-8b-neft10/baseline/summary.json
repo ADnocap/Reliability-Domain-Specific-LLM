@@ -1,0 +1,58 @@
+{
+  "model": "unsloth/qwen3-8b-unsloth-bnb-4bit",
+  "model_tag": "qwen3-8b-neft10",
+  "n_folds": 5,
+  "mean_accuracy": 70.69767441860465,
+  "per_fold": [
+    {
+      "fold": 0,
+      "total": 43,
+      "correct": 31,
+      "accuracy": 72.09302325581395,
+      "accuracy_by_type": {
+        "numeric": 72.09302325581395
+      },
+      "elapsed_seconds": 2357.019111394882
+    },
+    {
+      "fold": 1,
+      "total": 43,
+      "correct": 31,
+      "accuracy": 72.09302325581395,
+      "accuracy_by_type": {
+        "numeric": 72.09302325581395
+      },
+      "elapsed_seconds": 1804.5585975646973
+    },
+    {
+      "fold": 2,
+      "total": 43,
+      "correct": 30,
+      "accuracy": 69.76744186046511,
+      "accuracy_by_type": {
+        "numeric": 69.76744186046511
+      },
+      "elapsed_seconds": 2135.679610490799
+    },
+    {
+      "fold": 3,
+      "total": 43,
+      "correct": 28,
+      "accuracy": 65.11627906976744,
+      "accuracy_by_type": {
+        "numeric": 65.11627906976744
+      },
+      "elapsed_seconds": 2511.5405724048615
+    },
+    {
+      "fold": 4,
+      "total": 43,
+      "correct": 32,
+      "accuracy": 74.4186046511628,
+      "accuracy_by_type": {
+        "numeric": 74.4186046511628
+      },
+      "elapsed_seconds": 2475.45960688591
+    }
+  ]
+}

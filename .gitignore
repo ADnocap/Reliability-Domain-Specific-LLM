@@ -38,3 +38,7 @@ Thumbs.db
 # Data intermediates
 data/archive/
 data/cleaning_checkpoint.jsonl
+
+# Working documents (not for public repo)
+METHODOLOGY.md
+RESULTS.md

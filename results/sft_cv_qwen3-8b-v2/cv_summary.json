@@ -1,0 +1,606 @@
+{
+  "model_tag": "qwen3-8b-v2",
+  "n_folds": 5,
+  "baseline": {
+    "mean_accuracy": 67.91,
+    "std_accuracy": 3.72,
+    "per_fold": [
+      67.44186046511628,
+      72.09302325581395,
+      65.11627906976744,
+      62.7906976744186,
+      72.09302325581395
+    ]
+  },
+  "finetuned": {
+    "mean_accuracy": 74.88,
+    "std_accuracy": 4.0,
+    "per_fold": [
+      76.74418604651163,
+      67.44186046511628,
+      79.06976744186046,
+      74.4186046511628,
+      76.74418604651163
+    ]
+  },
+  "delta_mean": 6.98,
+  "wilcoxon_statistic": 1.0,
+  "wilcoxon_p_value": 0.125,
+  "significant": false,
+  "accuracy_by_type": {
+    "numeric": {
+      "total": 215,
+      "baseline_correct": 146,
+      "baseline_accuracy": 67.91,
+      "finetuned_correct": 161,
+      "finetuned_accuracy": 74.88,
+      "delta": 6.98
+    }
+  },
+  "question_flips": [
+    {
+      "fold": 0,
+      "question": "Suppose we want to be 60% confident of meeting an MTTF of at least 2,000,000 hours (in other words, a failure rate of 50",
+      "answer_type": "numeric",
+      "ground_truth": "2023",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{5108}\n$$",
+      "finetuned_answer": "we need to allow for more failures to achieve a feasible sample size.\n\nLet's try r = 2 failures allo"
+    },
+    {
+      "fold": 0,
+      "question": "Consider the exponential distribution with MTTF = 50,000 hours. What is the time to 50% failure?",
+      "answer_type": "numeric",
+      "ground_truth": "34657",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{34,655 \\text{ hours}}\n$$",
+      "finetuned_answer": "34655"
+    },
+    {
+      "fold": 0,
+      "question": "A reliability engineer is analyzing failure data for hydraulic pumps. A sample of 150 pumps is put on test, and testing ",
+      "answer_type": "numeric",
+      "ground_truth": "493.7",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{\\eta \\approx 432.17 \\text{ hours}}\n$$",
+      "finetuned_answer": "476"
+    },
+    {
+      "fold": 0,
+      "question": "A manufacturing facility produces circuit boards and conducts a life test on 10 identical boards. The test is terminated",
+      "answer_type": "numeric",
+      "ground_truth": "0.9667",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{\\frac{5}{6}}\n$$",
+      "finetuned_answer": "0.9667"
+    },
+    {
+      "fold": 0,
+      "question": "A manufacturing facility experiences machine breakdowns that follow a Poisson process with a rate of 1.2 breakdowns per ",
+      "answer_type": "numeric",
+      "ground_truth": "0.209",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.2091}\n$$",
+      "finetuned_answer": "0.2237"
+    },
+    {
+      "fold": 0,
+      "question": "A semiconductor manufacturer is evaluating the reliability of a new integrated circuit design. Field data shows that the",
+      "answer_type": "numeric",
+      "ground_truth": "52429",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{56,000 \\text{ hours}}\n$$",
+      "finetuned_answer": "51960"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "53174",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{53,175 \\text{ hours}}\n$$",
+      "finetuned_answer": "53172"
+    },
+    {
+      "fold": 0,
+      "question": "A manufacturing facility produces automotive sensors using two production lines. Line 1 produces 70% of the total output",
+      "answer_type": "numeric",
+      "ground_truth": "0.0747",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.07465}\n$$\n\nSo, the probability that a randomly selected sensor will test positive is **a",
+      "finetuned_answer": "0.067"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications satellite contains a critical oscillator component whose lifetime follows a Weibull distribution wi",
+      "answer_type": "numeric",
+      "ground_truth": "44311",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{44,310} \\text{ hours}\n$$",
+      "finetuned_answer": "44310"
+    },
+    {
+      "fold": 0,
+      "question": "A data center monitors server failures across its infrastructure. Server crashes follow a Poisson process with a rate of",
+      "answer_type": "numeric",
+      "ground_truth": "0.4493",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.4493}\n$$",
+      "finetuned_answer": "0.1353"
+    },
+    {
+      "fold": 1,
+      "question": "An automatic misting system in an agricultural study follows a Poisson process with rate λ = 0.2 mistings per hour. Give",
+      "answer_type": "numeric",
+      "ground_truth": "0.6703",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.6703}\n$$",
+      "finetuned_answer": "$$F_{T_4}(2) = 1 - 1"
+    },
+    {
+      "fold": 1,
+      "question": "Suppose 500 units are tested for 1000 hours with no fails. Calculate the 50% estimate for λ in FITs using the general fo",
+      "answer_type": "numeric",
+      "ground_truth": "1386",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{693 \\text{ FITs}}\n$$",
+      "finetuned_answer": "1386"
+    },
+    {
+      "fold": 1,
+      "question": "Let us assume the lifetime follows a Weibull distribution, find the time to achieve 20% failures, given a characteristic",
+      "answer_type": "numeric",
+      "ground_truth": "11157",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{11,157 \\text{ hours}}\n$$",
+      "finetuned_answer": "11155"
+    },
+    {
+      "fold": 1,
+      "question": "Suppose that a population of components follows the life-distribution model: F(t) = 1 - e^{-(t/2000)^{0.5}}. What is the",
+      "answer_type": "numeric",
+      "ground_truth": "0.3127",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.3128}\n$$",
+      "finetuned_answer": "0.2964"
+    },
+    {
+      "fold": 1,
+      "question": "In an experiment to compare different treatments, the old method produced 4 rejects out of 20. In the second experiment,",
+      "answer_type": "numeric",
+      "ground_truth": "0.09253",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.0521}\n$$",
+      "finetuned_answer": "0.0908"
+    },
+    {
+      "fold": 1,
+      "question": "A sample of 50 units per lot is drawn from successive lots of manufactured components and life tested at stress for 24 h",
+      "answer_type": "numeric",
+      "ground_truth": "31, 521",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{a = 31, \\quad b = 521}\n$$",
+      "finetuned_answer": "Beta(25, 75)"
+    },
+    {
+      "fold": 1,
+      "question": "A software development team is tracking defects in two different modules of their application. Module A has 50,000 lines",
+      "answer_type": "numeric",
+      "ground_truth": "0.36",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n$$\n\\boxed{0.36}\n$$",
+      "finetuned_answer": "0.00036"
+    },
+    {
+      "fold": 1,
+      "question": "A power supply unit has a constant failure rate of λ = 0.004 failures per 1000 hours. The unit operates continuously and",
+      "answer_type": "numeric",
+      "ground_truth": "0.00109",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.00109}\n$$",
+      "finetuned_answer": "2.748e-6"
+    },
+    {
+      "fold": 1,
+      "question": "A manufacturer conducts an accelerated life test on 300 LED light bulbs for 2500 hours. Assuming exponentially distribut",
+      "answer_type": "numeric",
+      "ground_truth": "92346",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{1096} \\text{ hours}\n$$",
+      "finetuned_answer": "93750"
+    },
+    {
+      "fold": 1,
+      "question": "A communication system component has a reliability function (survival function) given by $R(t) = e^{-0.5t}$ for $t \\geq ",
+      "answer_type": "numeric",
+      "ground_truth": "0.5",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{h(t) = 0.5}\n$$",
+      "finetuned_answer": "-0.5"
+    },
+    {
+      "fold": 1,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "13590",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{13,590 \\text{ hours}}\n$$",
+      "finetuned_answer": "13590"
+    },
+    {
+      "fold": 1,
+      "question": "A satellite communication system has a critical transponder subsystem consisting of 5 independent channels. Each channel",
+      "answer_type": "numeric",
+      "ground_truth": "0.9711",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "The **system reliability for the hot standby configuration** is:\n\n$$\n\\boxed{0.9559}\n$$\n\nThis is **lo",
+      "finetuned_answer": "This result is still greater than"
+    },
+    {
+      "fold": 2,
+      "question": "Assume that the lifetime follows a lognormal distribution, find the median life T₅₀ necessary for 5% failures by 96 hour",
+      "answer_type": "numeric",
+      "ground_truth": "1132",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{T_{50} \\approx 8.12}\n$$\n\nThis means that the **median life** of the system is approximatel",
+      "finetuned_answer": "1130"
+    },
+    {
+      "fold": 2,
+      "question": "Consider the case of four interarrival times (labeled 1, 2, 3, 4). There are 24 permutations of four objects. A reversal",
+      "answer_type": "numeric",
+      "ground_truth": "0.042",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{\\frac{1}{24}}\n$$",
+      "finetuned_answer": "0.0417"
+    },
+    {
+      "fold": 2,
+      "question": "Assume the lifetime follows a lognormal distribution, find the time to achieve 10% failures, given $T_{50}$ of 100,000 h",
+      "answer_type": "numeric",
+      "ground_truth": "38245",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{38,400 \\text{ hours}}\n$$",
+      "finetuned_answer": "38700"
+    },
+    {
+      "fold": 2,
+      "question": "Assume the lifetime follows a lognormal distribution, find the expected cumulative percent fallout at 2,000 hours, given",
+      "answer_type": "numeric",
+      "ground_truth": "0.135",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{13.45\\%}\n$$",
+      "finetuned_answer": "0.1355"
+    },
+    {
+      "fold": 2,
+      "question": "A memory chip lifetime for soft errors follows the exponential distribution with MTTF = 36 months. Find the probability ",
+      "answer_type": "numeric",
+      "ground_truth": "0.2424",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.243}\n$$\n\nSo, the probability of failure in the next 10 months, given survival to 10 mont",
+      "finetuned_answer": "0.1845"
+    },
+    {
+      "fold": 2,
+      "question": "Assume the lifetime follows a lognormal distribution, find the $T_{50}$ necessary to have an average failure rate of 50 ",
+      "answer_type": "numeric",
+      "ground_truth": "5.01e7",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{T_{50} \\approx 22026.47 \\text{ hours}}\n$$",
+      "finetuned_answer": "1"
+    },
+    {
+      "fold": 2,
+      "question": "A reliability test plan requires testing n units to failure with zero failures allowed (c = 0 acceptance number) to demo",
+      "answer_type": "numeric",
+      "ground_truth": "45",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{n = 2}\n$$",
+      "finetuned_answer": "46"
+    },
+    {
+      "fold": 2,
+      "question": "A manufacturer conducts accelerated life testing on electronic components. Due to time constraints, testing is stopped a",
+      "answer_type": "numeric",
+      "ground_truth": "173.1",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{168.7}\n$$\n\nThe estimated **characteristic life (η)** of the Weibull distribution for t",
+      "finetuned_answer": "142.2"
+    },
+    {
+      "fold": 2,
+      "question": "A power supply unit has a lifetime that follows a Weibull distribution with shape parameter β = 2.5 and scale parameter ",
+      "answer_type": "numeric",
+      "ground_truth": "0.9038",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.101}\n$$",
+      "finetuned_answer": "0.9215"
+    },
+    {
+      "fold": 2,
+      "question": "A reliability engineer is analyzing field failure data for a critical automotive component. Historical data shows that t",
+      "answer_type": "numeric",
+      "ground_truth": "0.696",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.594}\n$$\n\nThe reliability of the component at 100,000 miles is approximately **0.594*",
+      "finetuned_answer": "0.7165"
+    },
+    {
+      "fold": 3,
+      "question": "Let us assume the lifetime follows a Weibull distribution. Find the characteristic life necessary to have an AFR of 100 ",
+      "answer_type": "numeric",
+      "ground_truth": "2.52e5",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{252,000 \\text{ hours}}\n$$",
+      "finetuned_answer": "251900"
+    },
+    {
+      "fold": 3,
+      "question": "A manufacturer monitors the defect rate in production batches. A new production method is implemented, and the first bat",
+      "answer_type": "numeric",
+      "ground_truth": "0.01",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{\\frac{1}{100}}\n$$",
+      "finetuned_answer": "0.01"
+    },
+    {
+      "fold": 3,
+      "question": "A data center has backup generators that activate automatically when power failures occur. Power failures follow a Poiss",
+      "answer_type": "numeric",
+      "ground_truth": "0.607",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{e^{-0.5}}\n$$",
+      "finetuned_answer": "0.6065"
+    },
+    {
+      "fold": 3,
+      "question": "A manufacturer produces industrial control units whose lifetimes follow a lognormal distribution with a median life (T₅₀",
+      "answer_type": "numeric",
+      "ground_truth": "2.08",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.439}\n$$",
+      "finetuned_answer": "2.16"
+    },
+    {
+      "fold": 3,
+      "question": "A semiconductor manufacturing facility operates a fleet of 15 identical robotic handling systems. A reliability study tr",
+      "answer_type": "numeric",
+      "ground_truth": "3603600",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{3,603,600}\n$$",
+      "finetuned_answer": "3603600"
+    },
+    {
+      "fold": 4,
+      "question": "Using the Goal Seek function, find the necessary sample size n for an LTPD = 2.21% and a beta risk of 0.1 for the accept",
+      "answer_type": "numeric",
+      "ground_truth": "103",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{104}\n$$",
+      "finetuned_answer": "48"
+    },
+    {
+      "fold": 4,
+      "question": "Assume the lifetime follows a Weibull distribution, find the expected cumulative percent fallout at 1,000 hours, given a",
+      "answer_type": "numeric",
+      "ground_truth": "0.0311",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{3.11\\%}\n$$",
+      "finetuned_answer": "0.0311"
+    },
+    {
+      "fold": 4,
+      "question": "The lot acceptance criteria allows a maximum of three failures on 300 devices inspected (c = 3, n = 300, producer's risk",
+      "answer_type": "numeric",
+      "ground_truth": "0.029",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.015}\n$$\n\nThe **RQL** at a **consumer's risk β = 0.10** for the new sampling plan (n ",
+      "finetuned_answer": "0.0282"
+    },
+    {
+      "fold": 4,
+      "question": "A quality control inspector has a box containing 20 electronic components: 5 are defective and 15 are functional. Due to",
+      "answer_type": "numeric",
+      "ground_truth": "0.4605",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{\\frac{35}{76}}\n$$",
+      "finetuned_answer": "0.4598"
+    },
+    {
+      "fold": 4,
+      "question": "A reliability test is conducted on 50 identical electronic modules. The modules are tested until 8 failures occur. The f",
+      "answer_type": "numeric",
+      "ground_truth": "39511",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{4056.3 \\text{ hours}}\n$$",
+      "finetuned_answer": "39511.25"
+    },
+    {
+      "fold": 4,
+      "question": "An aerospace company is conducting life testing on a new hydraulic actuator design. They place 50 actuators on test at n",
+      "answer_type": "numeric",
+      "ground_truth": "0.0001272",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{0.001884}\n$$",
+      "finetuned_answer": "0.0001273"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications network uses a redundant server configuration to ensure high availability. The system consists of 5",
+      "answer_type": "numeric",
+      "ground_truth": "0.566",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.566}\n$$",
+      "finetuned_answer": "0.606"
+    },
+    {
+      "fold": 4,
+      "question": "A satellite communication system has a critical transponder subsystem consisting of 5 independent channels. The mission ",
+      "answer_type": "numeric",
+      "ground_truth": "0.9150",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.852}\n$$\n\nThe **reliability of the transponder subsystem** for a 5-year mission is ap",
+      "finetuned_answer": "0.913"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications satellite contains a critical oscillator component whose lifetime follows a Weibull distribution wi",
+      "answer_type": "numeric",
+      "ground_truth": "3",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n$$\n\\boxed{3}\n$$",
+      "finetuned_answer": "6"
+    },
+    {
+      "fold": 4,
+      "question": "A telecommunications company is designing a redundant power supply system for a cell tower using independent battery bac",
+      "answer_type": "numeric",
+      "ground_truth": "6",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n$$\n\\boxed{6}\n$$",
+      "finetuned_answer": "$$= 1001 \\times 0.71639296 \\times 0.000107374 + 2002 \\times 0.71639296 \\times 0.000134217 + 3003 \\ti"
+    }
+  ],
+  "per_fold_comparison": [
+    {
+      "fold": 0,
+      "total": 43,
+      "baseline_correct": 29,
+      "baseline_accuracy": 67.44,
+      "finetuned_correct": 33,
+      "finetuned_accuracy": 76.74,
+      "delta": 9.3
+    },
+    {
+      "fold": 1,
+      "total": 43,
+      "baseline_correct": 31,
+      "baseline_accuracy": 72.09,
+      "finetuned_correct": 29,
+      "finetuned_accuracy": 67.44,
+      "delta": -4.65
+    },
+    {
+      "fold": 2,
+      "total": 43,
+      "baseline_correct": 28,
+      "baseline_accuracy": 65.12,
+      "finetuned_correct": 34,
+      "finetuned_accuracy": 79.07,
+      "delta": 13.95
+    },
+    {
+      "fold": 3,
+      "total": 43,
+      "baseline_correct": 27,
+      "baseline_accuracy": 62.79,
+      "finetuned_correct": 32,
+      "finetuned_accuracy": 74.42,
+      "delta": 11.63
+    },
+    {
+      "fold": 4,
+      "total": 43,
+      "baseline_correct": 31,
+      "baseline_accuracy": 72.09,
+      "finetuned_correct": 33,
+      "finetuned_accuracy": 76.74,
+      "delta": 4.65
+    }
+  ]
+}
