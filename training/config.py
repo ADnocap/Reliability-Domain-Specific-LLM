@@ -31,7 +31,7 @@ MODEL_TAG = os.environ.get("SFT_TAG", "qwen3-8b-v2")
 # Paths (derived from MODEL_TAG)
 # ---------------------------------------------------------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATASET_PATH = PROJECT_ROOT / "data" / "master_dataset_cleaned.jsonl"
+DATASET_PATH = PROJECT_ROOT / "data" / os.environ.get("SFT_DATASET", "master_dataset_cleaned.jsonl")
 CV_SPLITS_DIR = PROJECT_ROOT / "data" / "cv_splits"
 RESULTS_DIR = PROJECT_ROOT / "results" / f"sft_cv_{MODEL_TAG}"
 BASELINE_DIR = RESULTS_DIR / "baseline"
@@ -54,9 +54,7 @@ SYSTEM_PROMPT = (
 
 GENERATION_CONFIG = dict(
     max_new_tokens=_env_int("SFT_MAX_TOKENS", 4096),
-    temperature=0.1,
-    top_p=0.95,
-    do_sample=True,
+    do_sample=False,
 )
 
 _neftune = _env_float("SFT_NEFTUNE", 5)

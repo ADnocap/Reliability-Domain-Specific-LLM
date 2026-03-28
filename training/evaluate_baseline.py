@@ -32,6 +32,7 @@ def normalize_answer(answer: str) -> str:
     answer = re.sub(r'\$(.*?)\$', r'\1', answer)
     answer = re.sub(r'\\frac\{(\d+)\}\{(\d+)\}', r'\1/\2', answer)
     answer = answer.replace(" ", "")
+    answer = re.sub(r'(\d),(\d)', r'\1\2', answer)  # 12,000 -> 12000
     answer = answer.replace("\u00d7", "x")
     answer = answer.replace("^", "**")
     return answer
