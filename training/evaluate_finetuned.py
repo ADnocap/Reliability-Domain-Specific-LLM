@@ -20,6 +20,7 @@ from utils.data_io import load_dataset
 from training.config import (
     MODEL_NAME, MODEL_TAG, MAX_SEQ_LENGTH, N_FOLDS,
     CV_SPLITS_DIR, ADAPTERS_DIR, FINETUNED_DIR, SYSTEM_PROMPT, GENERATION_CONFIG,
+    EVAL_THINKING,
 )
 
 
@@ -168,7 +169,7 @@ def main():
             ]
             input_ids = tokenizer.apply_chat_template(
                 messages, add_generation_prompt=True, return_tensors="pt",
-                enable_thinking=False,
+                enable_thinking=EVAL_THINKING,
             ).to(model.device)
 
             with torch.no_grad():

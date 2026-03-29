@@ -57,6 +57,10 @@ GENERATION_CONFIG = dict(
     do_sample=False,
 )
 
+# Thinking mode: controls enable_thinking kwarg in apply_chat_template for EVAL.
+# Training always uses enable_thinking=False (training data has no <think> blocks).
+EVAL_THINKING = os.environ.get("SFT_THINKING", "false").lower() == "true"
+
 _neftune = _env_float("SFT_NEFTUNE", 5)
 
 LORA_CONFIG = dict(

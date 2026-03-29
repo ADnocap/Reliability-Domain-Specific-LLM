@@ -35,9 +35,17 @@ Thumbs.db
 *.safetensors
 *.bin
 
-# Data intermediates
+# Data intermediates (keep only master_dataset_cleaned, master_dataset_v2, hard_numeric_generated)
 data/archive/
 data/cleaning_checkpoint.jsonl
+data/dataset_alex.json
+data/seed_extended.jsonl
+data/seed_latex_cleaned.jsonl
+data/seed_latex_cleaned.md
+data/seed_subset_49.md
+data/cross_model_rejected.md
+data/cross_model_verified.md
+data/master_dataset.jsonl
 
 # Working documents (not for public repo)
 METHODOLOGY.md

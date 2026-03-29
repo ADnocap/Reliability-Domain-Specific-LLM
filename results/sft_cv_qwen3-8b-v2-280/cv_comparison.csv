@@ -1,0 +1,6 @@
+fold,total,baseline_correct,baseline_accuracy,finetuned_correct,finetuned_accuracy,delta
+0,43,30,69.77,35,81.4,11.63
+1,56,38,67.86,37,66.07,-1.79
+2,56,31,55.36,33,58.93,3.57
+3,56,31,55.36,31,55.36,0.0
+4,56,40,71.43,36,64.29,-7.14
