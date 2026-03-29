@@ -305,7 +305,7 @@ def main():
         grpo_config = GRPOConfig(
             output_dir=str(fold_output_dir),
             num_generations=4,  # generate 4 responses per prompt
-            max_completion_length=2048,
+            max_completion_length=4096,
             per_device_train_batch_size=1,
             gradient_accumulation_steps=8,
             num_train_epochs=1,
