@@ -64,25 +64,25 @@ This project develops a domain-specific LLM by:
 ## Results Summary
 
 ### Dataset
-- 256 Q&A pairs (215 numeric, 21 formula, 19 text, 1 boolean)
-- Sources: 98 textbook-extracted (seed) + 158 cross-model verified (synthetic)
+- 215 numeric Q&A pairs (primary), 280 with hard augmentation
+- Sources: 98 textbook-extracted + 158 cross-model verified + 65 hard generated
 
-### Fine-Tuning Experiments (Qwen3-8B, numeric-only, 5-fold CV)
+### Best Results (Qwen3-8B, 5-fold CV, greedy decoding)
 
-| Experiment | Key Change | Baseline | Finetuned | Delta |
-|-----------|-----------|----------|-----------|-------|
-| Run 1 (thinking enabled) | LR=5e-5, no NEFTune | 67.9% | 67.0% | -0.9% |
-| **v2 (best guess)** | **LR=2e-4, NEFTune=5, no-think** | **67.9%** | **74.9%** | **+7.0%** |
-| neft10 | NEFTune=10 | 67.9% | 72.1% | +4.2% |
-| lowrank | r=8, alpha=16 | 67.9% | 69.3% | +1.4% |
-| lr1e4 | LR=1e-4 | 67.9% | TBD | TBD |
+| Experiment | Epochs | Baseline | Finetuned | Delta |
+|-----------|--------|----------|-----------|-------|
+| **v2, 4 epochs (best)** | **4** | **70.7%** | **73.0%** | **+2.3%** |
+| v2, 3 epochs | 3 | 70.7% | 71.6% | +0.9% |
+| v2, 5 epochs | 5 | 70.7% | 72.6% | +1.9% |
 
-### Earlier Experiments
+Config: LR=2e-4, NEFTune=5, r=16, alpha=32, dropout=0.05, non-thinking, 215 numeric questions.
 
-| Model | Dataset | Baseline | Finetuned | Delta |
-|-------|---------|----------|-----------|-------|
-| Qwen3-14B | 288 (all) | 8.6% | 13.8% | +5.2% |
-| Llama 3.1 8B | 256 (all) | 37.5% | 39.8% | +2.4% |
+### Model Comparison (baseline accuracy, no fine-tuning)
+
+| Model | Accuracy |
+|-------|----------|
+| Qwen3-8B | 70.7% |
+| Llama 3.1 8B | 37.5% |
 
 ---
 

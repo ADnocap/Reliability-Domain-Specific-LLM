@@ -10,11 +10,15 @@ need paired data — it learns from its own exploration.
 """
 
 import json
+import os
 import re
 import sys
 import time
 from functools import partial
 from pathlib import Path
+
+# Disable torch.compile to avoid Triton crash in older containers
+os.environ["TORCHDYNAMO_DISABLE"] = "1"
 
 import torch
 from unsloth import FastLanguageModel
@@ -239,27 +243,61 @@ def main():
         )
         print("SFT model loaded for GRPO.")
 
-        # Build GRPO dataset: just the prompts (questions)
+        # Pre-screen: generate 2 responses per question, keep only those
+        # where the model gets at least 1 right (has signal to learn from)
+        FastLanguageModel.for_inference(model)
         grpo_prompts = []
+        skipped = 0
         for item in train_data:
             question = None
+            gt_answer = None
             for msg in item["conversations"]:
                 if msg["role"] == "user":
                     question = msg["content"]
-            if question:
+                if msg["role"] == "assistant":
+                    gt_answer = extract_final_answer(msg["content"])
+            if not question or not gt_answer:
+                continue
+
+            messages = [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": question},
+            ]
+            input_ids = tokenizer.apply_chat_template(
+                messages, add_generation_prompt=True, return_tensors="pt",
+                enable_thinking=False,
+            ).to(model.device)
+
+            got_one_right = False
+            for _ in range(2):
+                with torch.no_grad():
+                    out = model.generate(input_ids=input_ids, max_new_tokens=1024,
+                                         do_sample=True, temperature=0.7, top_p=0.9)
+                resp = tokenizer.decode(out[0][input_ids.shape[1]:], skip_special_tokens=True)
+                if is_correct(extract_final_answer(resp), gt_answer):
+                    got_one_right = True
+                    break
+
+            if got_one_right:
                 prompt = tokenizer.apply_chat_template(
-                    [
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {"role": "user", "content": question},
-                    ],
-                    tokenize=False,
-                    add_generation_prompt=True,
+                    messages, tokenize=False, add_generation_prompt=True,
                     enable_thinking=False,
                 )
                 grpo_prompts.append({"prompt": prompt})
+            else:
+                skipped += 1
+
+        # Switch back to training mode
+        del model, tokenizer
+        torch.cuda.empty_cache()
+        model, tokenizer = FastLanguageModel.from_pretrained(
+            model_name=str(fold_output_dir / "sft"),
+            max_seq_length=MAX_SEQ_LENGTH,
+            load_in_4bit=True,
+        )
 
         grpo_dataset = Dataset.from_list(grpo_prompts)
-        print(f"GRPO prompts: {len(grpo_dataset)}")
+        print(f"GRPO prompts: {len(grpo_dataset)} (skipped {skipped} hopeless questions)")
 
         # Reward function
         reward_fn = make_reward_fn(train_data)

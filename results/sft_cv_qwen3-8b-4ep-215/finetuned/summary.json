@@ -1,0 +1,59 @@
+{
+  "model": "unsloth/qwen3-8b-unsloth-bnb-4bit",
+  "model_tag": "qwen3-8b-4ep-215",
+  "adapter_dir": "/gpfs/workdir/dalbanal/reliability-sft/results/sft_cv_qwen3-8b-4ep-215/adapters",
+  "n_folds": 5,
+  "mean_accuracy": 73.0232558139535,
+  "per_fold": [
+    {
+      "fold": 0,
+      "total": 43,
+      "correct": 29,
+      "accuracy": 67.44186046511628,
+      "accuracy_by_type": {
+        "numeric": 67.44186046511628
+      },
+      "elapsed_seconds": 817.933042049408
+    },
+    {
+      "fold": 1,
+      "total": 43,
+      "correct": 33,
+      "accuracy": 76.74418604651163,
+      "accuracy_by_type": {
+        "numeric": 76.74418604651163
+      },
+      "elapsed_seconds": 885.9772651195526
+    },
+    {
+      "fold": 2,
+      "total": 43,
+      "correct": 29,
+      "accuracy": 67.44186046511628,
+      "accuracy_by_type": {
+        "numeric": 67.44186046511628
+      },
+      "elapsed_seconds": 365.79473090171814
+    },
+    {
+      "fold": 3,
+      "total": 43,
+      "correct": 32,
+      "accuracy": 74.4186046511628,
+      "accuracy_by_type": {
+        "numeric": 74.4186046511628
+      },
+      "elapsed_seconds": 820.8941531181335
+    },
+    {
+      "fold": 4,
+      "total": 43,
+      "correct": 34,
+      "accuracy": 79.06976744186046,
+      "accuracy_by_type": {
+        "numeric": 79.06976744186046
+      },
+      "elapsed_seconds": 716.4781260490417
+    }
+  ]
+}

@@ -151,7 +151,7 @@ DPO_TRAIN_CONFIG = dict(
     seed=42,
 )
 
-N_SAMPLES = 4  # responses per question for rejection sampling
+N_SAMPLES = 2  # responses per question for rejection sampling (2 is faster, still effective)
 
 
 def generate_preference_pairs(model, tokenizer, train_data):
