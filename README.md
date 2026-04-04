@@ -22,45 +22,6 @@ This project develops a domain-specific LLM by:
 
 ---
 
-## Repository Structure
-
-```
-├── data/
-│   ├── master_dataset_cleaned.jsonl   # Final dataset (256 items)
-│   ├── cv_splits/                     # 5-fold train/test splits
-│   ├── seed_dataset.json              # Original textbook extractions
-│   ├── seed_subset_49.jsonl           # Filtered high-quality seed
-│   ├── cross_model_verified.jsonl     # Cross-model verified items
-│   └── cross_model_rejected.jsonl     # Rejected items
-├── training/
-│   ├── config.py                      # Experiment config (env var overrides)
-│   ├── prepare_data.py                # CV split generation
-│   ├── evaluate_baseline.py           # Base model evaluation
-│   ├── train_sft.py                   # LoRA SFT training
-│   ├── evaluate_finetuned.py          # Fine-tuned model evaluation
-│   ├── aggregate_results.py           # Cross-validation aggregation
-│   └── experiments/                   # Per-experiment SLURM scripts
-├── generators/
-│   ├── synthetic_data_generation.ipynb # Self-instruct generation
-│   ├── cross_model_generation.ipynb   # Cross-model verification
-│   └── reasoning_processor.py         # Reasoning chain validation
-├── evaluators/
-│   ├── baseline_small_models.ipynb    # Multi-model baseline eval
-│   └── model_evaluation.ipynb         # General evaluation
-├── extractors/
-│   ├── textbook_qa_extractor.ipynb    # OCR -> Q/R/A extraction
-│   ├── dataset_cleaning.ipynb         # Final cleaning pipeline
-│   └── fix_unicode_latex_llm.ipynb    # LaTeX/Unicode fixing
-├── results/                           # Experiment results (per model tag)
-├── utils/
-│   ├── api_client.py                  # OpenRouter API client
-│   └── data_io.py                     # JSONL I/O helpers
-├── literature/                        # Reference papers
-└── ocr_output/                        # Textbook OCR markdown
-```
-
----
-
 ## Results Summary
 
 ### Dataset
