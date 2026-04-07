@@ -1,0 +1,49 @@
+{
+  "model": "unsloth/qwen3-8b-unsloth-bnb-4bit",
+  "model_tag": "qwen3-8b-dpo-215",
+  "adapter_dir": "/gpfs/workdir/dalbanal/reliability-sft/results/sft_cv_qwen3-8b-dpo-215/adapters",
+  "n_folds": 4,
+  "mean_accuracy": 68.02325581395348,
+  "per_fold": [
+    {
+      "fold": 0,
+      "total": 43,
+      "correct": 27,
+      "accuracy": 62.7906976744186,
+      "accuracy_by_type": {
+        "numeric": 62.7906976744186
+      },
+      "elapsed_seconds": 1479.3063447475433
+    },
+    {
+      "fold": 1,
+      "total": 43,
+      "correct": 31,
+      "accuracy": 72.09302325581395,
+      "accuracy_by_type": {
+        "numeric": 72.09302325581395
+      },
+      "elapsed_seconds": 1426.2237734794617
+    },
+    {
+      "fold": 2,
+      "total": 43,
+      "correct": 30,
+      "accuracy": 69.76744186046511,
+      "accuracy_by_type": {
+        "numeric": 69.76744186046511
+      },
+      "elapsed_seconds": 1378.9588642120361
+    },
+    {
+      "fold": 3,
+      "total": 43,
+      "correct": 29,
+      "accuracy": 67.44186046511628,
+      "accuracy_by_type": {
+        "numeric": 67.44186046511628
+      },
+      "elapsed_seconds": 1539.904937028885
+    }
+  ]
+}

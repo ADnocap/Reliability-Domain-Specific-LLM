@@ -1,0 +1,199 @@
+{
+  "model_tag": "qwen3-8b-dpo-215",
+  "n_folds": 4,
+  "baseline": {
+    "mean_accuracy": 69.77,
+    "std_accuracy": 4.35,
+    "per_fold": [
+      69.76744186046511,
+      76.74418604651163,
+      67.44186046511628,
+      65.11627906976744
+    ]
+  },
+  "finetuned": {
+    "mean_accuracy": 68.02,
+    "std_accuracy": 3.44,
+    "per_fold": [
+      62.7906976744186,
+      72.09302325581395,
+      69.76744186046511,
+      67.44186046511628
+    ]
+  },
+  "delta_mean": -1.74,
+  "wilcoxon_statistic": 3.0,
+  "wilcoxon_p_value": 0.625,
+  "significant": false,
+  "accuracy_by_type": {
+    "numeric": {
+      "total": 172,
+      "baseline_correct": 120,
+      "baseline_accuracy": 69.77,
+      "finetuned_correct": 117,
+      "finetuned_accuracy": 68.02,
+      "delta": -1.74
+    }
+  },
+  "question_flips": [
+    {
+      "fold": 0,
+      "question": "A data center has 5 independent cooling units arranged in a k-out-of-n configuration where at least 3 units must be oper",
+      "answer_type": "numeric",
+      "ground_truth": "0.924",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.9175}\n$$\n\nThe **reliability of the cooling system at t = 500 hours is approximately 0.91",
+      "finetuned_answer": "$$\n\\boxed{0.999}\n$$"
+    },
+    {
+      "fold": 0,
+      "question": "A telecommunications satellite has a critical transponder component that follows a Weibull distribution with shape param",
+      "answer_type": "numeric",
+      "ground_truth": "53174",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n$$\n\\boxed{53,175} \\text{ hours}\n$$",
+      "finetuned_answer": "**\n\n$$\n\\boxed{53,174} \\text{ hours}\n$$"
+    },
+    {
+      "fold": 0,
+      "question": "A satellite communication system has a critical transponder subsystem consisting of 5 independent channels in a 3-out-of",
+      "answer_type": "numeric",
+      "ground_truth": "0.9712",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{1.0}\n$$",
+      "finetuned_answer": "**\n\n$$\n\\boxed{0.7684}\n$$"
+    },
+    {
+      "fold": 0,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a shape param",
+      "answer_type": "numeric",
+      "ground_truth": "0.9208",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{0.9235}\n$$\n\nThe reliability of the pump at 2,000 hours of operation is approximately *",
+      "finetuned_answer": "**\n\n$$\n\\boxed{0.079}\n$$\n\nThe reliability of the pump at 2,000 hours of operation is approximately **"
+    },
+    {
+      "fold": 0,
+      "question": "A data center monitors server failures across its infrastructure. Server crashes follow a Poisson process with a rate of",
+      "answer_type": "numeric",
+      "ground_truth": "0.4493",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{0.4493}\n$$",
+      "finetuned_answer": "$$\n\\boxed{0.1353}\n$$"
+    },
+    {
+      "fold": 1,
+      "question": "A sample of 50 units per lot is drawn from successive lots of manufactured components and life tested at stress for 24 h",
+      "answer_type": "numeric",
+      "ground_truth": "31, 521",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{a = 31, \\quad b = 521}\n$$",
+      "finetuned_answer": "**\n\n$$\n\\boxed{a = 6, \\quad b = 64}\n$$"
+    },
+    {
+      "fold": 1,
+      "question": "Industrial pumps used in chemical processing plants have lifetimes that follow a Weibull distribution with a shape param",
+      "answer_type": "numeric",
+      "ground_truth": "2916",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "$$\n\\boxed{2928}\n$$\n\nMaintenance should be scheduled at **2928 hours** to ensure that no more than 15",
+      "finetuned_answer": "$$\n\\boxed{3488}\n$$\n\nMaintenance should be scheduled at approximately **3488 hours** to ensure that n"
+    },
+    {
+      "fold": 2,
+      "question": "A manufacturer conducts accelerated life testing on electronic components. Due to time constraints, testing is stopped a",
+      "answer_type": "numeric",
+      "ground_truth": "173.1",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "**\n\n$$\n\\boxed{149.3}\n$$\n\nThe estimated **characteristic life (η)** of the Weibull distribution for t",
+      "finetuned_answer": "**\n\n$$\n\\boxed{168}\n$$\n\nThe estimated **characteristic life (η)** of the Weibull distribution for thi"
+    },
+    {
+      "fold": 3,
+      "question": "A reliability engineer is comparing two suppliers for a critical electronic component. A sample of 30 components from Su",
+      "answer_type": "numeric",
+      "ground_truth": "3750",
+      "baseline_correct": true,
+      "finetuned_correct": false,
+      "flip": "right->wrong",
+      "baseline_answer": "**\n\n$$\n\\boxed{3750} \\text{ hours}\n$$",
+      "finetuned_answer": "**\n\n$$\n\\boxed{1000} \\text{ hours}\n$$"
+    },
+    {
+      "fold": 3,
+      "question": "A data center has backup generators that activate automatically when power failures occur. Power failures follow a Poiss",
+      "answer_type": "numeric",
+      "ground_truth": "0.607",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{e^{-0.5}}\n$$",
+      "finetuned_answer": "$$\n\\boxed{e^{-0.5}} \\approx 0.6065\n$$"
+    },
+    {
+      "fold": 3,
+      "question": "A critical avionics system uses a hybrid redundancy configuration with 4 identical processors. The system operates in a ",
+      "answer_type": "numeric",
+      "ground_truth": "0.9101",
+      "baseline_correct": false,
+      "finetuned_correct": true,
+      "flip": "wrong->right",
+      "baseline_answer": "$$\n\\boxed{0.9613}\n$$",
+      "finetuned_answer": "**\n\n$$\n\\boxed{0.9207}\n$$"
+    }
+  ],
+  "per_fold_comparison": [
+    {
+      "fold": 0,
+      "total": 43,
+      "baseline_correct": 30,
+      "baseline_accuracy": 69.77,
+      "finetuned_correct": 27,
+      "finetuned_accuracy": 62.79,
+      "delta": -6.98
+    },
+    {
+      "fold": 1,
+      "total": 43,
+      "baseline_correct": 33,
+      "baseline_accuracy": 76.74,
+      "finetuned_correct": 31,
+      "finetuned_accuracy": 72.09,
+      "delta": -4.65
+    },
+    {
+      "fold": 2,
+      "total": 43,
+      "baseline_correct": 29,
+      "baseline_accuracy": 67.44,
+      "finetuned_correct": 30,
+      "finetuned_accuracy": 69.77,
+      "delta": 2.33
+    },
+    {
+      "fold": 3,
+      "total": 43,
+      "baseline_correct": 28,
+      "baseline_accuracy": 65.12,
+      "finetuned_correct": 29,
+      "finetuned_accuracy": 67.44,
+      "delta": 2.33
+    }
+  ]
+}
