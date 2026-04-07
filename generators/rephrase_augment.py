@@ -355,7 +355,7 @@ def main():
     parser.add_argument("--workers", type=int, default=1,
                         help="Number of concurrent workers (default: 1)")
     parser.add_argument("--source", type=str, default=None,
-                        choices=["seed", "hard_generated"],
+                        choices=["seed", "hard_generated", "cross_model_verified"],
                         help="Filter by source field (default: all)")
     parser.add_argument("--max-samples", type=int, default=None,
                         help="Max number of source samples to rephrase")

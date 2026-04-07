@@ -42,7 +42,7 @@ ADAPTERS_DIR = RESULTS_DIR / "adapters"
 # Training & evaluation settings
 # ---------------------------------------------------------------------------
 MAX_SEQ_LENGTH = 2048
-N_FOLDS = 5
+N_FOLDS = _env_int("SFT_FOLDS", 5)
 RANDOM_STATE = 42
 
 SYSTEM_PROMPT = (
