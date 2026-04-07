@@ -5,8 +5,7 @@ Two-stage per fold:
   2. GRPO on the SFT model using ground truth as reward signal
 
 GRPO generates multiple responses per question, scores them against ground truth,
-and optimizes the model to prefer correct reasoning chains. Unlike DPO, it doesn't
-need paired data — it learns from its own exploration.
+and optimizes the model to prefer correct reasoning chains.
 """
 
 import json
@@ -32,6 +31,11 @@ from training.config import (
     CV_SPLITS_DIR, ADAPTERS_DIR, LORA_CONFIG, TRAIN_CONFIG,
     SYSTEM_PROMPT,
 )
+
+# GRPO needs a larger sequence buffer than SFT because it generates
+# completions during training. prompt (~500 tokens) + completion (~2048)
+GRPO_MAX_SEQ_LENGTH = 4096
+GRPO_MAX_COMPLETION = 2048
 
 
 # ---------------------------------------------------------------------------
@@ -141,25 +145,23 @@ def formatting_func(examples, tokenizer):
 # ---------------------------------------------------------------------------
 def make_reward_fn(train_data):
     """Create a reward function that checks answers against ground truth."""
-    # Build question -> answer lookup
     qa_lookup = {}
     for item in train_data:
+        question = None
+        answer = None
         for msg in item["conversations"]:
             if msg["role"] == "user":
                 question = msg["content"]
             if msg["role"] == "assistant":
                 answer = extract_final_answer(msg["content"])
-        qa_lookup[question] = answer
+        if question and answer:
+            qa_lookup[question] = answer
 
     def reward_fn(completions, prompts=None, **kwargs):
         """Score each completion: 1.0 if correct, 0.0 if wrong."""
         rewards = []
         for i, completion in enumerate(completions):
-            # Extract the question from the prompt
-            if prompts and i < len(prompts):
-                prompt_text = prompts[i]
-            else:
-                prompt_text = ""
+            prompt_text = prompts[i] if prompts and i < len(prompts) else ""
 
             # Find matching ground truth
             gt_answer = None
@@ -173,10 +175,7 @@ def make_reward_fn(train_data):
                 continue
 
             extracted = extract_final_answer(completion)
-            if is_correct(extracted, gt_answer):
-                rewards.append(1.0)
-            else:
-                rewards.append(0.0)
+            rewards.append(1.0 if is_correct(extracted, gt_answer) else 0.0)
 
         return rewards
 
@@ -195,11 +194,11 @@ def main():
         train_data = load_dataset(str(train_path))
         print(f"Training samples: {len(train_data)}")
 
-        # ---- Phase 1: SFT ----
+        # ==== Phase 1: SFT ====
         print(f"\n--- Phase 1: SFT ---")
         model, tokenizer = FastLanguageModel.from_pretrained(
             model_name=MODEL_NAME,
-            max_seq_length=MAX_SEQ_LENGTH,
+            max_seq_length=MAX_SEQ_LENGTH,  # 2048 is fine for SFT
             load_in_4bit=True,
         )
         model = FastLanguageModel.get_peft_model(model, **LORA_CONFIG)
@@ -226,26 +225,20 @@ def main():
         sft_result = trainer.train()
         print(f"SFT complete. Loss: {sft_result.training_loss:.4f}")
 
-        # Save SFT adapter temporarily
         model.save_pretrained(str(fold_output_dir / "sft"))
         tokenizer.save_pretrained(str(fold_output_dir / "sft"))
         del model, tokenizer, trainer
         torch.cuda.empty_cache()
 
-        # ---- Phase 2: GRPO ----
-        print(f"\n--- Phase 2: GRPO ---")
-
-        # Load the SFT model
+        # ==== Phase 2: Pre-screen ====
+        print(f"\n--- Phase 2: Pre-screen (filter hopeless questions) ---")
         model, tokenizer = FastLanguageModel.from_pretrained(
             model_name=str(fold_output_dir / "sft"),
-            max_seq_length=MAX_SEQ_LENGTH,
+            max_seq_length=GRPO_MAX_SEQ_LENGTH,  # 4096 for generation
             load_in_4bit=True,
         )
-        print("SFT model loaded for GRPO.")
-
-        # Pre-screen: generate 2 responses per question, keep only those
-        # where the model gets at least 1 right (has signal to learn from)
         FastLanguageModel.for_inference(model)
+
         grpo_prompts = []
         skipped = 0
         for item in train_data:
@@ -271,8 +264,10 @@ def main():
             got_one_right = False
             for _ in range(2):
                 with torch.no_grad():
-                    out = model.generate(input_ids=input_ids, max_new_tokens=1024,
-                                         do_sample=True, temperature=0.7, top_p=0.9)
+                    out = model.generate(
+                        input_ids=input_ids, max_new_tokens=1024,
+                        do_sample=True, temperature=0.7, top_p=0.9,
+                    )
                 resp = tokenizer.decode(out[0][input_ids.shape[1]:], skip_special_tokens=True)
                 if is_correct(extract_final_answer(resp), gt_answer):
                     got_one_right = True
@@ -287,27 +282,35 @@ def main():
             else:
                 skipped += 1
 
-        # Switch back to training mode
         del model, tokenizer
         torch.cuda.empty_cache()
+
+        print(f"Kept {len(grpo_prompts)} prompts, skipped {skipped} hopeless questions")
+
+        if len(grpo_prompts) < 10:
+            print(f"Too few prompts for GRPO, skipping this fold.")
+            continue
+
+        # ==== Phase 3: GRPO ====
+        print(f"\n--- Phase 3: GRPO ---")
+
+        # Reload SFT model with larger buffer for GRPO generation
         model, tokenizer = FastLanguageModel.from_pretrained(
             model_name=str(fold_output_dir / "sft"),
-            max_seq_length=MAX_SEQ_LENGTH,
+            max_seq_length=GRPO_MAX_SEQ_LENGTH,  # 4096 — critical fix
             load_in_4bit=True,
         )
+        # Model already has LoRA from SFT adapter — GRPOTrainer will train it
+        print(f"SFT model loaded for GRPO (max_seq_length={GRPO_MAX_SEQ_LENGTH}).")
 
         grpo_dataset = Dataset.from_list(grpo_prompts)
-        print(f"GRPO prompts: {len(grpo_dataset)} (skipped {skipped} hopeless questions)")
-
-        # Reward function
-        reward_fn = make_reward_fn(train_data)
 
         grpo_config = GRPOConfig(
             output_dir=str(fold_output_dir),
-            num_generations=4,  # generate 4 responses per prompt
-            max_completion_length=4096,
-            per_device_train_batch_size=1,
-            gradient_accumulation_steps=8,
+            num_generations=4,
+            max_completion_length=GRPO_MAX_COMPLETION,  # 2048 tokens for completion
+            per_device_train_batch_size=4,  # must be multiple of num_generations
+            gradient_accumulation_steps=4,
             num_train_epochs=1,
             learning_rate=5e-6,
             warmup_ratio=0.1,
@@ -315,10 +318,12 @@ def main():
             optim="adamw_8bit",
             bf16=True,
             logging_steps=1,
-            save_strategy="epoch",
+            save_strategy="no",
             report_to="none",
             seed=42,
         )
+
+        reward_fn = make_reward_fn(train_data)
 
         grpo_trainer = GRPOTrainer(
             model=model,
@@ -332,7 +337,7 @@ def main():
         grpo_result = grpo_trainer.train()
         print(f"GRPO complete. Loss: {grpo_result.training_loss:.4f}")
 
-        # Save final adapter
+        # Save final adapter (GRPO on top of SFT)
         model.save_pretrained(str(fold_output_dir))
         tokenizer.save_pretrained(str(fold_output_dir))
         print(f"GRPO adapter saved to: {fold_output_dir}")
