@@ -1,0 +1,108 @@
+{
+  "model": "unsloth/qwen3-8b-unsloth-bnb-4bit",
+  "model_tag": "qwen3-8b-aug866-3ep-10f",
+  "n_folds": 10,
+  "mean_accuracy": 63.61668003207698,
+  "per_fold": [
+    {
+      "fold": 0,
+      "total": 87,
+      "correct": 59,
+      "accuracy": 67.81609195402298,
+      "accuracy_by_type": {
+        "numeric": 67.81609195402298
+      },
+      "elapsed_seconds": 3090.5364105701447
+    },
+    {
+      "fold": 1,
+      "total": 87,
+      "correct": 57,
+      "accuracy": 65.51724137931035,
+      "accuracy_by_type": {
+        "numeric": 65.51724137931035
+      },
+      "elapsed_seconds": 2834.3693373203278
+    },
+    {
+      "fold": 2,
+      "total": 87,
+      "correct": 56,
+      "accuracy": 64.36781609195403,
+      "accuracy_by_type": {
+        "numeric": 64.36781609195403
+      },
+      "elapsed_seconds": 3009.8460376262665
+    },
+    {
+      "fold": 3,
+      "total": 87,
+      "correct": 55,
+      "accuracy": 63.2183908045977,
+      "accuracy_by_type": {
+        "numeric": 63.2183908045977
+      },
+      "elapsed_seconds": 2775.8900167942047
+    },
+    {
+      "fold": 4,
+      "total": 87,
+      "correct": 59,
+      "accuracy": 67.81609195402298,
+      "accuracy_by_type": {
+        "numeric": 67.81609195402298
+      },
+      "elapsed_seconds": 3110.075424671173
+    },
+    {
+      "fold": 5,
+      "total": 87,
+      "correct": 53,
+      "accuracy": 60.91954022988506,
+      "accuracy_by_type": {
+        "numeric": 60.91954022988506
+      },
+      "elapsed_seconds": 3034.1023116111755
+    },
+    {
+      "fold": 6,
+      "total": 86,
+      "correct": 58,
+      "accuracy": 67.44186046511628,
+      "accuracy_by_type": {
+        "numeric": 67.44186046511628
+      },
+      "elapsed_seconds": 3100.1013832092285
+    },
+    {
+      "fold": 7,
+      "total": 86,
+      "correct": 49,
+      "accuracy": 56.97674418604651,
+      "accuracy_by_type": {
+        "numeric": 56.97674418604651
+      },
+      "elapsed_seconds": 3597.4927411079407
+    },
+    {
+      "fold": 8,
+      "total": 86,
+      "correct": 49,
+      "accuracy": 56.97674418604651,
+      "accuracy_by_type": {
+        "numeric": 56.97674418604651
+      },
+      "elapsed_seconds": 3323.6255202293396
+    },
+    {
+      "fold": 9,
+      "total": 86,
+      "correct": 56,
+      "accuracy": 65.11627906976744,
+      "accuracy_by_type": {
+        "numeric": 65.11627906976744
+      },
+      "elapsed_seconds": 2797.908885240555
+    }
+  ]
+}
