@@ -64,10 +64,10 @@ All experiments use Qwen3-8B (4-bit, LoRA) with 5-fold cross-validation on numer
 
 | # | Config | Baseline | Finetuned | Delta | W->R / R->W | p-value |
 |---|--------|----------|-----------|-------|-------------|---------|
-| **22** | **6ep + early stop, LR=2e-4** | **63.6%** | **81.8%** | **+18.1%** | **208 / 51** | **0.002** |
+| **24** | **8ep (ES→4), LR=2e-4** | **63.6%** | **82.2%** | **+18.6%** | **206 / 45** | **0.002** |
+| 22 | 6ep (ES→4), LR=2e-4 | 63.6% | 81.8% | +18.1% | 208 / 51 | 0.002 |
 | 21 | 4 epochs, LR=2e-4 | 63.6% | 79.3% | +15.7% | 194 / 58 | 0.002 |
-| 23 | 3 epochs, LR=2e-4 | 63.6% | -- | -- | -- | Running |
-| 24 | 8ep + early stop, LR=2e-4 | 63.6% | -- | -- | -- | Running |
+| 23 | 3 epochs, LR=2e-4 | 63.6% | 75.1% | +11.4% | 171 / 72 | 0.002 |
 
 Note: Baseline is lower than the 215-only experiments (63.6% vs 70.7%) because the test set now includes paraphrased questions the base model hasn't seen. The finetuned model handles both original and rephrased questions well, reaching 81.8% accuracy.
 
@@ -86,19 +86,19 @@ Rephrasing questions with Opus 4.6 (verified by GPT-5.4) produced massive improv
 | 215 (original) | 215 | 5 | +2.3% | 0.50 |
 | 280 (+ hard generated) | 280 | 5 | +2.0% | 0.69 |
 | 501 (+ 221 paraphrased) | 501 | 5 | +6.2% | 0.0625 |
-| **866 (+ 586 paraphrased)** | **866** | **10** | **+18.1%** | **0.002** |
+| **866 (+ 586 paraphrased)** | **866** | **10** | **+18.6%** | **0.002** |
 
 This aligns with MetaMath/PersonaMath research: surface-level diversity (rephrasing) is more valuable than difficulty (hard questions). The improvement scales with augmentation volume.
 
-### 3. 6 Epochs with Early Stopping is the Sweet Spot (with enough data)
+### 3. Early Stopping Converges to Epoch 4 (the true sweet spot)
 | Epochs | Delta (215) | Delta (501) | Delta (866, 10-fold) |
 |--------|-------------|-------------|----------------------|
-| 3 | +0.9% | -- | pending |
-| **4** | **+2.3%** | **+6.2%** | +15.7% |
-| **6 (ES)** | -- | +5.8% | **+18.1%** |
-| 8 (ES) | -- | +5.4% | pending |
+| 3 | +0.9% | -- | +11.4% |
+| **4** | **+2.3%** | **+6.2%** | **+15.7%** |
+| 6 (ES→4) | -- | +5.8% | +18.1% |
+| **8 (ES→4)** | -- | +5.4% | **+18.6%** |
 
-With 866 samples, 6 epochs + early stopping outperforms 4 epochs. More data allows more training before overfitting.
+Early stopping with patience=2 independently converges to epoch 4 across all experiments and folds. Setting max epochs to 6 or 8 with early stopping gives the best results because the model explores more of the loss landscape before selecting the best checkpoint at epoch 4.
 
 ### 4. NEFTune=5 is the Right Amount
 NEFTune=5 works, NEFTune=7 hurts (-1.3%), NEFTune=10 marginal (+1.4% stochastic). More noise = more forgetting.
@@ -122,14 +122,14 @@ DATASET = "master_dataset_v4.jsonl"  # 866 samples (280 original + 586 paraphras
 LR = 2e-4
 NEFTUNE = 5
 LORA_R = 16, LORA_ALPHA = 32, DROPOUT = 0.05
-EPOCHS = 6  # with early stopping (patience=2)
+EPOCHS = 8  # with early stopping (patience=2), converges to epoch 4
 N_FOLDS = 10
 ENABLE_THINKING = False
 DO_SAMPLE = False  # for eval
 MAX_NEW_TOKENS = 4096
 ```
 
-Result: 63.6% -> 81.8% (+18.1%, p=0.002) on 866 numeric questions, 10-fold CV.
+Result: 63.6% -> 82.2% (+18.6%, p=0.002) on 866 numeric questions, 10-fold CV.
 
 ---
 
@@ -138,7 +138,7 @@ Result: 63.6% -> 81.8% (+18.1%, p=0.002) on 866 numeric questions, 10-fold CV.
 - [x] Get DPO results → -2.7% (worse than baseline)
 - [x] Get GRPO results → +0.5% (marginal, below SFT)
 - [x] Paraphrase augmentation → **+18.1% (p=0.002)** with 866 samples, 10-fold CV
-- [ ] Get exp23 (3ep) and exp24 (8ep+ES) results to complete epoch comparison
+- [x] Get exp23 (3ep: +11.4%) and exp24 (8ep+ES: +18.6%) — all 4 significant at p=0.002
 - [ ] Try grouped k-fold (keep original + paraphrases together) for stricter evaluation
 - [ ] Try self-consistency training (use model's own correct reasoning chains)
 - [ ] Investigate the ~18% of questions the model still gets wrong
