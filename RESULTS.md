@@ -52,15 +52,24 @@ All experiments use Qwen3-8B (4-bit, LoRA) with 5-fold cross-validation on numer
 | 10 | DPO | 280 | 64.3% | -- | -- | Timed out |
 | 13 | SFT+GRPO | 215 | 70.7% | -- | -- | Crashed (Triton) |
 
-### Round 5: Paraphrase Augmentation (501 questions = 280 original + 221 rephrased)
+### Round 5: Paraphrase Augmentation (501 questions, 5-fold CV)
 
-| # | Config | Baseline | Finetuned | Delta | W->R / R->W |
-|---|--------|----------|-----------|-------|-------------|
-| **18** | **4 epochs, LR=2e-4** | **59.1%** | **65.3%** | **+6.2%** | **74 / 43** |
-| 20 | 6 epochs, LR=1e-4 | 59.1% | 64.9% | +5.8% | 78 / 49 |
-| 19 | 8 epochs + early stop, LR=1.5e-4 | 59.1% | 64.5% | +5.4% | 83 / 56 |
+| # | Config | Baseline | Finetuned | Delta | W->R / R->W | p-value |
+|---|--------|----------|-----------|-------|-------------|---------|
+| **18** | **4 epochs, LR=2e-4** | **59.1%** | **65.3%** | **+6.2%** | **74 / 43** | 0.0625 |
+| 20 | 6 epochs, LR=1e-4 | 59.1% | 64.9% | +5.8% | 78 / 49 | 0.0625 |
+| 19 | 8 epochs + early stop, LR=1.5e-4 | 59.1% | 64.5% | +5.4% | 83 / 56 | 0.0625 |
 
-Note: Baseline is lower (59.1% vs 70.7%) because the test set now includes rephrased questions the base model hasn't seen. The finetuned model handles both original and rephrased questions well.
+### Round 6: Scaled Augmentation + 10-Fold CV (866 questions, statistically significant)
+
+| # | Config | Baseline | Finetuned | Delta | W->R / R->W | p-value |
+|---|--------|----------|-----------|-------|-------------|---------|
+| **22** | **6ep + early stop, LR=2e-4** | **63.6%** | **81.8%** | **+18.1%** | **208 / 51** | **0.002** |
+| 21 | 4 epochs, LR=2e-4 | 63.6% | 79.3% | +15.7% | 194 / 58 | 0.002 |
+| 23 | 3 epochs, LR=2e-4 | 63.6% | -- | -- | -- | Running |
+| 24 | 8ep + early stop, LR=2e-4 | 63.6% | -- | -- | -- | Running |
+
+Note: Baseline is lower than the 215-only experiments (63.6% vs 70.7%) because the test set now includes paraphrased questions the base model hasn't seen. The finetuned model handles both original and rephrased questions well, reaching 81.8% accuracy.
 
 ---
 
@@ -70,26 +79,26 @@ Note: Baseline is lower (59.1% vs 70.7%) because the test set now includes rephr
 Qwen3-8B (70.7% baseline) vs Llama 3.1 8B (37.5%) — nearly 2x difference with zero fine-tuning.
 
 ### 2. Paraphrase Augmentation is the Most Effective Strategy
-Rephrasing questions with Opus 4.6 (verified by GPT-5.4) nearly tripled the SFT improvement:
+Rephrasing questions with Opus 4.6 (verified by GPT-5.4) produced massive improvements:
 
-| Dataset | Samples | Best Delta |
-|---------|---------|------------|
-| 215 (original) | 215 | +2.3% |
-| 280 (+ hard generated) | 280 | +2.0% |
-| **501 (+ paraphrased)** | **501** | **+6.2%** |
+| Dataset | Samples | Folds | Best Delta | p-value |
+|---------|---------|-------|------------|---------|
+| 215 (original) | 215 | 5 | +2.3% | 0.50 |
+| 280 (+ hard generated) | 280 | 5 | +2.0% | 0.69 |
+| 501 (+ 221 paraphrased) | 501 | 5 | +6.2% | 0.0625 |
+| **866 (+ 586 paraphrased)** | **866** | **10** | **+18.1%** | **0.002** |
 
-This aligns with MetaMath/PersonaMath research: surface-level diversity (rephrasing) is more valuable than difficulty (hard questions).
+This aligns with MetaMath/PersonaMath research: surface-level diversity (rephrasing) is more valuable than difficulty (hard questions). The improvement scales with augmentation volume.
 
-### 3. 4 Epochs Remains the Sweet Spot
-| Epochs | Delta (215) | Delta (280) | Delta (501) |
-|--------|-------------|-------------|-------------|
-| 3 | +0.9% | +1.3% | -- |
-| **4** | **+2.3%** | **+2.0%** | **+6.2%** |
-| 5 | +1.9% | +1.4% | -- |
-| 6 | -- | -- | +5.8% |
-| 8 (ES) | -- | -- | +5.4% |
+### 3. 6 Epochs with Early Stopping is the Sweet Spot (with enough data)
+| Epochs | Delta (215) | Delta (501) | Delta (866, 10-fold) |
+|--------|-------------|-------------|----------------------|
+| 3 | +0.9% | -- | pending |
+| **4** | **+2.3%** | **+6.2%** | +15.7% |
+| **6 (ES)** | -- | +5.8% | **+18.1%** |
+| 8 (ES) | -- | +5.4% | pending |
 
-More epochs with lower LR didn't help, even with 2x more data.
+With 866 samples, 6 epochs + early stopping outperforms 4 epochs. More data allows more training before overfitting.
 
 ### 4. NEFTune=5 is the Right Amount
 NEFTune=5 works, NEFTune=7 hurts (-1.3%), NEFTune=10 marginal (+1.4% stochastic). More noise = more forgetting.
@@ -109,18 +118,18 @@ DPO actually hurt performance (-2.7%), and GRPO gave only +0.5% — well below S
 
 ```python
 MODEL = "unsloth/qwen3-8b-unsloth-bnb-4bit"
-DATASET = "master_dataset_v3.jsonl"  # 501 samples (280 original + 221 paraphrased)
+DATASET = "master_dataset_v4.jsonl"  # 866 samples (280 original + 586 paraphrased)
 LR = 2e-4
 NEFTUNE = 5
 LORA_R = 16, LORA_ALPHA = 32, DROPOUT = 0.05
-EPOCHS = 4
+EPOCHS = 6  # with early stopping (patience=2)
+N_FOLDS = 10
 ENABLE_THINKING = False
 DO_SAMPLE = False  # for eval
 MAX_NEW_TOKENS = 4096
 ```
 
-Result: 59.1% -> 65.3% (+6.2%) on 501 numeric questions, 5-fold CV.
-Previous best: 70.7% -> 73.0% (+2.3%) on 215 numeric questions.
+Result: 63.6% -> 81.8% (+18.1%, p=0.002) on 866 numeric questions, 10-fold CV.
 
 ---
 
@@ -128,8 +137,9 @@ Previous best: 70.7% -> 73.0% (+2.3%) on 215 numeric questions.
 
 - [x] Get DPO results → -2.7% (worse than baseline)
 - [x] Get GRPO results → +0.5% (marginal, below SFT)
-- [x] Paraphrase augmentation → **+6.2%** (best result, nearly 3x previous best delta)
+- [x] Paraphrase augmentation → **+18.1% (p=0.002)** with 866 samples, 10-fold CV
+- [ ] Get exp23 (3ep) and exp24 (8ep+ES) results to complete epoch comparison
+- [ ] Try grouped k-fold (keep original + paraphrases together) for stricter evaluation
 - [ ] Try self-consistency training (use model's own correct reasoning chains)
-- [ ] Investigate the ~35% of questions the model always gets wrong
-- [ ] Generate more paraphrases (currently 2x, research suggests up to 4x can help)
+- [ ] Investigate the ~18% of questions the model still gets wrong
 - [ ] Consider a different base model (e.g., Qwen2.5-Math-7B if available)

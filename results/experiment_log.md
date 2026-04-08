@@ -26,6 +26,10 @@ Every experiment run, with full configuration and results.
 | **18** | **qwen3-8b-aug501-4ep** | **Qwen3-8B** | **master_v3 (501, numeric)** | **400** | **101** | **4** | **2e-4** | **5** | **16/32** | **0.05** | **off** | **greedy** | **59.1%** | **65.3%** | **+6.2%** | **74** | **43** | **0.0625** | **Done (best aug, +6.2%)** |
 | 19     | qwen3-8b-aug501-8ep-es | Qwen3-8B     | master_v3 (501, numeric)          | 400     | 101    | 8 (ES)   | 1.5e-4    | 5       | 16/32     | 0.05     | off      | greedy     | 59.1%     | 64.5%     | +5.4%     | 83     | 56     | 0.0625  | Done (early stopping, patience=2)        |
 | 20     | qwen3-8b-aug501-6ep-lr1e4 | Qwen3-8B  | master_v3 (501, numeric)          | 400     | 101    | 6        | 1e-4      | 5       | 16/32     | 0.05     | off      | greedy     | 59.1%     | 64.9%     | +5.8%     | 78     | 49     | 0.0625  | Done                                     |
+| 21     | qwen3-8b-aug866-4ep-10f | Qwen3-8B   | master_v4 (866, numeric)          | 780     | 87     | 4        | 2e-4      | 5       | 16/32     | 0.05     | off      | greedy     | 63.6%     | 79.3%     | +15.7%    | 194    | 58     | **0.002** | Done (10-fold, significant)             |
+| **22** | **qwen3-8b-aug866-6ep-es-10f** | **Qwen3-8B** | **master_v4 (866, numeric)** | **780** | **87** | **6 (ES)** | **2e-4** | **5** | **16/32** | **0.05** | **off** | **greedy** | **63.6%** | **81.8%** | **+18.1%** | **208** | **51** | **0.002** | **Done (best overall, significant)** |
+| 23     | qwen3-8b-aug866-3ep-10f | Qwen3-8B   | master_v4 (866, numeric)          | 780     | 87     | 3        | 2e-4      | 5       | 16/32     | 0.05     | off      | greedy     | 63.6%     | --        | --        | --     | --     | --      | Running                                  |
+| 24     | qwen3-8b-aug866-8ep-es-10f | Qwen3-8B | master_v4 (866, numeric)          | 780     | 87     | 8 (ES)   | 2e-4      | 5       | 16/32     | 0.05     | off      | greedy     | 63.6%     | --        | --        | --     | --     | --      | Running                                  |
 
 \*Exp 3 delta inflated by stochastic eval — true deterministic improvement is +2.3% (exp 12).
 
@@ -36,6 +40,7 @@ Every experiment run, with full configuration and results.
 | master_cleaned | master_dataset_cleaned.jsonl | 256   | 215     | 98 textbook + 158 cross-model verified            |
 | master_v2      | master_dataset_v2.jsonl      | 280   | 280     | 215 from above + 65 hard generated (Opus+GPT-5.4) |
 | master_v3      | master_dataset_v3.jsonl      | 501   | 501     | 280 from v2 + 221 paraphrase-augmented (Opus 4.6 + GPT-5.4 verified) |
+| master_v4      | master_dataset_v4.jsonl      | 866   | 866     | 280 from v2 + 586 paraphrase-augmented (Opus 4.6 + GPT-5.4 verified) |
 
 ## Methods
 

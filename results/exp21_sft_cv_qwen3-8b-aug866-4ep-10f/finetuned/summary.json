@@ -1,0 +1,109 @@
+{
+  "model": "unsloth/qwen3-8b-unsloth-bnb-4bit",
+  "model_tag": "qwen3-8b-aug866-4ep-10f",
+  "adapter_dir": "/gpfs/workdir/dalbanal/reliability-sft/results/sft_cv_qwen3-8b-aug866-4ep-10f/adapters",
+  "n_folds": 10,
+  "mean_accuracy": 79.3370756482224,
+  "per_fold": [
+    {
+      "fold": 0,
+      "total": 87,
+      "correct": 66,
+      "accuracy": 75.86206896551724,
+      "accuracy_by_type": {
+        "numeric": 75.86206896551724
+      },
+      "elapsed_seconds": 2365.59819149971
+    },
+    {
+      "fold": 1,
+      "total": 87,
+      "correct": 67,
+      "accuracy": 77.01149425287356,
+      "accuracy_by_type": {
+        "numeric": 77.01149425287356
+      },
+      "elapsed_seconds": 2087.0660622119904
+    },
+    {
+      "fold": 2,
+      "total": 87,
+      "correct": 71,
+      "accuracy": 81.60919540229885,
+      "accuracy_by_type": {
+        "numeric": 81.60919540229885
+      },
+      "elapsed_seconds": 2193.8473632335663
+    },
+    {
+      "fold": 3,
+      "total": 87,
+      "correct": 66,
+      "accuracy": 75.86206896551724,
+      "accuracy_by_type": {
+        "numeric": 75.86206896551724
+      },
+      "elapsed_seconds": 1894.3097071647644
+    },
+    {
+      "fold": 4,
+      "total": 87,
+      "correct": 71,
+      "accuracy": 81.60919540229885,
+      "accuracy_by_type": {
+        "numeric": 81.60919540229885
+      },
+      "elapsed_seconds": 2520.166620492935
+    },
+    {
+      "fold": 5,
+      "total": 87,
+      "correct": 68,
+      "accuracy": 78.16091954022988,
+      "accuracy_by_type": {
+        "numeric": 78.16091954022988
+      },
+      "elapsed_seconds": 2168.530741930008
+    },
+    {
+      "fold": 6,
+      "total": 86,
+      "correct": 71,
+      "accuracy": 82.55813953488372,
+      "accuracy_by_type": {
+        "numeric": 82.55813953488372
+      },
+      "elapsed_seconds": 1529.6639742851257
+    },
+    {
+      "fold": 7,
+      "total": 86,
+      "correct": 71,
+      "accuracy": 82.55813953488372,
+      "accuracy_by_type": {
+        "numeric": 82.55813953488372
+      },
+      "elapsed_seconds": 2766.877209663391
+    },
+    {
+      "fold": 8,
+      "total": 86,
+      "correct": 66,
+      "accuracy": 76.74418604651163,
+      "accuracy_by_type": {
+        "numeric": 76.74418604651163
+      },
+      "elapsed_seconds": 1961.4088311195374
+    },
+    {
+      "fold": 9,
+      "total": 86,
+      "correct": 70,
+      "accuracy": 81.3953488372093,
+      "accuracy_by_type": {
+        "numeric": 81.3953488372093
+      },
+      "elapsed_seconds": 2212.6906957626343
+    }
+  ]
+}
