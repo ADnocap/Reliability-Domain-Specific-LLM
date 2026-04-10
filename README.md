@@ -51,7 +51,7 @@ Config: LR=2e-4, NEFTune=5, LoRA r=16/alpha=32, dropout=0.05, non-thinking mode,
 4. **RL methods (DPO, GRPO) don't beat SFT** on this dataset size
 5. **Surface-level diversity > difficulty**: rephrased questions help more than harder questions
 
-### 24 Experiments Completed
+### 26 Experiments Completed
 
 See [results/experiment_log.md](results/experiment_log.md) for the full table covering model selection, hyperparameter search, deterministic eval, DPO/GRPO, and paraphrase augmentation.
 
@@ -74,7 +74,7 @@ training/                   # Training and evaluation pipeline
   evaluate_finetuned.py     # Fine-tuned model evaluation
   aggregate_results.py      # CV aggregation, Wilcoxon test, per-type breakdown
   experiments/              # SLURM job scripts for LaRuche HPC
-results/                    # Per-experiment results (numbered exp01-exp24)
+results/                    # Per-experiment results (numbered exp01-exp26)
 utils/                      # Shared utilities (API client, data I/O)
 ```
 

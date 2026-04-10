@@ -69,7 +69,16 @@ All experiments use Qwen3-8B (4-bit, LoRA) with 5-fold cross-validation on numer
 | 21 | 4 epochs, LR=2e-4 | 63.6% | 79.3% | +15.7% | 194 / 58 | 0.002 |
 | 23 | 3 epochs, LR=2e-4 | 63.6% | 75.1% | +11.4% | 171 / 72 | 0.002 |
 
-Note: Baseline is lower than the 215-only experiments (63.6% vs 70.7%) because the test set now includes paraphrased questions the base model hasn't seen. The finetuned model handles both original and rephrased questions well, reaching 81.8% accuracy.
+Note: Baseline is lower than the 215-only experiments (63.6% vs 70.7%) because the test set now includes paraphrased questions the base model hasn't seen. The finetuned model handles both original and rephrased questions well, reaching 82.2% accuracy.
+
+### Round 7: 600-Question Subset (v4 remaining, 10-Fold CV)
+
+| # | Config | Baseline | Finetuned | Delta | W->R / R->W | p-value |
+|---|--------|----------|-----------|-------|-------------|---------|
+| **25** | **5 epochs, LR=2e-4** | **68.0%** | **79.7%** | **+11.7%** | **108 / 38** | **0.002** |
+| 26 | 5ep + ES (patience=2), LR=2e-4 | 68.0% | 78.8% | +10.8% | 100 / 35 | 0.002 |
+
+Note: This 600-sample subset of v4 has a higher baseline (68.0% vs 63.6%) since it excludes some harder questions. Both experiments are statistically significant at p=0.002.
 
 ---
 
@@ -139,6 +148,7 @@ Result: 63.6% -> 82.2% (+18.6%, p=0.002) on 866 numeric questions, 10-fold CV.
 - [x] Get GRPO results → +0.5% (marginal, below SFT)
 - [x] Paraphrase augmentation → **+18.1% (p=0.002)** with 866 samples, 10-fold CV
 - [x] Get exp23 (3ep: +11.4%) and exp24 (8ep+ES: +18.6%) — all 4 significant at p=0.002
+- [x] exp25/26: 600-sample v4 subset, 5 epochs — +11.7% / +10.8% (p=0.002)
 - [ ] Try grouped k-fold (keep original + paraphrases together) for stricter evaluation
 - [ ] Try self-consistency training (use model's own correct reasoning chains)
 - [ ] Investigate the ~18% of questions the model still gets wrong

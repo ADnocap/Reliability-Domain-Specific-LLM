@@ -30,6 +30,8 @@ Every experiment run, with full configuration and results.
 | 22     | qwen3-8b-aug866-6ep-es-10f     | Qwen3-8B     | master_v4 (866, numeric)          | 780     | 87      | 6 (ES→4)\*\*   | 2e-4      | 5       | 16/32     | 0.05     | off      | greedy     | 63.6%     | 81.8%     | +18.1%     | 208     | 51     | **0.002**  | Done (10-fold, significant)              |
 | 23     | qwen3-8b-aug866-3ep-10f        | Qwen3-8B     | master_v4 (866, numeric)          | 780     | 87      | 3          | 2e-4      | 5       | 16/32     | 0.05     | off      | greedy     | 63.6%     | 75.1%     | +11.4%     | 171     | 72     | **0.002**  | Done (10-fold, significant)              |
 | **24** | **qwen3-8b-aug866-8ep-es-10f** | **Qwen3-8B** | **master_v4 (866, numeric)**      | **780** | **87**  | **8 (ES→4)\*\*** | **2e-4** | **5** | **16/32** | **0.05** | **off** | **greedy** | **63.6%** | **82.2%** | **+18.6%** | **206** | **45** | **0.002** | **Done (best overall, significant)**     |
+| **25** | **qwen3-8b-600s-5ep-10f**      | **Qwen3-8B** | **v4 remaining (600, numeric)**   | **540** | **60**  | **5**             | **2e-4** | **5** | **16/32** | **0.05** | **off** | **greedy** | **68.0%** | **79.7%** | **+11.7%** | **108** | **38** | **0.002** | **Done (best on 600 subset, significant)** |
+| 26     | qwen3-8b-600s-5ep-es-10f       | Qwen3-8B     | v4 remaining (600, numeric)       | 540     | 60      | 5 (ES)            | 2e-4     | 5     | 16/32     | 0.05     | off     | greedy     | 68.0%     | 78.8%     | +10.8%     | 100     | 35     | **0.002**  | Done (10-fold, significant)              |
 
 \*Exp 3 delta inflated by stochastic eval — true deterministic improvement is +2.3% (exp 12).
 
@@ -43,6 +45,7 @@ Every experiment run, with full configuration and results.
 | master_v2      | master_dataset_v2.jsonl      | 280   | 280     | 215 from above + 65 hard generated (Opus+GPT-5.4)                    |
 | master_v3      | master_dataset_v3.jsonl      | 501   | 501     | 280 from v2 + 221 paraphrase-augmented (Opus 4.6 + GPT-5.4 verified) |
 | master_v4      | master_dataset_v4.jsonl      | 866   | 866     | 280 from v2 + 586 paraphrase-augmented (Opus 4.6 + GPT-5.4 verified) |
+| v4_remaining   | dataset_sft_v4_remaining.jsonl | 600 | 600     | 600-sample subset of master_v4 (54 seed + 105 cross-model + 27 hard + 414 rephrased) |
 
 ## Methods
 
