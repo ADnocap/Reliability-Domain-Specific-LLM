@@ -1,0 +1,7 @@
+Dataset,Model,Correct,Exact,Numerical,Partial,Total,Accuracy (%),UNABLE_TO_EXTRACT
+v4_500sample,claude-sonnet-4.6,462,189,459,282,500,92.4,0
+v4_500sample,gemini-3.1-pro-preview,308,114,305,199,500,61.6,97
+v4_500sample,o3-mini,427,159,422,245,500,85.4,6
+holdout_54q,claude-sonnet-4.6,43,18,42,27,54,79.63,1
+holdout_54q,gemini-3.1-pro-preview,19,10,19,11,54,35.19,31
+holdout_54q,o3-mini,37,15,36,22,54,68.52,6

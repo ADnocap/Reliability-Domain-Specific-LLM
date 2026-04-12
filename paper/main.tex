@@ -1,0 +1,64 @@
+% CVPR 2026 Paper Template; see https://github.com/cvpr-org/author-kit
+
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+%%%%%%%%% PAPER TYPE  - PLEASE UPDATE FOR FINAL VERSION
+% \usepackage{cvpr}              % To produce the CAMERA-READY version
+\usepackage[review]{cvpr}      % To produce the REVIEW version
+% \usepackage[pagenumbers]{cvpr} % To force page numbers, e.g. for an arXiv version
+
+% Import additional packages in the preamble file, before hyperref
+\input{preamble}
+
+% It is strongly recommended to use hyperref, especially for the review version.
+% hyperref with option pagebackref eases the reviewers' job.
+\definecolor{cvprblue}{rgb}{0.21,0.49,0.74}
+\usepackage[pagebackref,breaklinks,colorlinks,allcolors=cvprblue]{hyperref}
+
+%%%%%%%%% PAPER ID  - PLEASE UPDATE
+\def\paperID{}
+\def\confName{CVPR}
+\def\confYear{2026}
+
+%%%%%%%%% TITLE - PLEASE UPDATE
+\title{Domain-Specific Fine-Tuning for Reliability Engineering: From Small-Seed Self-Instruct to Reinforcement Learning}
+
+%%%%%%%%% AUTHORS - PLEASE UPDATE
+\author{Alexandre Dalban\\
+CentraleSup\'{e}lec, Universit\'{e} Paris-Saclay\\
+Laboratoire G\'{e}nie Industriel (LGI)\\
+{\tt\small alexandre.dalban@student-cs.fr}
+\and
+Elora Drouilhet\\
+CentraleSup\'{e}lec, Universit\'{e} Paris-Saclay\\
+Laboratoire G\'{e}nie Industriel (LGI)\\
+{\tt\small elora.drouilhet@student-cs.fr}
+\and
+Zhiguo Zeng\\
+CentraleSup\'{e}lec, Universit\'{e} Paris-Saclay\\
+Laboratoire G\'{e}nie Industriel (LGI)\\
+{\tt\small zhiguo.zeng@centralesupelec.fr}
+}
+
+\begin{document}
+\maketitle
+
+\input{sec/0_abstract}
+\input{sec/1_intro}
+\input{sec/2_related}
+\input{sec/3_data}
+\input{sec/4_finetuning}
+\input{sec/5_grpo}
+\input{sec/6_experiments}
+\input{sec/7_conclusion}
+
+{
+    \small
+    \bibliographystyle{ieeenat_fullname}
+    \bibliography{main}
+}
+
+% Appendices (experiment log + prompts)
+\input{sec/X_suppl}
+
+\end{document}

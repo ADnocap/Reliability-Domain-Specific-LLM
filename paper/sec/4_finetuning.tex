@@ -1,0 +1,152 @@
+\section{Supervised Fine-Tuning}
+\label{sec:sft}
+
+\subsection{Base Model Selection}
+\label{sec:sft:model}
+
+We evaluated two open-source instruction-tuned models as base candidates: Llama~3.1~8B~\cite{roziere2024codellama} and Qwen3-8B~\cite{qwen2025qwen3}, both in 4-bit quantized form via Unsloth. Table~\ref{tab:model_selection} shows that Qwen3-8B achieves a substantially higher zero-shot baseline on our reliability engineering questions (70.7\% vs.\ 37.5\%), likely due to its stronger mathematical pre-training. Moreover, fine-tuning Llama~3.1~8B caused a regression on numeric questions ($-1.4$pp) while improving only format-dependent categories (formula $+28.6$pp, text $+15.8$pp), suggesting catastrophic forgetting of mathematical capabilities. We therefore selected Qwen3-8B as our base model for all subsequent experiments.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Base model comparison on 215 numeric questions (5-fold CV). A strong baseline is critical: Llama's low starting point leaves little room for SFT gains.}
+\label{tab:model_selection}
+\begin{tabular}{lcccc}
+\toprule
+Model & Baseline & Fine-tuned & $\Delta$ & $p$ \\
+\midrule
+Llama 3.1 8B & 37.5\% & 39.8\% & $+2.4$ & 0.25 \\
+\textbf{Qwen3-8B} & \textbf{70.7\%} & \textbf{73.0\%} & $\boldsymbol{+2.3}$ & 0.50 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+By analyzing the model's thinking traces, we observed that the base model uses these blocks as \emph{scratch work}: it explores solution avenues, backtracks when an approach seems wrong, and iterates toward the answer, much like a human solving a problem for the first time. Our SFT training data, by contrast, consists of polished step-by-step solutions that proceed directly to the correct answer without false starts. Training on these clean reasoning chains with thinking enabled would effectively require the model to ``already know the answer'' and go straight to a proof, conflicting with the exploratory nature of the thinking trace. We found that this mismatch caused the model to overfit, producing empty thinking tags followed by shallow pattern-matched answers. Disabling thinking during both training and inference resolved this: the model generates direct chain-of-thought responses consistent with the training format, while preserving its internal reasoning capabilities for use during GRPO (Section~\ref{sec:grpo}).
+
+\subsection{Training Setup}
+\label{sec:sft:setup}
+
+\subsubsection{LoRA Configuration}
+
+We use 4-bit QLoRA~\cite{dettmers2023qlora} via the Unsloth framework, which provides optimized CUDA kernels for approximately 40\% faster training. LoRA adapters~\cite{hu2022lora} are applied to all attention and MLP projection layers. Key hyperparameters are rank $r=16$, scaling factor $\alpha=32$, and dropout $0.05$.
+
+\subsubsection{Training Hyperparameters}
+
+Table~\ref{tab:training_config} summarizes the training configuration. NEFTune~\cite{jain2023neftune} adds uniform noise to embedding vectors during training, serving as a regularizer against memorization on small datasets. We found $\alpha=5$ to be optimal: $\alpha=7$ degraded performance by $-1.3$pp (Exp.~17), and $\alpha=10$ showed only marginal gains (Exp.~4). Early stopping with patience 2 (monitoring validation loss on a 10\% held-out split) consistently converged to epoch 4 regardless of the maximum epoch setting (6 or 8), indicating a stable training dynamic.
+
+\begin{table}[t]
+\centering
+\small
+\caption{SFT training configuration (best setup).}
+\label{tab:training_config}
+\begin{tabular}{ll}
+\toprule
+Parameter & Value \\
+\midrule
+Learning rate & $2 \times 10^{-4}$ \\
+LR scheduler & Cosine \\
+Optimizer & AdamW 8-bit \\
+Batch size & 2 (grad.\ accum.\ 4, eff.\ 8) \\
+Max epochs & 8 (early stop $\to$ epoch 4) \\
+Warmup steps & 5 \\
+Weight decay & 0.01 \\
+NEFTune $\alpha$ & 5 \\
+Precision & BF16 \\
+Max sequence length & 2048 tokens \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Data Format}
+
+Training examples follow a three-turn chat format: a \emph{system} message establishing the reliability engineering expert persona (``You are an expert in reliability engineering\ldots Provide clear, accurate answers with step-by-step reasoning. At the end, clearly state your final answer after `Final Answer:'\,''), a \emph{user} message containing the question, and an \emph{assistant} message containing the full chain-of-thought reasoning followed by the final answer. The tokenizer's \texttt{apply\_chat\_template()} handles model-specific formatting.
+
+\subsection{Evaluation Protocol}
+\label{sec:sft:eval}
+
+\subsubsection{K-Fold Cross-Validation}
+
+Given the small dataset sizes (215--866 examples), we use $k$-fold cross-validation rather than a single train/test split to obtain reliable performance estimates. Initial experiments used 5-fold CV (172 train / 43 test per fold), but 5 folds limit the minimum achievable $p$-value to 0.0625 under the Wilcoxon test, precluding statistical significance at $p < 0.05$. We therefore moved to 10-fold CV for experiments on 866 samples ($\sim$780 train / $\sim$87 test per fold), which achieves $p = 0.002$ when all folds show improvement.
+
+For each fold, a fresh base model is loaded and fine-tuned from scratch to avoid information leakage between folds. All evaluation uses greedy decoding (\texttt{do\_sample=False}) with \texttt{max\_new\_tokens=4096}, ensuring deterministic and reproducible results. Early experiments with stochastic decoding inflated improvements (e.g., $+7.0\%$ stochastic vs.\ $+2.3\%$ greedy in Exp.~3 vs.\ Exp.~12).
+
+\subsubsection{Answer Comparison}
+
+We extract the final answer from model responses using pattern matching (``Final Answer:'', ``The answer is:'', ``Therefore,'') with fallback to the last non-empty line. Extracted answers are then compared against ground truth through a multi-level pipeline:
+
+\begin{enumerate}
+    \item \textbf{Exact match:} Normalized strings (lowercase, strip whitespace, remove LaTeX wrappers such as \verb|\boxed{}|, convert \verb|\frac{a}{b}| to \verb|a/b|).
+    \item \textbf{Numerical match:} Extract all numbers via regex; accept if all values match within 5\% relative tolerance.
+    \item \textbf{Fraction-to-decimal:} Convert fractions (e.g., 14/33 $\leftrightarrow$ 0.4242).
+    \item \textbf{Percentage conversion:} Normalize percentages (e.g., 25.5\% $\leftrightarrow$ 0.255).
+    \item \textbf{Partial match:} Substring containment for answers longer than 3 characters.
+\end{enumerate}
+
+An answer is considered correct if any of the above criteria is satisfied.
+
+\subsubsection{Statistical Testing}
+
+We use the Wilcoxon signed-rank test to compare per-fold baseline and fine-tuned accuracies. This non-parametric paired test is appropriate because: (1) we have a small number of paired observations (5 or 10 folds), (2) we cannot assume normality of accuracy differences, and (3) the test is robust to outlier folds. We use $p < 0.05$ as the significance threshold.
+
+We additionally track \emph{question flips} wherein a question changes correctness between baseline and fine-tuned model, aggregated across all folds. A successful fine-tuning should show substantially more wrong$\to$right flips than right$\to$wrong regressions.
+
+\subsection{SFT Results}
+\label{sec:sft:results}
+
+Table~\ref{tab:sft_results} presents the main SFT results across dataset sizes. The improvement scales consistently with dataset size: from $+2.3\%$ (not significant) on 215 original questions to $+18.6\%$ ($p=0.002$) on 866 augmented questions. All 10 folds showed improvement in Exp.~24, with per-fold deltas ranging from $+12.6\%$ to $+26.4\%$.
+
+\begin{table}[t]
+\centering
+\small
+\caption{SFT results across dataset sizes. Best configuration per dataset shown. All use Qwen3-8B, greedy decoding, LR=$2\!\times\!10^{-4}$, NEFTune=5.}
+\label{tab:sft_results}
+\begin{tabular}{rcccccc}
+\toprule
+$N$ & Folds & Ep. & Base & FT & $\Delta$ & $p$ \\
+\midrule
+215 & 5 & 4          & 70.7 & 73.0 & $+2.3$  & 0.50 \\
+280 & 5 & 4          & 71.0 & 73.0 & $+2.0$  & 0.69 \\
+501 & 5 & 4          & 59.1 & 65.3 & $+6.2$  & 0.063 \\
+\textbf{866} & \textbf{10} & \textbf{8$\to$4} & \textbf{63.6} & \textbf{82.2} & $\boldsymbol{+18.6}$ & \textbf{0.002} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The question flip analysis for Exp.~24 shows 206 wrong$\to$right flips against only 45 right$\to$wrong regressions (ratio 4.6:1), indicating that fine-tuning broadly improves performance rather than trading one type of error for another. By contrast, Exp.~12 (215 samples) showed only 23 wrong$\to$right vs.\ 18 right$\to$wrong (ratio 1.3:1), confirming that larger augmented datasets produce more decisive improvements.
+
+Note that the baseline accuracy is lower on larger datasets (63.6\% on 866 vs.\ 70.7\% on 215) because the augmented test sets include paraphrased questions the base model has not seen. This makes the improvement more impressive: the fine-tuned model handles both original and paraphrased formulations effectively.
+
+\subsection{Ablation Studies}
+\label{sec:sft:ablation}
+
+Table~\ref{tab:ablations} summarizes key ablation results on the 215-question dataset (5-fold CV, greedy decoding).
+
+\begin{table}[t]
+\centering
+\small
+\caption{Ablation studies on 215 numeric questions (5-fold CV, greedy). Bold marks the best configuration.}
+\label{tab:ablations}
+\begin{tabular}{lcc}
+\toprule
+Variation & $\Delta$ & $p$ \\
+\midrule
+\textbf{Best (LR=$\mathbf{2\!\times\!10^{-4}}$, NEFTune=5, $r$=16, 4ep)} & $\boldsymbol{+2.3}$ & 0.50 \\
+Lower LR ($1\!\times\!10^{-4}$) & $-0.5$ & 1.0 \\
+Higher NEFTune ($\alpha=7$) & $-1.3$ & 0.38 \\
+Lower LoRA rank ($r=8$, $\alpha=16$) & $+1.4$ & 0.88 \\
+3 epochs (vs.\ 4) & $+0.9$ & 0.88 \\
+5 epochs (vs.\ 4) & $+1.9$ & 0.50 \\
+DPO (instead of SFT) & $-1.7$ & 0.63 \\
+SFT + GRPO & $+0.5$ & 0.88 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Early stopping.} Across all experiments with maximum epochs $\geq 6$, early stopping (patience 2, monitoring validation loss) consistently selects epoch 4 as the best checkpoint. This holds for both 501-sample (Exp.~19) and 866-sample (Exp.~22, 24) experiments, suggesting a stable convergence point for this model and domain.
+
+\paragraph{Learning rate.} LR=$2\!\times\!10^{-4}$ consistently outperforms LR=$1\!\times\!10^{-4}$, consistent with the recommendation that LoRA adapters benefit from learning rates approximately 10$\times$ higher than full fine-tuning.
+
+\paragraph{RL methods on small data.} Both DPO ($-1.7\%$) and SFT+GRPO ($+0.5\%$) underperformed pure SFT ($+2.3\%$) on 215 questions. DPO actually degraded performance, likely because the small dataset produced too few informative preference pairs. GRPO showed marginal gains but insufficient to justify the additional training complexity at this scale.
+
+\TODO{Chnage this if needed with ur results ELORA}
+

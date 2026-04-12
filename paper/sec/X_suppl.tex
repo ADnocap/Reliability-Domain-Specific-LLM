@@ -1,0 +1,156 @@
+\clearpage
+\appendix
+
+\section{Complete Experiment Log}
+\label{app:experiments}
+
+Table~\ref{tab:exp_log} lists all 26 experiments with full configurations and results. All experiments use 4-bit QLoRA via Unsloth on NVIDIA A100-SXM4-40GB GPUs. Evaluation uses greedy decoding (\texttt{do\_sample=False}) from Exp.~7 onwards; earlier experiments used stochastic sampling (marked with $\dagger$). Bold rows indicate best results per dataset size. ES = early stopping (patience=2); the notation ``8(ES$\to$4)'' means max 8 epochs with early stopping selecting epoch 4.
+
+\begin{table*}[t]
+\centering
+\caption{Complete experiment log. All models are Qwen3-8B (4-bit) except Exp.~1 (Llama 3.1 8B). LoRA config is $r$/$\alpha$ with dropout 0.05 unless noted. $\dagger$ = stochastic eval (inflated). $\ddagger$ = thinking enabled (mismatch).}
+\label{tab:exp_log}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rlllrrccccccrr}
+\toprule
+Exp & Dataset & $N$ & Folds & Ep. & LR & NEF & Method & Baseline & FT & $\Delta$ & W$\to$R & R$\to$W & $p$ \\
+\midrule
+\multicolumn{14}{l}{\textit{Round 1: Model Selection}} \\
+1   & cleaned (all)    & 256 & 5  & 3        & 2e-4   & --  & SFT$^\dagger$          & 37.5 & 39.8 & +2.4  & 35  & 29 & 0.25  \\
+2   & cleaned (num)    & 215 & 5  & 4        & 5e-5   & --  & SFT$^{\dagger\ddagger}$ & 67.9 & 67.0 & $-$0.9 & 25  & 27 & 0.88  \\
+\midrule
+\multicolumn{14}{l}{\textit{Round 2: Hyperparameter Search (stochastic eval)}} \\
+3   & cleaned (num)    & 215 & 5  & 3        & 2e-4   & 5   & SFT$^\dagger$  & 67.9 & 74.9 & +7.0$^\dagger$ & 31  & 16 & 0.13  \\
+4   & cleaned (num)    & 215 & 5  & 3        & 2e-4   & 10  & SFT$^\dagger$  & 70.7 & 72.1 & +1.4  & 21  & 18 & 1.0   \\
+5   & cleaned (num)    & 215 & 5  & 3        & 2e-4   & 5   & SFT$^\dagger$  & 67.9 & 69.3 & +1.4  & 24  & 21 & 0.88  \\
+6   & cleaned (num)    & 215 & 5  & 3        & 1e-4   & 5   & SFT$^\dagger$  & 68.8 & 68.4 & $-$0.5 & 20  & 21 & 1.0   \\
+\midrule
+\multicolumn{14}{l}{\textit{Round 3: Deterministic Evaluation (greedy decoding)}} \\
+7   & v2 (num)         & 280 & 5  & 3        & 2e-4   & 5   & SFT    & 64.0 & 65.2 & +1.3  & 21  & 21 & 0.88  \\
+8   & v2 (num)         & 280 & 5  & 5        & 2e-4   & 5   & SFT    & 64.3 & 65.7 & +1.4  & 30  & 19 & 0.88  \\
+9   & cleaned (num)    & 215 & 5  & 5        & 2e-4   & 5   & SFT$^\dagger$  & 70.7 & 72.6 & +1.9  & 21  & 17 & 0.50  \\
+11  & cleaned (num)    & 215 & 5  & 3        & 2e-4   & 5   & SFT    & 70.7 & 71.6 & +0.9  & 22  & 20 & 0.88  \\
+\textbf{12} & \textbf{cleaned (num)} & \textbf{215} & \textbf{5} & \textbf{4} & \textbf{2e-4} & \textbf{5} & \textbf{SFT} & \textbf{70.7} & \textbf{73.0} & \textbf{+2.3} & \textbf{23} & \textbf{18} & \textbf{0.50} \\
+\textbf{16} & \textbf{v2 (num)} & \textbf{280} & \textbf{5} & \textbf{4} & \textbf{2e-4} & \textbf{5} & \textbf{SFT} & \textbf{71.0} & \textbf{73.0} & \textbf{+2.0} & \textbf{19} & \textbf{15} & \textbf{0.69} \\
+17  & cleaned (num)    & 215 & 5  & 4        & 2e-4   & 7   & SFT    & 71.0 & 69.8 & $-$1.3 & 19  & 18 & 0.38  \\
+\midrule
+\multicolumn{14}{l}{\textit{Round 4: Alternative Methods}} \\
+10  & v2 (num)         & 280 & 5  & DPO      & 5e-6   & --  & DPO    & 64.3 & --   & --    & --  & -- & --    \\
+14  & cleaned (num)    & 215 & 5  & DPO      & 5e-6   & --  & DPO    & 69.8 & 68.0 & $-$1.7 & 4   & 7  & 0.63  \\
+13  & cleaned (num)    & 215 & 5  & SFT+GRPO & 2e-4   & 5   & GRPO   & 70.7 & --   & --    & --  & -- & --    \\
+15  & cleaned (num)    & 215 & 5  & SFT+GRPO & 2e-4   & 5   & GRPO   & 70.7 & 71.2 & +0.5  & 18  & 17 & 0.88  \\
+\midrule
+\multicolumn{14}{l}{\textit{Round 5: Paraphrase Augmentation (5-fold CV)}} \\
+\textbf{18} & \textbf{v3 (num)} & \textbf{501} & \textbf{5} & \textbf{4} & \textbf{2e-4} & \textbf{5} & \textbf{SFT} & \textbf{59.1} & \textbf{65.3} & \textbf{+6.2} & \textbf{74} & \textbf{43} & \textbf{0.063} \\
+19  & v3 (num)         & 501 & 5  & 8(ES$\to$4) & 1.5e-4 & 5 & SFT  & 59.1 & 64.5 & +5.4  & 83  & 56 & 0.063 \\
+20  & v3 (num)         & 501 & 5  & 6        & 1e-4   & 5   & SFT    & 59.1 & 64.9 & +5.8  & 78  & 49 & 0.063 \\
+\midrule
+\multicolumn{14}{l}{\textit{Round 6: Scaled Augmentation (10-fold CV)}} \\
+23  & v4 (num)         & 866 & 10 & 3        & 2e-4   & 5   & SFT    & 63.6 & 75.1 & +11.4 & 171 & 72 & \textbf{0.002} \\
+21  & v4 (num)         & 866 & 10 & 4        & 2e-4   & 5   & SFT    & 63.6 & 79.3 & +15.7 & 194 & 58 & \textbf{0.002} \\
+22  & v4 (num)         & 866 & 10 & 6(ES$\to$4) & 2e-4 & 5  & SFT    & 63.6 & 81.8 & +18.1 & 208 & 51 & \textbf{0.002} \\
+\textbf{24} & \textbf{v4 (num)} & \textbf{866} & \textbf{10} & \textbf{8(ES$\to$4)} & \textbf{2e-4} & \textbf{5} & \textbf{SFT} & \textbf{63.6} & \textbf{82.2} & \textbf{+18.6} & \textbf{206} & \textbf{45} & \textbf{0.002} \\
+\midrule
+\multicolumn{14}{l}{\textit{Round 7: 600-Sample Subset Validation (10-fold CV)}} \\
+\textbf{25} & \textbf{v4 sub (num)} & \textbf{600} & \textbf{10} & \textbf{5} & \textbf{2e-4} & \textbf{5} & \textbf{SFT} & \textbf{68.0} & \textbf{79.7} & \textbf{+11.7} & \textbf{108} & \textbf{38} & \textbf{0.002} \\
+26  & v4 sub (num)     & 600 & 10 & 5(ES)    & 2e-4   & 5   & SFT    & 68.0 & 78.8 & +10.8 & 100 & 35 & \textbf{0.002} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\TODO{ADD YOUR EXPERIMENTS ELORA IN THIS TABLE OR A SECOND}
+
+
+Notes: Exp.~1 uses Llama 3.1 8B; all others use Qwen3-8B. Exp.~5 uses LoRA $r=8$/$\alpha=16$; all others use $r=16$/$\alpha=32$. Exp.~10 timed out after 14 hours. Exp.~13 crashed due to Triton kernel incompatibility. Exp.~14 completed only 4 of 5 folds (missing adapter for fold~4). Accuracy values are percentages; $\Delta$ is the absolute difference (FT $-$ Baseline). W$\to$R and R$\to$W are question flip counts aggregated across all folds.
+
+
+\section{Key Prompts}
+\label{app:prompts}
+
+Below are selected prompts used in our data pipeline. Minor formatting adjustments have been made for readability.
+
+\subsection{Synthetic Question Generation}
+\label{app:prompt:gen}
+
+Used to generate new reliability engineering problems from seed examples (Section~\ref{sec:data:selfinst}).
+
+\begin{quote}
+\small
+\textit{You are an expert in reliability engineering, creating practice problems for students.}
+
+\textit{I will show you \{num\_examples\} example problems. Your task is to:}
+\begin{enumerate}\small
+    \item \textit{Understand the style, difficulty, and topics of these examples}
+    \item \textit{Create \{num\_to\_generate\} new, original problems that are similar in style and difficulty}
+    \item \textit{Make questions that are educational and challenging}
+    \item \textit{Provide complete solutions with step-by-step reasoning}
+\end{enumerate}
+
+\textit{Important: Create different questions (don't just change numbers in the examples). Use similar concepts but new scenarios. Include all necessary data in the question (self-contained). Show clear reasoning steps. Provide specific numerical answers when appropriate.}
+
+\textit{[3 randomly sampled seed examples shown]}
+
+\textit{For each problem, provide:}\\
+\textit{QUESTION: [Complete problem statement]}\\
+\textit{REASONING: [Step-by-step solution]}\\
+\textit{ANSWER: [Final answer(s)]}
+\end{quote}
+
+\subsection{Paraphrase Augmentation}
+\label{app:prompt:rephrase}
+
+Used to rephrase existing questions while preserving mathematical content (Section~\ref{sec:data:augment}). The prompt includes two manually curated few-shot examples (omitted for brevity).
+
+\begin{quote}
+\small
+\textit{You are a technical writer specializing in reliability engineering. Your task is to rephrase a question and its solution reasoning while preserving their exact mathematical meaning.}
+
+\textit{Strict rules:}
+\begin{enumerate}\small
+    \item \textit{All numerical values, failure rates, probabilities, time periods, and parameters must remain exactly the same}
+    \item \textit{All formulas, equations, and mathematical relationships must be preserved}
+    \item \textit{The correct answer must be identical}
+    \item \textit{Change the wording, sentence structure, and phrasing to create a distinct version}
+    \item \textit{Do not add information, assumptions, or conditions not present in the original}
+\end{enumerate}
+
+\textit{What to change: Synonyms for non-technical words (e.g., ``compute'' $\to$ ``determine''), sentence structure, scenario framing (e.g., ``plant'' $\to$ ``factory''), transition words.}
+
+\textit{What must not change: Any number, rate, probability, or parameter value. Variable names in formulas. The mathematical operations and formulas used. The final answer.}
+
+\textit{[2 few-shot examples shown]}
+
+\textit{Respond with a JSON object:}
+\texttt{\{"question": "...", "reasoning": "..."\}}
+\end{quote}
+
+\subsection{Paraphrase Verification}
+\label{app:prompt:verify}
+
+Used by GPT-5.4 to verify that a rephrase preserves mathematical meaning (Section~\ref{sec:data:augment}).
+
+\begin{quote}
+\small
+\textit{You are verifying whether a rephrased reliability engineering question preserves the exact mathematical meaning of the original. Compare the original and rephrased versions. Check all of the following:}
+\begin{enumerate}\small
+    \item \textit{Numerical values: Are all numbers, rates, probabilities exactly the same?}
+    \item \textit{Mathematical meaning: Do both questions ask for the exact same quantity?}
+    \item \textit{Constraints: Are all conditions and given information preserved?}
+    \item \textit{Solution: Would the exact same calculation steps produce the correct answer?}
+    \item \textit{Reasoning: Are all formulas and intermediate values identical?}
+\end{enumerate}
+
+\textit{Respond with a JSON object:}
+\texttt{\{"values\_preserved": bool, "meaning\_preserved": bool, "constraints\_preserved": bool, "solution\_equivalent": bool, "reasoning\_equivalent": bool, "overall\_valid": bool, "issues": "..."\}}
+\end{quote}
+
+\subsection{SFT System Prompt}
+\label{app:prompt:system}
+
+Used as the system message during both training and evaluation (Section~\ref{sec:sft:setup}).
+
+\begin{quote}
+\small
+\textit{You are an expert in reliability engineering, probability theory, and system analysis. Provide clear, accurate answers with step-by-step reasoning. At the end, clearly state your final answer after `Final Answer:'.}
+\end{quote}

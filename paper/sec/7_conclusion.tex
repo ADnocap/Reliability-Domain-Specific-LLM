@@ -1,0 +1,14 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented a complete pipeline for adapting a general-purpose LLM to reliability engineering, a technical domain with no existing training datasets or benchmarks. Starting from 56 textbook-extracted seed questions, our adapted self-instruct methodology with cross-model answer verification and paraphrase augmentation scales the dataset to 866 verified examples. Supervised fine-tuning of Qwen3-8B yields a statistically significant $+18.6\%$ accuracy improvement ($p=0.002$) under 10-fold cross-validation, placing our 8B-parameter model between frontier models o3-mini and Gemini 3.1 Pro on domain-specific tasks.
+
+Our analysis reveals two key findings for the synthetic data generation community. First, the \emph{self-instruct ceiling effect}: LLM generators create questions within their own capability envelope, making same-model answer consistency a trivially satisfied check rather than a meaningful quality filter. Second, paraphrase augmentation---creating surface-level rephrases while preserving mathematical content---is far more effective than generating harder synthetic questions, consistent with MetaMath~\cite{yu2024metamath} and suggesting that diversity of expression matters more than difficulty in small-data regimes.
+
+\TODO{Add GRPO results and discussion once available.}
+
+\TODO{Add discussion of general reasoning benchmark results (catastrophic forgetting vs. positive transfer).}
+
+\paragraph{Limitations.} Our evaluation is limited to numeric questions with automated answer comparison; formula derivation and conceptual questions require human evaluation. The self-instruct ceiling effect means our synthetic data may not cover the hardest problems in reliability engineering. Additionally, our cross-validation evaluates on in-distribution paraphrased questions; fully out-of-distribution evaluation on unseen problem types is ongoing.
+
+\paragraph{Future work.} Promising directions include grounding data generation in textbook source material (following SearchInstruct~\cite{li2025searchinstruct}), extending to non-numeric question types, evaluating on other engineering domains to test the generality of our pipeline, and scaling GRPO training with the full augmented dataset.

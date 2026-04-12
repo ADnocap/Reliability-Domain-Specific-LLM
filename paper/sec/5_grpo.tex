@@ -1,0 +1,31 @@
+\section{Reinforcement Learning with GRPO}
+\label{sec:grpo}
+
+% This section is primarily authored by teammate working on GRPO
+
+\subsection{Motivation}
+\label{sec:grpo:motivation}
+% SFT teaches format and domain knowledge, but reasoning can be further improved
+% GRPO provides a way to optimize for correct final answers via verifiable rewards
+\TODO{Why RL after SFT? Limitations of SFT alone (memorization vs. reasoning). GRPO as a natural next step.}
+
+\subsection{GRPO Overview}
+\label{sec:grpo:method}
+% Group Relative Policy Optimization (DeepSeek-R1)
+% No critic model needed -- uses group-relative advantages
+\TODO{Brief description of GRPO algorithm. Key advantage over PPO/DPO: no reward model needed for verifiable tasks.}
+
+\subsection{Reward Design}
+\label{sec:grpo:reward}
+% Verifiable rewards for reliability engineering: numerical answer correctness
+% Format rewards for chain-of-thought structure
+\TODO{Define reward function: correctness reward (numerical comparison) + format reward (reasoning structure).}
+
+\subsection{Training Configuration}
+\label{sec:grpo:config}
+\TODO{GRPO-specific hyperparameters: group size, KL penalty, learning rate schedule, number of iterations.}
+
+\subsection{Results}
+\label{sec:grpo:results}
+% SFT-only vs SFT+GRPO comparison
+\TODO{Accuracy comparison. Qualitative analysis of reasoning improvements. Statistical significance.}

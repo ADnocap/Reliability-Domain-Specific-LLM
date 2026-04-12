@@ -1,0 +1,16 @@
+\section{Introduction}
+\label{sec:intro}
+
+Reliability engineering is concerned with the analysis and prediction of failure in complex systems---from nuclear power plants and aircraft to electrical grids and autonomous vehicles. Practitioners routinely employ sophisticated mathematical tools including Weibull and exponential lifetime distributions, Markov chain modeling, Bayesian inference, fault tree analysis, and system-level reliability computation for series-parallel and $k$-out-of-$n$ architectures. Mastering these techniques requires years of specialized training, and even experienced engineers benefit from computational assistance when solving multi-step quantitative problems.
+
+Large language models (LLMs) have demonstrated impressive general reasoning capabilities across a wide range of tasks~\cite{openai2023gpt4}. However, when applied to domain-specific technical problems such as reliability engineering, their performance degrades substantially. Prior work evaluated state-of-the-art models on a set of hand-written reliability engineering problems and found that even frontier models fail to produce correct numerical answers in the majority of cases, often generating plausible-sounding but mathematically incorrect solutions. This performance gap motivates the development of domain-adapted models that can reliably assist with reliability engineering computations.
+
+A central challenge in building such models is the scarcity of training data. Unlike well-studied domains such as general mathematics~\cite{yu2024metamath,hendrycks2021math} or medicine~\cite{singhal2023medpalm}, reliability engineering lacks large-scale question-answer datasets or established benchmarks. Manually creating such datasets is prohibitively expensive, as each problem requires expert knowledge to both formulate and solve. This creates a bootstrapping problem: we need data to train a model, but generating quality data requires the very expertise the model is meant to provide.
+
+We address this challenge with a data generation and fine-tuning pipeline that bootstraps 56 textbook-extracted seed questions into 866 verified training examples, achieving $+18.6\%$ accuracy ($p=0.002$) on Qwen3-8B. Our contributions are:
+\begin{itemize}
+    \item A cross-model answer verification method for synthetic data quality control, replacing same-model consistency checks that we show are trivially satisfied in technical domains (Section~\ref{sec:data:selfinst}).
+    \item The identification and empirical characterization of the self-instruct ceiling effect (Section~\ref{sec:data:selfinst}), and evidence that paraphrase augmentation overcomes it more effectively than difficulty scaling (Section~\ref{sec:data:augment}).
+    \item A reproducible SFT pipeline achieving $+18.6\%$ on reliability engineering with a fine-tuned 8B model competitive with frontier models an order of magnitude larger (Section~\ref{sec:sft}).
+    \item Integration of GRPO with verifiable rewards to further improve domain reasoning beyond SFT (Section~\ref{sec:grpo}).
+\end{itemize}
