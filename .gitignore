@@ -16,6 +16,16 @@ __pycache__/
 .venv/
 venv/
 
+# LaTeX build artifacts
+*.aux
+*.blg
+*.brf
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+
 # Jupyter
 .ipynb_checkpoints/
 
