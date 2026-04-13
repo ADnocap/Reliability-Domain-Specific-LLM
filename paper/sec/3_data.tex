@@ -88,9 +88,7 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 \subsection{Seed Dataset Extraction}
 \label{sec:data:seed}
 
-We digitized 32 chapters from reliability engineering textbooks using Mistral OCR, converting them to structured markdown. The textbooks cover exponential and Weibull lifetime distributions, mean time to failure (MTTF) and hazard functions, Bayesian inference, series-parallel and $k$-out-of-$n$ system reliability, reliability demonstration testing, and acceptance sampling.
-
-\TODO{need to quote and mention which textbook, I cant remember which it is and maybe we worl this part above}
+We digitized 32 chapters from two reliability engineering textbooks---\emph{Applied Reliability} (3rd ed.) by Tobias and Trindade~\cite{tobias2012applied} and \emph{Reliability Engineering} (3rd ed.) by Elsayed~\cite{elsayed2012reliability}---using Mistral OCR, converting them to structured markdown. The textbooks cover exponential and Weibull lifetime distributions, mean time to failure (MTTF) and hazard functions, Bayesian inference, series-parallel and $k$-out-of-$n$ system reliability, reliability demonstration testing, and acceptance sampling.
 
 From this corpus, we extracted question-reasoning-answer (QRA) triplets through a three-step process: (1)~keyword scanning with regular expressions to identify exercise and solution blocks, (2)~LLM-assisted validation to check self-containment (no references to figures or prior parts), and (3)~structured extraction into $(q, r, a)$ triplets using GPT-5-Mini. After iterative cleaning---including LaTeX normalization, Unicode fixing, and manual curation---we obtained \textbf{56 high-quality seed QRA triplets} covering the core topics of reliability engineering.
 
