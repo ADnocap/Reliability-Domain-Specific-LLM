@@ -46,10 +46,13 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 \node[data, below=1.2cm of verified] (master) {215 numeric};
 
 \draw[arrow] (cleanproc) -- (master);
-% verified feeds down into cleaning
-\draw[arrow] (verified.south) -- ++(0,-0.35) -| (cleanproc.east);
-% seed feeds down into cleaning, arriving on top of the block
-\draw[arrow] (seed.south) -- ++(0,-0.35) -| (cleanproc.north);
+% verified feeds down into cleaning (enters from the top)
+\draw[arrow] (verified.south) -- ++(0,-0.35) -| (cleanproc.north);
+% seed feeds into cleaning via bayonet path: down, left past Stage 3 label, down, then right into .west
+\draw[arrow, rounded corners=5pt]
+    (seed.south) -- ++(0,-0.5)
+    -| ([xshift=-1.8cm]cleanproc.west)
+    |- (cleanproc.west);
 
 % === Row 4: Augmentation (horizontal, below row 3) ===
 \node[model, below=1.2cm of cleanproc, text width=2.2cm] (hard) {Hard generation\\Opus 4.6 + GPT-5.4};
