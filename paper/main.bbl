@@ -1,4 +1,4 @@
-\begin{thebibliography}{24}
+\begin{thebibliography}{25}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -168,5 +168,11 @@ Longhui Yu, Weisen Jiang, Han Shi, Jincheng Yu, Zhengying Liu, Yu Zhang,
 \newblock {M}eta{M}ath: Bootstrap your own mathematical questions for large
   language models.
 \newblock \emph{arXiv preprint arXiv:2309.12284}, 2024{\natexlab{b}}.
+
+\bibitem[Yu et~al.(2025)Yu, Sun, Hou, Yu, et~al.]{yu2025dapo}
+Qiying Yu, Zheng Sun, Huawen Hou, Kaituo Yu, et~al.
+\newblock {DAPO}: An open-source {LLM} reinforcement learning system via
+  dynamic sampling.
+\newblock \emph{arXiv preprint arXiv:2503.14476}, 2025.
 
 \end{thebibliography}
