@@ -42,14 +42,14 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 \draw[arrow] (seed.south) -- ++(0,-0.35) -| (gen);
 
 % === Row 3: Cleaning (horizontal, below row 2) ===
-\node[proc, below=1.2cm of gen, text width=4.7cm] (cleanproc) {Merge, classify, split multi-part,\\deduplicate, standardize answers};
+\node[proc, below=1.2cm of verifier, text width=4.7cm] (cleanproc) {Merge, classify, split multi-part,\\deduplicate, standardize answers};
 \node[data, below=1.2cm of verified] (master) {215 numeric};
 
 \draw[arrow] (cleanproc) -- (master);
 % verified feeds down into cleaning
 \draw[arrow] (verified.south) -- ++(0,-0.35) -| (cleanproc.east);
-% seed feeds into cleaning, arriving from the left
-\draw[arrow] (seed.south) |- (cleanproc.west);
+% seed feeds down into cleaning, arriving on top of the block
+\draw[arrow] (seed.south) -- ++(0,-0.35) -| (cleanproc.north);
 
 % === Row 4: Augmentation (horizontal, below row 3) ===
 \node[model, below=1.2cm of cleanproc, text width=2.2cm] (hard) {Hard generation\\Opus 4.6 + GPT-5.4};
