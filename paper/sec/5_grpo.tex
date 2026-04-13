@@ -4,7 +4,7 @@
 \subsection{Motivation}
 \label{sec:grpo:motivation}
 
-While SFT teaches the model domain-specific formatting and reasoning patterns, it is fundamentally limited to imitating the training data. On questions the base model already solves correctly, SFT reinforces existing capabilities; on questions where the model fails, SFT provides the correct answer but does not teach the model \emph{how to arrive at it} from its own reasoning process. This limitation is reflected in our results: the SFT model trained on the 600 ``easy'' questions (those the base model solves 4/4 times) shows no improvement and even slight regression on the remaining 266 harder questions (Section~\ref{sec:grpo:results}).
+While SFT teaches the model domain-specific formatting and reasoning patterns, it is fundamentally limited to imitating the training data. On questions the base model already solves correctly, SFT reinforces existing capabilities; on questions where the model fails, SFT provides the correct answer but does not teach the model \emph{how to arrive at it} from its own reasoning process. This limitation is reflected in our results: the SFT model trained on the 600 questions where GRPO cannot learn (those the base model solves either 0/4 or 4/4 times, producing zero reward variance) shows no improvement and even slight regression on the remaining 266 mixed-difficulty questions (Section~\ref{sec:grpo:results}).
 
 Group Relative Policy Optimization (GRPO)~\cite{shao2024deepseekmath} offers a complementary approach: rather than imitating expert solutions, the model generates multiple candidate answers and learns to prefer reasoning chains that lead to correct results. For reliability engineering, where answers are verifiable numerical values, this provides a natural reward signal without requiring a learned reward model.
 
@@ -30,7 +30,7 @@ Unlike PPO, GRPO requires no critic model: the group mean serves as the baseline
 
 A key challenge with GRPO on small datasets is that many prompts produce zero reward variance: either all $G$ generations are correct (no learning signal for improvement) or all are wrong (no positive signal). Following DAPO (Dynamic sampling Policy Optimization)~\cite{yu2025dapo}, we implement \emph{dynamic sampling}: when all $G$ generations produce the same reward, the prompt is discarded and a new one is sampled. This ensures every training step provides a meaningful gradient signal.
 
-We track \emph{useful steps} (prompts with reward variance) separately from \emph{wasted steps} (prompts discarded due to zero variance). The waste rate serves as a diagnostic: a rising waste rate indicates the model is converging (more prompts become too easy or too hard), while an initially high waste rate suggests the training distribution is poorly calibrated to the model's current capability.
+We track \emph{useful steps} (prompts with reward variance) separately from \emph{wasted steps} (prompts discarded due to zero variance). In practice, dynamic sampling proves essential: to accumulate 200 useful steps, the model required 260 total attempts (60 wasted, 23.1\% waste rate), meaning nearly \textbf{one in four prompts} produced zero-variance rewards and would have contributed no gradient without resampling. Without dynamic sampling, these wasted steps would either inject pure noise (all-correct prompts reinforce the status quo) or provide no learning signal at all (all-wrong prompts), substantially degrading training efficiency on a 266-question dataset.
 
 \subsection{Reward Design}
 \label{sec:grpo:reward}
@@ -57,11 +57,11 @@ The graded structure provides a smoother reward landscape than binary correct/in
 The 866-question dataset (v4) is split based on base-model screening: each question is evaluated 4 times with the base Qwen3-8B model, and questions are categorized by success rate:
 
 \begin{itemize}
-    \item \textbf{600 questions (4/4 correct):} Used for SFT training. These are ``easy'' for the base model; SFT reinforces correct patterns.
+    \item \textbf{600 questions (0/4 or 4/4 correct):} Used for SFT training. These include 210 questions the base model always fails (0/4) and 390 it always solves (4/4). Both extremes produce zero reward variance under GRPO---either all generations are correct or all are wrong---so they cannot provide a gradient signal for RL. However, they are suitable for supervised learning from ground-truth answers.
     \item \textbf{266 questions (1/4 to 3/4 correct):} Used for GRPO training. These have natural reward variance---some generations succeed, others fail---making them ideal for group-relative optimization.
 \end{itemize}
 
-Questions where the base model scores 0/4 are excluded from GRPO as they provide no positive reward signal. This split ensures zero data leakage between SFT and GRPO stages and targets GRPO training at the model's learning frontier---questions that are neither trivially easy nor impossibly hard.
+This split ensures zero data leakage between SFT and GRPO stages and targets GRPO training at the model's learning frontier---questions where the base model sometimes succeeds and sometimes fails, providing the contrastive signal that GRPO requires.
 
 \subsection{Training Configuration}
 \label{sec:grpo:config}
