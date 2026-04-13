@@ -1,7 +1,7 @@
 \section{Data Pipeline}
 \label{sec:data}
 
-Our data pipeline transforms 56 textbook-extracted seed questions into 866 verified training examples through four stages: seed extraction, synthetic generation with cross-model verification, cleaning, and paraphrase augmentation. Figure~\ref{fig:pipeline} illustrates the complete pipeline.
+Our pipeline transforms 56 textbook-extracted seed questions into 866 verified training examples through four stages: seed extraction, synthetic generation with cross-model verification, cleaning, and paraphrase augmentation. Figure~\ref{fig:pipeline} illustrates the complete flow.
 
 \begin{figure*}[t]
 \centering
@@ -81,77 +81,40 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 
 \end{tikzpicture}%
 }
-\caption{Data pipeline overview. Blue: dataset milestones; orange: processing; green: LLM-based generation/verification; red: training. Seed questions feed both the generation stage and the cleaning stage (routed via the left margin to avoid crossing Stage~2 nodes).}
+\caption{Data pipeline overview. Blue: dataset milestones; orange: processing; green: LLM-based generation/verification; red: training.}
 \label{fig:pipeline}
 \end{figure*}
 
-\subsection{Seed Dataset Extraction}
+\subsection{Seed Extraction}
 \label{sec:data:seed}
 
-We digitized 32 chapters from two reliability engineering textbooks---\emph{Applied Reliability} (3rd ed.) by Tobias and Trindade~\cite{tobias2012applied} and \emph{Reliability Engineering} (3rd ed.) by Elsayed~\cite{elsayed2012reliability}---using Mistral OCR, converting them to structured markdown. The textbooks cover exponential and Weibull lifetime distributions, mean time to failure (MTTF) and hazard functions, Bayesian inference, series-parallel and $k$-out-of-$n$ system reliability, reliability demonstration testing, and acceptance sampling.
+We digitized 32 chapters from two reliability engineering textbooks---\emph{Applied Reliability} (3rd ed.) by Tobias and Trindade~\cite{tobias2012applied} and \emph{Reliability Engineering} (3rd ed.) by Elsayed~\cite{elsayed2012reliability}---using Mistral OCR. From this corpus, we extracted \textbf{56 seed QRA triplets} via regex scanning for exercise blocks, LLM-assisted validation for self-containment, and structured extraction into $(q, r, a)$ format.
 
-From this corpus, we extracted question-reasoning-answer (QRA) triplets through a three-step process: (1)~keyword scanning with regular expressions to identify exercise and solution blocks, (2)~LLM-assisted validation to check self-containment (no references to figures or prior parts), and (3)~structured extraction into $(q, r, a)$ triplets using GPT-5-Mini. After iterative cleaning---including LaTeX normalization, Unicode fixing, and manual curation---we obtained \textbf{56 high-quality seed QRA triplets} covering the core topics of reliability engineering.
-
-\subsection{Adapted Self-Instruct with Cross-Model Verification}
+\subsection{Cross-Model Verification}
 \label{sec:data:selfinst}
 
-\subsubsection{Generation with a Stronger Model}
+Unlike Self-Instruct~\cite{wang2023selfinstruct}, we use a \emph{stronger} generator (Claude Opus~4) to create training data for the smaller Qwen3-8B target, producing 158 synthetic QRA triplets.
 
-Unlike the original Self-Instruct~\cite{wang2023selfinstruct}, which uses the same model for both generation and fine-tuning, we employ \emph{stronger} generator models to create training data for a smaller target model (Qwen3-8B). This asymmetry is motivated by the observation that the target model lacks the domain knowledge needed to generate correct reliability engineering problems and solutions.
-
-Each generation prompt includes 3 randomly sampled seed examples and requests 2 new problems. The generator is instructed to produce complete $(q, r, a)$ triplets with step-by-step chain-of-thought reasoning, using temperature 0.8 for diversity. Quality gates filter out questions shorter than 30 characters, reasoning shorter than 50 characters, placeholder answers, and near-duplicates (by 200-character question prefix). This process yielded 158 synthetic QRA triplets that passed initial quality checks.
-
-\subsubsection{Cross-Model Answer Verification}
+\subsubsection{Verification Pipeline}
 \label{sec:data:verification}
 
-To ensure mathematical correctness, we replace same-model answer consistency~\cite{yu2024cotselfinst} with a cross-model verification pipeline:
-
-\begin{enumerate}
-    \item \textbf{Generate and solve:} Claude Opus 4 produces a $(q, r, a)$ triplet from the seed pool (temperature 0.8).
-    \item \textbf{Verify:} GPT-5.4 independently solves the same question without seeing the generator's answer or reasoning (temperature 0.1).
-    \item \textbf{Compare:} Final numerical answers are compared with 5\% relative tolerance, with LLM-based semantic comparison as fallback for edge cases.
-\end{enumerate}
-
-Only items where both models agree (\textsc{match}) are retained. A safety valve halts generation if the acceptance rate drops below 10\% after 20 batches. Because the generator and verifier are different models with different architectures and failure modes, agreement provides a substantially stronger correctness signal than same-model consistency.
-
-\subsubsection{The Limitations of Same-Model Answer Consistency}
-
-A key motivation for cross-model verification is our empirical observation that same-model answer consistency, as used in prior work~\cite{yu2024cotselfinst}, is trivially satisfied for self-instruct-generated questions: baseline models achieve 92--97\% accuracy on synthetic questions while scoring only 68--76\% on the 56 textbook-extracted seed problems. This means that if the generating model is also used for answer consistency verification, it will confirm nearly all of its own outputs, regardless of whether they represent genuinely challenging or educationally useful problems. The verification step thus filters for self-consistency rather than for quality or difficulty. This does not invalidate the downstream fine-tuning improvements reported in prior work as the trained model may still benefit from exposure to diverse reasoning patterns, but it reveals that answer consistency is not a reliable proxy for data quality in technical domains where the goal is to teach \emph{new} knowledge rather than to align instruction-following behavior.
+To ensure correctness, we replace same-model consistency with cross-model verification: (1)~Claude Opus~4 generates $(q,r,a)$ from seeds; (2)~GPT-5.4 independently solves $q$ without seeing the answer; (3)~numerical answers are compared within 5\% tolerance. Only matching items are retained.
 
 \subsubsection{Self-Instruct Ceiling Effect}
 
-This accuracy gap reflects a more fundamental limitation that we term the \emph{self-instruct ceiling effect}: LLM generators create questions within their own capability envelope. The generator avoids edge cases it does not understand (truncated distributions, competing risks), defaults to standard formulations matching its training distribution, and produces clean numerical answers that do not require iterative methods or lookup tables. Consequently, synthetic questions are systematically easier than real domain problems.
+We observe that baseline models achieve 92--97\% accuracy on self-instruct-generated questions while scoring only 68--76\% on textbook problems, meaning same-model answer consistency~\cite{yu2024cotselfinst} is trivially satisfied. We term this the \emph{self-instruct ceiling effect}: generators create questions within their own capability envelope, avoiding edge cases they cannot solve. This motivates our paraphrase strategy.
 
-This has a direct implication for fine-tuning: training on self-instruct data may teach the model the \emph{format} of domain-specific reasoning (step-by-step solutions, correct use of notation) without imparting the \emph{knowledge} needed to solve genuinely hard problems. This ceiling effect motivates our paraphrase augmentation strategy (Section~\ref{sec:data:augment}): rather than generating more synthetic questions, we create surface-level rephrases of real textbook problems, preserving their difficulty while increasing training set diversity.
-
-\subsection{Dataset Cleaning and Standardization}
-\label{sec:data:cleaning}
-
-The combined seed and verified synthetic data (140 items) underwent LLM-assisted cleaning using Claude Opus 4.6 (temperature 0.1):
-
-\begin{enumerate}
-    \item \textbf{Type classification:} Each item was labeled as \textsc{single\_numeric}, \textsc{multi\_part\_numeric}, \textsc{formula}, \textsc{derivation}, or \textsc{conceptual}.
-    \item \textbf{Multi-part splitting:} 107 multi-part questions were split into fully self-contained entries, with each sub-question rewritten to include all necessary context (removing references such as ``from Part~(a)'').
-    \item \textbf{Answer standardization:} Trailing periods, units, and commas were stripped; percentages retained as-is; LaTeX notation cleaned (e.g., \verb|\frac{14}{33}| $\to$ \verb|14/33|).
-    \item \textbf{Deduplication:} 173 near-duplicate entries removed by 200-character question prefix matching.
-\end{enumerate}
-
-The resulting \textbf{master dataset} contains \textbf{256 items}: 215 numeric, 21 formula, 19 text, and 1 boolean. For all fine-tuning experiments, we use the 215 numeric questions as the base, since these permit automated evaluation via numerical comparison.
-
-\subsection{Paraphrase Augmentation}
+\subsection{Cleaning and Augmentation}
 \label{sec:data:augment}
 
-\subsubsection{Augmentation Strategy}
+The combined data underwent LLM-assisted cleaning (type classification, multi-part splitting, answer standardization, deduplication), yielding \textbf{215 numeric questions}. We then augment via two strategies:
 
-Inspired by MetaMath~\cite{yu2024metamath} and PersonaMath~\cite{wang2024personamath}, we augment the dataset by generating surface-level rephrases of existing questions while strictly preserving mathematical content. Each original question is rephrased by Claude Opus 4.6 (temperature 0.7) with explicit constraints: all numerical values, formulas, and intermediate calculations must remain identical; only wording, sentence structure, and scenario framing may change (e.g., ``plant'' $\to$ ``factory'', ``compute'' $\to$ ``determine''). Two manually curated few-shot examples guide the model.
+\begin{itemize}
+    \item \textbf{Hard generation:} 65 new difficult questions (Claude Opus~4.6, verified by GPT-5.4).
+    \item \textbf{Paraphrase augmentation} (inspired by MetaMath~\cite{yu2024metamath}): surface-level rephrases preserving all numerical values, verified by GPT-5.4 for mathematical equivalence.
+\end{itemize}
 
-Each rephrase is then verified by GPT-5.4 (temperature 0.1), which checks five dimensions: numerical values preserved, mathematical meaning preserved, constraints preserved, solution equivalence, and reasoning equivalence. A local gate additionally extracts key numbers from both versions and rejects the rephrase (with up to 2 retries) if any number is missing from the rephrased version.
-
-\subsubsection{Surface Diversity vs.\ Difficulty Scaling}
-
-We also experimented with generating harder questions using Claude Opus 4.6, requiring problems that combine multiple distributions, conditional probability, or system-level analysis. This produced 65 verified hard questions (cross-verified with GPT-5.4), forming dataset v2 (280 items).
-
-The contrast in downstream performance is striking. Adding 65 hard questions to the 215-item base yielded only $+2.0\%$ improvement (Exp.~16), whereas adding 221 paraphrases of existing questions yielded $+6.2\%$ (Exp.~18), and scaling to 586 paraphrases yielded $+18.6\%$ (Exp.~24). This confirms the MetaMath finding: for small datasets, surface-level diversity in question formulation is more valuable than increasing problem difficulty.
+The contrast is striking: adding 65 hard questions yields only $+2.0\%$, while 586 paraphrases yield $+18.6\%$ ($p=0.002$), confirming that surface diversity outperforms difficulty scaling.
 
 \subsection{Dataset Summary}
 \label{sec:data:summary}
@@ -159,7 +122,7 @@ The contrast in downstream performance is striking. Adding 65 hard questions to 
 \begin{table}[t]
 \centering
 \small
-\caption{Dataset versions. All entries are verified\\numeric QRA triplets.}
+\caption{Dataset versions. All entries are verified numeric QRA triplets.}
 \label{tab:datasets}
 \begin{tabular}{@{}lrc@{}}
 \toprule
@@ -172,7 +135,3 @@ v3 (+ para.) & 501 & v2 + 221 paraphrased \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-Table~\ref{tab:datasets} summarizes the dataset evolution. All versions contain numeric-only questions with chain-of-thought reasoning and verified numerical answers.
-
-Each entry follows a chat-format structure with three roles: a system prompt establishing the reliability engineering expert persona, a user message containing the question, and an assistant message containing the chain-of-thought reasoning followed by a clearly delimited final answer.

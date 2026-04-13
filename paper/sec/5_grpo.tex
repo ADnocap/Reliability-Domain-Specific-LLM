@@ -66,37 +66,7 @@ Questions where the base model scores 0/4 are excluded from GRPO as they provide
 \subsection{Training Configuration}
 \label{sec:grpo:config}
 
-Table~\ref{tab:grpo_config} summarizes the GRPO training configuration. We use a custom training loop (no TRL dependency) with memory-efficient per-generation backward passes and Unsloth's optimized inference for the generation phase.
-
-\begin{table}[t]
-\centering
-\small
-\caption{GRPO training configuration (baseline, lr=$1\!\times\!10^{-5}$).}
-\label{tab:grpo_config}
-\begin{tabular}{ll}
-\toprule
-Parameter & Value \\
-\midrule
-Base model & Qwen3-8B (4-bit) \\
-SFT initialization & SFT fold\_4 LoRA ($r\!=\!16$, $\alpha\!=\!32$) \\
-Generations per prompt ($G$) & 4 \\
-Max new tokens & 2048 \\
-Useful steps & 200 \\
-Max total attempts & 600 \\
-Max resample attempts/step & 10 \\
-Learning rate & $1 \times 10^{-5}$ \\
-Gradient accumulation & 4 \\
-Max gradient norm & 0.1 \\
-KL penalty ($\beta$) & 0.0 \\
-Checkpoint interval & every 20 useful steps \\
-Optimizer & AdamW (weight decay 0.1) \\
-LR scheduler & Linear warmup + cosine decay \\
-Warmup steps & 15 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The pipeline proceeds as: (1) load the base Qwen3-8B model, (2) load the SFT LoRA adapter from fold\_4, (3) enable gradients only on LoRA parameters ($\sim$43.6M trainable), (4) run the GRPO loop with dynamic sampling on the 266 mixed questions. Thinking mode is disabled (\texttt{/no\_think} system prompt) to maintain consistency with the SFT training format.
+We use a custom training loop (no TRL dependency) with $G\!=\!4$ generations per prompt, 200 useful steps, LR=$1\!\times\!10^{-5}$ with cosine decay, gradient accumulation of 4, and $\beta\!=\!0$ (no KL penalty). The pipeline loads Qwen3-8B, applies the SFT fold\_4 LoRA ($r\!=\!16$, $\alpha\!=\!32$, $\sim$43.6M trainable parameters), and runs GRPO with dynamic sampling on the 266 mixed questions. Full configuration details are in Appendix~A.
 
 \subsection{GRPO Results}
 \label{sec:grpo:results}
@@ -163,22 +133,4 @@ Fresh LoRA & 50.8\% & ref. & 29.3\% & --- \\
 
 \paragraph{SFT warm-start ablation.} The SFT warm-start is essential: GRPO from scratch barely exceeds the base model ($+0.4$pp, likely within noise), while GRPO from the SFT checkpoint gains $+7.5$pp. The SFT initialization also produces a lower waste rate (23.1\% vs.\ 29.3\%), indicating more diverse reward signals and more efficient dynamic sampling. This is paradoxical: the SFT alone degrades holdout performance by $-20.4$pp, yet it provides a critical initialization for GRPO. We hypothesize that SFT teaches domain-specific \emph{format and vocabulary} (reliability formulas, structured computation) without teaching correct \emph{application} to hard problems. GRPO then leverages this structural foundation to optimize for numerical correctness. Without SFT, the LoRA starts at zero and must simultaneously learn both format and reasoning---too many degrees of freedom for 266 questions.
 
-\subsubsection{Learning Rate Ablation}
-
-\begin{table}[t]
-\centering
-\small
-\caption{Learning rate comparison\\(all from SFT fold\_4, 200 useful steps).}
-\label{tab:grpo_lr}
-\begin{tabular}{@{}lccc@{}}
-\toprule
-LR & Waste & Attempts & Best Acc. \\
-\midrule
-$5\!\times\!10^{-6}$ & 21.3\% & 254 & Pending \\
-$\boldsymbol{1\!\times\!10^{-5}}$ & 23.1\% & 260 & \textbf{57.9\%} \\
-$2\!\times\!10^{-5}$ & 20.9\% & 253 & Pending \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Training dynamics are similar across learning rates, with waste rates between 20.9\% and 23.1\%. Full evaluation results for the conservative and aggressive learning rate configurations will determine whether the learning rate significantly affects peak accuracy or the onset of overfitting.
+We also trained with LR=$5\!\times\!10^{-6}$ and $2\!\times\!10^{-5}$; training dynamics (waste rates 20.9--23.1\%) were similar across all three learning rates. Full results are in Appendix~A.
