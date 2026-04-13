@@ -190,3 +190,124 @@ Used as the system message during both training and evaluation (Section~\ref{sec
 \small
 \textit{You are an expert in reliability engineering, probability theory, and system analysis. Provide clear, accurate answers with step-by-step reasoning. At the end, clearly state your final answer after `Final Answer:'.}
 \end{quote}
+
+
+\section{Project Organization}
+\label{app:organization}
+
+\subsection{Task Distribution}
+
+This project was carried out by two students under the supervision of Prof.\ Zhiguo Zeng. Table~\ref{tab:tasks} summarizes the main tasks and their distribution.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Task} & \textbf{Alexandre} & \textbf{Elora} \\
+\midrule
+Literature review          & \checkmark & \checkmark \\
+Seed dataset curation      & \checkmark & \\
+Synthetic data generation  & \checkmark & \\
+Paraphrase augmentation    & \checkmark & \\
+SFT training pipeline      & \checkmark & \\
+GRPO implementation        & \checkmark & \checkmark \\
+Evaluation \& baselines    & \checkmark & \checkmark \\
+HPC cluster management     & \checkmark & \\
+Paper writing (draft)      & \checkmark & \\
+Paper writing (revision)   & \checkmark & \checkmark \\
+Figures \& tables          &            & \checkmark \\
+\bottomrule
+\end{tabular}
+\caption{Task distribution between team members.}
+\label{tab:tasks}
+\end{table}
+
+\subsection{Project Timeline}
+
+The project spanned approximately six months, from late October 2025 to April 2026. Figure~\ref{fig:gantt} presents the timeline as a Gantt chart.
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{ganttchart}[
+    hgrid,
+    vgrid={*{3}{draw=none}, dotted},
+    x unit=0.45cm,
+    y unit chart=0.6cm,
+    title height=1,
+    bar height=0.6,
+    bar label font=\small,
+    title label font=\small,
+    milestone label font=\small,
+    group label font=\small\bfseries,
+    bar/.append style={fill=cvprblue!60},
+    group/.append style={fill=cvprblue!30},
+    milestone/.append style={fill=red!70},
+]{1}{28}
+    % Title: 7 months, 4 weeks each
+    \gantttitle{Oct 25}{4}
+    \gantttitle{Nov 25}{4}
+    \gantttitle{Dec 25}{4}
+    \gantttitle{Jan 26}{4}
+    \gantttitle{Feb 26}{4}
+    \gantttitle{Mar 26}{4}
+    \gantttitle{Apr 26}{4} \\
+
+    % Phase 1: Data
+    \ganttgroup{Data Pipeline}{1}{20} \\
+    \ganttbar{Literature review}{1}{8} \\
+    \ganttbar{Seed dataset curation}{5}{14} \\
+    \ganttbar{Synthetic data generation}{12}{18} \\
+    \ganttbar{Paraphrase augmentation}{20}{22} \\
+
+    % Phase 2: Training
+    \ganttgroup{Model Training}{18}{26} \\
+    \ganttbar{SFT pipeline \& experiments}{18}{23} \\
+    \ganttbar{GRPO implementation}{20}{24} \\
+    \ganttbar{Evaluation \& baselines}{22}{26} \\
+
+    % Phase 3: Paper
+    \ganttgroup{Paper}{24}{28} \\
+    \ganttbar{Writing \& revision}{24}{28} \\
+
+    % Milestones
+    \ganttmilestone{Mid-project defence}{7} \\
+    \ganttmilestone{Seed dataset finalized}{14} \\
+    \ganttmilestone{Best SFT result (+18.6\%)}{23} \\
+    \ganttmilestone{Submission}{28}
+
+    % Links
+    \ganttlink{elem2}{elem3}
+    \ganttlink{elem3}{elem4}
+    \ganttlink{elem6}{elem7}
+\end{ganttchart}
+}
+\caption{Project timeline (October 2025 -- April 2026).}
+\label{fig:gantt}
+\end{figure*}
+
+\subsection{Time Estimates}
+
+Table~\ref{tab:time} provides approximate time spent on each major phase of the project.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Phase} & \textbf{Approx.\ hours} \\
+\midrule
+Literature review \& problem formulation   & 30 \\
+Data pipeline (seed + synthetic + augment.) & 60 \\
+SFT training \& hyperparameter search       & 50 \\
+GRPO implementation \& experiments          & 40 \\
+Evaluation \& baseline comparison           & 25 \\
+Paper writing \& revision                   & 45 \\
+\midrule
+\textbf{Total (combined)}                   & \textbf{250} \\
+\bottomrule
+\end{tabular}
+\caption{Approximate time spent on each project phase (combined for both team members).}
+\label{tab:time}
+\end{table}

@@ -1,9 +1,15 @@
-\begin{thebibliography}{24}
+\begin{thebibliography}{26}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Barati et~al.(2025)Barati, Amiri, and Faili]{li2025searchinstruct}
+Iman Barati, Mostafa Amiri, and Heshaam Faili.
+\newblock {S}earch{I}nstruct: Enhancing domain adaptation via retrieval-based
+  instruction dataset creation.
+\newblock \emph{arXiv preprint arXiv:2509.10708}, 2025.
 
 \bibitem[Cui et~al.(2023)Cui, Li, Yan, Chen, and Yuan]{cui2023chatlaw}
 Jiaxi Cui, Zongjian Li, Yang Yan, Bohua Chen, and Li Yuan.
@@ -23,11 +29,16 @@ Tim Dettmers, Artidoro Pagnoni, Ari Holtzman, and Luke Zettlemoyer.
 \newblock {QL}o{RA}: Efficient finetuning of quantized language models.
 \newblock \emph{NeurIPS}, 2023.
 
-\bibitem[Ding et~al.(2024)]{ding2024dataaugllm}
-Bosheng Ding et~al.
-\newblock Data augmentation using large language models: Data perspectives,
-  learning paradigms and challenges.
-\newblock \emph{arXiv preprint arXiv:2403.02990}, 2024.
+\bibitem[Elsayed(2012)]{elsayed2012reliability}
+Elsayed~A. Elsayed.
+\newblock \emph{Reliability Engineering}.
+\newblock John Wiley \& Sons, 3rd edition, 2012.
+
+\bibitem[Grattafiori et~al.(2024)Grattafiori, Dubey, Jauhri, Pandey,
+  et~al.]{grattafiori2024llama3}
+Aaron Grattafiori, Abhimanyu Dubey, Abhinav Jauhri, Abhinav Pandey, et~al.
+\newblock The {L}lama 3 herd of models.
+\newblock \emph{arXiv preprint arXiv:2407.21783}, 2024.
 
 \bibitem[Hendrycks et~al.(2021)Hendrycks, Burns, Kadavath, Arora, Basart, Tang,
   Song, and Steinhardt]{hendrycks2021math}
@@ -51,11 +62,12 @@ Neel Jain, Ping-yeh Chiang, Yuxin Wen, John Kirchenbauer, Hong-Min Chu,
 \newblock {NEFT}une: Noisy embeddings improve instruction finetuning.
 \newblock \emph{arXiv preprint arXiv:2310.05914}, 2023.
 
-\bibitem[Li et~al.(2025)]{li2025searchinstruct}
-Xiao Li et~al.
-\newblock {S}earch{I}nstruct: Domain-specific instruction data generation via
-  {RAG}.
-\newblock \emph{arXiv preprint arXiv:2509.10708}, 2025.
+\bibitem[Luo et~al.(2024)Luo, Luo, Chen, Zhu, Ao, Li,
+  et~al.]{wang2024personamath}
+Jing Luo, Run Luo, Longze Chen, Liang Zhu, Chang Ao, Jiaming Li, et~al.
+\newblock {P}ersona{M}ath: Enhancing math reasoning through persona-driven data
+  augmentation.
+\newblock \emph{arXiv preprint arXiv:2410.01504}, 2024.
 
 \bibitem[{OpenAI}(2023)]{openai2023gpt4}
 {OpenAI}.
@@ -86,15 +98,15 @@ Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher~D.
 Leonardo Ranaldi and Andr\'{e} Freitas.
 \newblock Self-refine instruction-tuning for aligning reasoning in language
   models.
-\newblock 2024.
+\newblock \emph{arXiv preprint arXiv:2405.00402}, 2024.
 
-\bibitem[Rozi\`{e}re et~al.(2024)Rozi\`{e}re, Gehring, Gloeckle, Sootla, Gat,
-  Tan, Adi, Liu, Sauvestre, Remez, et~al.]{roziere2024codellama}
+\bibitem[Rozi\`{e}re et~al.(2023)Rozi\`{e}re, Gehring, Gloeckle, Sootla, Gat,
+  Tan, Adi, Liu, Sauvestre, Remez, et~al.]{roziere2023codellama}
 Baptiste Rozi\`{e}re, Jonas Gehring, Fabian Gloeckle, Sten Sootla, Itai Gat,
   Xiaoqing~Ellen Tan, Yossi Adi, Jingyu Liu, Romain Sauvestre, Tal Remez,
   et~al.
 \newblock Code {L}lama: Open foundation models for code.
-\newblock \emph{arXiv preprint arXiv:2308.12950}, 2024.
+\newblock \emph{arXiv preprint arXiv:2308.12950}, 2023.
 
 \bibitem[Shao et~al.(2024)Shao, Wang, Zhu, Xu, Song, Zhang, Li, Wu, and
   Guo]{shao2024deepseekmath}
@@ -104,10 +116,10 @@ Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Mingchuan Zhang,
   open language models.
 \newblock \emph{arXiv preprint arXiv:2402.03300}, 2024.
 
-\bibitem[Shumailov et~al.(2024)Shumailov, Shumaylov, Zhao, Papernot, Anderson,
-  and Gal]{shumailov2024curse}
-Ilia Shumailov, Zakhar Shumaylov, Yiren Zhao, Nicolas Papernot, Ross Anderson,
-  and Yarin Gal.
+\bibitem[Shumailov et~al.(2024)Shumailov, Shumaylov, Zhao, Gal, Papernot, and
+  Anderson]{shumailov2024curse}
+Ilia Shumailov, Zakhar Shumaylov, Yiren Zhao, Yarin Gal, Nicolas Papernot, and
+  Ross Anderson.
 \newblock The curse of recursion: Training on generated data makes models
   forget.
 \newblock \emph{Nature}, 631:\penalty0 755--759, 2024.
@@ -127,11 +139,10 @@ Rohan Taori, Ishaan Gulrajani, Tianyi Zhang, Yann Dubois, Xuechen Li, Carlos
 \newblock Stanford {A}lpaca: An instruction-following {LL}a{MA} model.
 \newblock \emph{GitHub repository}, 2023.
 
-\bibitem[Wang et~al.(2024)]{wang2024personamath}
-Jing Wang et~al.
-\newblock {P}ersona{M}ath: Enhancing math reasoning through persona-driven data
-  augmentation.
-\newblock \emph{arXiv preprint arXiv:2410.01504}, 2024.
+\bibitem[Tobias and Trindade(2012)]{tobias2012applied}
+Paul~A. Tobias and David~C. Trindade.
+\newblock \emph{Applied Reliability}.
+\newblock Chapman \& Hall/CRC, 3rd edition, 2012.
 
 \bibitem[Wang et~al.(2023)Wang, Kordi, Mishra, Liu, Smith, Khashabi, and
   Hajishirzi]{wang2023selfinstruct}
@@ -155,18 +166,18 @@ Can Xu, Qingfeng Sun, Kai Zheng, Xiubo Geng, Pu Zhao, Jiazhan Feng, Chongyang
   instructions.
 \newblock \emph{arXiv preprint arXiv:2304.12244}, 2023.
 
-\bibitem[Yu et~al.(2024{\natexlab{a}})]{yu2024cotselfinst}
-Haoran Yu et~al.
-\newblock {C}o{T}-self-instruct: Chain-of-thought self-instruct for aligning
-  language models.
-\newblock \emph{arXiv preprint arXiv:2405.00402}, 2024{\natexlab{a}}.
-
-\bibitem[Yu et~al.(2024{\natexlab{b}})Yu, Jiang, Shi, Yu, Liu, Zhang, Kwok, Li,
-  Weller, and Liu]{yu2024metamath}
+\bibitem[Yu et~al.(2024)Yu, Jiang, Shi, Yu, Liu, Zhang, Kwok, Li, Weller, and
+  Liu]{yu2024metamath}
 Longhui Yu, Weisen Jiang, Han Shi, Jincheng Yu, Zhengying Liu, Yu Zhang,
   James~T. Kwok, Zhenguo Li, Adrian Weller, and Weiyang Liu.
 \newblock {M}eta{M}ath: Bootstrap your own mathematical questions for large
   language models.
-\newblock \emph{arXiv preprint arXiv:2309.12284}, 2024{\natexlab{b}}.
+\newblock \emph{arXiv preprint arXiv:2309.12284}, 2024.
+
+\bibitem[Yu et~al.(2025)Yu, Zhang, Zhu, Yuan, Zuo, Yue, et~al.]{yu2025dapo}
+Qiying Yu, Zheng Zhang, Ruofei Zhu, Yufeng Yuan, Xiaochen Zuo, Yu Yue, et~al.
+\newblock {DAPO}: An open-source {LLM} reinforcement learning system via
+  dynamic sampling.
+\newblock \emph{arXiv preprint arXiv:2503.14476}, 2025.
 
 \end{thebibliography}
