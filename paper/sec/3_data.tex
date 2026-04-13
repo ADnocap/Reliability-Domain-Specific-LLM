@@ -117,29 +117,11 @@ Only items where both models agree (\textsc{match}) are retained. A safety valve
 
 \subsubsection{The Limitations of Same-Model Answer Consistency}
 
-A key motivation for cross-model verification is our empirical observation that same-model answer consistency, as used in prior work~\cite{yu2024cotselfinst}, is trivially satisfied for self-instruct-generated questions. Table~\ref{tab:ceiling} shows that baseline models achieve 92--97\% accuracy on synthetic questions while scoring only 68--76\% on the 56 textbook-extracted seed problems.
-
-\begin{table}[t]
-\centering
-\small
-\caption{Accuracy of baseline models on textbook-extracted seed questions (56) vs.\ self-instruct-generated questions, revealing the systematic difficulty gap.}
-\label{tab:ceiling}
-\begin{tabular}{lcc}
-\toprule
-Model & Textbook (56) & Synthetic \\
-\midrule
-Qwen3-8B     & 68.2\% & 92.4\% \\
-GPT-4-Mini   & 76.0\% & 97.1\% \\
-\bottomrule
-\end{tabular}
-\TODO{Verify exact numbers from evaluation logs. idf these numbers chnage, you need to chnage the referacnes to this below and in the intro}
-\end{table}
-
-This means that if the generating model is also used for answer consistency verification, it will confirm nearly all of its own outputs, regardless of whether they represent genuinely challenging or educationally useful problems. The verification step thus filters for self-consistency rather than for quality or difficulty. This does not invalidate the downstream fine-tuning improvements reported in prior work as the trained model may still benefit from exposure to diverse reasoning patterns, but it reveals that answer consistency is not a reliable proxy for data quality in technical domains where the goal is to teach \emph{new} knowledge rather than to align instruction-following behavior.
+A key motivation for cross-model verification is our empirical observation that same-model answer consistency, as used in prior work~\cite{yu2024cotselfinst}, is trivially satisfied for self-instruct-generated questions: baseline models achieve 92--97\% accuracy on synthetic questions while scoring only 68--76\% on the 56 textbook-extracted seed problems. This means that if the generating model is also used for answer consistency verification, it will confirm nearly all of its own outputs, regardless of whether they represent genuinely challenging or educationally useful problems. The verification step thus filters for self-consistency rather than for quality or difficulty. This does not invalidate the downstream fine-tuning improvements reported in prior work as the trained model may still benefit from exposure to diverse reasoning patterns, but it reveals that answer consistency is not a reliable proxy for data quality in technical domains where the goal is to teach \emph{new} knowledge rather than to align instruction-following behavior.
 
 \subsubsection{Self-Instruct Ceiling Effect}
 
-The accuracy gap in Table~\ref{tab:ceiling} reflects a more fundamental limitation that we term the \emph{self-instruct ceiling effect}: LLM generators create questions within their own capability envelope. The generator avoids edge cases it does not understand (truncated distributions, competing risks), defaults to standard formulations matching its training distribution, and produces clean numerical answers that do not require iterative methods or lookup tables. Consequently, synthetic questions are systematically easier than real domain problems.
+This accuracy gap reflects a more fundamental limitation that we term the \emph{self-instruct ceiling effect}: LLM generators create questions within their own capability envelope. The generator avoids edge cases it does not understand (truncated distributions, competing risks), defaults to standard formulations matching its training distribution, and produces clean numerical answers that do not require iterative methods or lookup tables. Consequently, synthetic questions are systematically easier than real domain problems.
 
 This has a direct implication for fine-tuning: training on self-instruct data may teach the model the \emph{format} of domain-specific reasoning (step-by-step solutions, correct use of notation) without imparting the \emph{knowledge} needed to solve genuinely hard problems. This ceiling effect motivates our paraphrase augmentation strategy (Section~\ref{sec:data:augment}): rather than generating more synthetic questions, we create surface-level rephrases of real textbook problems, preserving their difficulty while increasing training set diversity.
 
@@ -178,16 +160,16 @@ The contrast in downstream performance is striking. Adding 65 hard questions to 
 \begin{table}[t]
 \centering
 \small
-\caption{Dataset versions and their composition. All entries are numeric QRA triplets with verified answers.}
+\caption{Dataset versions. All entries are verified\\numeric QRA triplets.}
 \label{tab:datasets}
-\begin{tabular}{llrl}
+\begin{tabular}{@{}lrc@{}}
 \toprule
-Version & File & Size & Source \\
+Version & Size & Source \\
 \midrule
-v1 (cleaned) & \texttt{cleaned.jsonl} & 215 & 98 textbook + 158 verified \\
-v2 (+ hard)  & \texttt{v2.jsonl}      & 280 & v1 + 65 hard generated \\
-v3 (+ para.) & \texttt{v3.jsonl}      & 501 & v2 + 221 paraphrased \\
-\textbf{v4 (+ para.)} & \texttt{\textbf{v4.jsonl}} & \textbf{866} & \textbf{v2 + 586 paraphrased} \\
+v1 (cleaned) & 215 & 98 textbook + 158 verified \\
+v2 (+ hard)  & 280 & v1 + 65 hard generated \\
+v3 (+ para.) & 501 & v2 + 221 paraphrased \\
+\textbf{v4 (+ para.)} & \textbf{866} & \textbf{v2 + 586 paraphrased} \\
 \bottomrule
 \end{tabular}
 \end{table}

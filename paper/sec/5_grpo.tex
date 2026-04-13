@@ -161,14 +161,14 @@ To isolate the contribution of SFT initialization, we run an identical GRPO conf
 \begin{table}[t]
 \centering
 \small
-\caption{Ablation: effect of SFT warm-start on GRPO (step 80, 266 questions).}
+\caption{Ablation: SFT warm-start effect on GRPO\\(step 80, 266 questions).}
 \label{tab:grpo_ablation_sft}
-\begin{tabular}{lccc}
+\begin{tabular}{@{}lccc@{}}
 \toprule
-Configuration & Acc. & $\Delta$ vs.\ Base & Waste Rate \\
+Init & Acc. & $\Delta$ & Waste \\
 \midrule
-GRPO from scratch (fresh LoRA) & 50.8\% & $+$0.4 & 29.3\% \\
-\textbf{GRPO from SFT (fold\_4 LoRA)} & \textbf{57.9\%} & $\boldsymbol{+7.5}$ & 23.1\% \\
+Fresh LoRA & 50.8\% & $+$0.4 & 29.3\% \\
+\textbf{SFT fold\_4} & \textbf{57.9\%} & $\boldsymbol{+7.5}$ & 23.1\% \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -182,15 +182,15 @@ We hypothesize that SFT teaches the model the \emph{format and vocabulary} of do
 \begin{table}[t]
 \centering
 \small
-\caption{Learning rate comparison (all from SFT fold\_4, 200 useful steps).}
+\caption{Learning rate comparison\\(all from SFT fold\_4, 200 useful steps).}
 \label{tab:grpo_lr}
-\begin{tabular}{lcccc}
+\begin{tabular}{@{}lccc@{}}
 \toprule
-Configuration & LR & Waste Rate & Total Attempts & Best Accuracy \\
+LR & Waste & Attempts & Best Acc. \\
 \midrule
-GRPO conservative LR & $5 \times 10^{-6}$ & 21.3\% & 254 & Eval pending \\
-\textbf{GRPO baseline LR} & $\boldsymbol{1 \times 10^{-5}}$ & 23.1\% & 260 & \textbf{57.9\% (step 80)} \\
-GRPO aggressive LR  & $2 \times 10^{-5}$ & 20.9\% & 253 & Eval pending \\
+$5\!\times\!10^{-6}$ & 21.3\% & 254 & Pending \\
+$\boldsymbol{1\!\times\!10^{-5}}$ & 23.1\% & 260 & \textbf{57.9\%} \\
+$2\!\times\!10^{-5}$ & 20.9\% & 253 & Pending \\
 \bottomrule
 \end{tabular}
 \end{table}
