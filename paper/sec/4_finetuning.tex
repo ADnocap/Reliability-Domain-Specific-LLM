@@ -4,21 +4,47 @@
 \subsection{Model Selection}
 \label{sec:sft:model}
 
-We evaluated Llama~3.1~8B~\cite{roziere2024codellama} and Qwen3-8B~\cite{qwen2025qwen3} in 4-bit quantized form. Qwen3-8B achieves a substantially higher zero-shot baseline (70.7\% vs.\ 37.5\%), and Llama showed regression on numeric questions after SFT ($-1.4$pp) while improving only format-dependent categories, suggesting catastrophic forgetting of mathematical capabilities. We therefore selected Qwen3-8B.
+We evaluated two open-source instruction-tuned models as base candidates: Llama~3.1~8B~\cite{roziere2024codellama} and Qwen3-8B~\cite{qwen2025qwen3}, both in 4-bit quantized form via Unsloth. Qwen3-8B achieves a substantially higher zero-shot baseline on our reliability engineering questions (70.7\% vs.\ 37.5\%), likely due to its stronger mathematical pre-training. Moreover, fine-tuning Llama~3.1~8B caused a regression on numeric questions ($-1.4$pp) while improving only format-dependent categories (formula $+28.6$pp, text $+15.8$pp), suggesting catastrophic forgetting of mathematical capabilities. We therefore selected Qwen3-8B as our base model for all subsequent experiments.
 
-By analyzing the model's thinking traces, we observed that Qwen3-8B uses thinking blocks as \emph{scratch work}: exploring solution avenues, backtracking, and iterating toward the answer. Our SFT data consists of polished step-by-step solutions without false starts. This mismatch caused the model to overfit, producing empty thinking tags followed by shallow pattern-matched answers. Disabling thinking during SFT training and inference resolved this, while preserving thinking capabilities for GRPO (Section~\ref{sec:grpo}).
+By analyzing the model's thinking traces, we observed that Qwen3-8B uses these blocks as \emph{scratch work}: it explores solution avenues, backtracks when an approach seems wrong, and iterates toward the answer. Our SFT training data, by contrast, consists of polished step-by-step solutions without false starts. Training with thinking enabled caused the model to overfit, producing empty thinking tags followed by shallow pattern-matched answers. Disabling thinking during both training and inference resolved this, while preserving internal reasoning capabilities for use during GRPO (Section~\ref{sec:grpo}).
 
 \subsection{Training Setup}
 \label{sec:sft:setup}
 
-We use 4-bit QLoRA~\cite{dettmers2023qlora} via the Unsloth framework with LoRA~\cite{hu2022lora} adapters ($r\!=\!16$, $\alpha\!=\!32$, dropout 0.05) on all attention and MLP layers. Key training hyperparameters: LR=$2\!\times\!10^{-4}$ with cosine schedule, AdamW 8-bit optimizer, effective batch size 8, NEFTune~\cite{jain2023neftune} $\alpha\!=\!5$, max 8 epochs with early stopping (patience 2, consistently converging to epoch 4). Training examples follow a three-turn chat format (system/user/assistant) with chain-of-thought reasoning and the tokenizer's \texttt{apply\_chat\_template()} for model-specific formatting.
+We use 4-bit QLoRA~\cite{dettmers2023qlora} via the Unsloth framework, which provides optimized CUDA kernels for approximately 40\% faster training. LoRA adapters~\cite{hu2022lora} ($r\!=\!16$, $\alpha\!=\!32$, dropout 0.05) are applied to all attention and MLP layers. Table~\ref{tab:training_config} summarizes the training configuration. NEFTune~\cite{jain2023neftune} adds uniform noise to embedding vectors during training, serving as a regularizer against memorization on small datasets. Early stopping with patience 2 consistently converged to epoch 4 regardless of the maximum epoch setting (6 or 8). Training examples follow a three-turn chat format (system/user/assistant) with chain-of-thought reasoning.
+
+\begin{table}[t]
+\centering
+\small
+\caption{SFT training configuration (best setup).}
+\label{tab:training_config}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Parameter & Value \\
+\midrule
+Learning rate & $2 \times 10^{-4}$ (cosine) \\
+Optimizer & AdamW 8-bit \\
+Batch size & 2 (grad.\ accum.\ 4, eff.\ 8) \\
+Max epochs & 8 (early stop $\to$ epoch 4) \\
+Weight decay / Warmup & 0.01 / 5 steps \\
+NEFTune $\alpha$ & 5 \\
+Precision / Max seq.\ len. & BF16 / 2048 tokens \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Evaluation Protocol}
 \label{sec:sft:eval}
 
 Given the small dataset sizes (215--866 examples), we use $k$-fold cross-validation (5-fold for $N\!\leq\!501$, 10-fold for $N\!=\!866$) with a fresh model per fold to avoid information leakage. All evaluation uses greedy decoding (\texttt{do\_sample=False}); early experiments with stochastic decoding inflated improvements ($+7.0\%$ stochastic vs.\ $+2.3\%$ greedy).
 
-Answers are extracted via pattern matching (``Final Answer:'', ``The answer is:'') with fallback to the last line, then compared against ground truth through: (1)~exact string match after normalization, (2)~numerical match within 5\% relative tolerance, (3)~fraction/percentage conversion, and (4)~substring containment. Statistical significance is assessed via the Wilcoxon signed-rank test ($p < 0.05$). We additionally track \emph{question flips}---questions that change correctness between base and fine-tuned models---as a measure of improvement robustness.
+Answers are extracted via pattern matching (``Final Answer:'', ``The answer is:'') with fallback to the last non-empty line, then compared against ground truth through:
+\begin{enumerate}
+    \item \textbf{Exact match:} Normalized strings (lowercase, strip LaTeX wrappers).
+    \item \textbf{Numerical match:} All extracted numbers within 5\% relative tolerance.
+    \item \textbf{Normalization:} Fraction-to-decimal and percentage conversion.
+\end{enumerate}
+Statistical significance is assessed via the Wilcoxon signed-rank test ($p < 0.05$). We additionally track \emph{question flips}---questions that change correctness between base and fine-tuned models---as a measure of improvement robustness.
 
 \subsection{SFT Results}
 \label{sec:sft:results}
@@ -42,9 +68,27 @@ $N$ & Folds & Ep. & Base & FT & $\Delta$ & $p$ \\
 \end{tabular}
 \end{table}
 
-The question flip ratio is particularly informative: at 215 samples, the model trades nearly as many correct answers as it gains (1.3:1, 23~W$\to$R vs.\ 18~R$\to$W), while at 866 samples, gains overwhelm regressions (4.6:1, 206~W$\to$R vs.\ 45~R$\to$W), confirming that paraphrase augmentation produces robust improvements rather than trading one error type for another.
+The question flip ratio is particularly informative: at 215 samples, the model trades nearly as many correct answers as it gains (1.3:1, 23~W$\to$R vs.\ 18~R$\to$W), while at 866 samples, gains overwhelm regressions (4.6:1, 206~W$\to$R vs.\ 45~R$\to$W), confirming that paraphrase augmentation produces robust improvements. Note that baseline accuracy is lower on larger datasets (63.6\% on 866 vs.\ 70.7\% on 215) because augmented test sets include paraphrased questions the base model has not seen.
 
-\subsection{Ablation Summary}
+\subsection{Ablation Studies}
 \label{sec:sft:ablation}
 
-On the 215-question dataset (5-fold CV), LR=$2\!\times\!10^{-4}$ consistently outperforms $1\!\times\!10^{-4}$ ($+2.3\%$ vs.\ $-0.5\%$), consistent with the recommendation that LoRA adapters benefit from higher learning rates. NEFTune $\alpha\!=\!7$ degrades performance ($-1.3\%$), confirming $\alpha\!=\!5$ as optimal. Both DPO ($-1.7\%$) and early GRPO ($+0.5\%$) underperform pure SFT on this small dataset, motivating our move to a larger GRPO training set (Section~\ref{sec:grpo}). Full ablation details are in Appendix~A.
+Table~\ref{tab:ablations} summarizes key ablation results on the 215-question dataset (5-fold CV, greedy decoding). LR=$2\!\times\!10^{-4}$ consistently outperforms $1\!\times\!10^{-4}$, consistent with the recommendation that LoRA adapters benefit from higher learning rates. NEFTune $\alpha\!=\!7$ degrades performance ($-1.3\%$), confirming $\alpha\!=\!5$ as optimal. Both DPO ($-1.7\%$) and early GRPO ($+0.5\%$) underperform pure SFT on this small dataset; the early GRPO used TRL with LLM-judge rewards on 215 questions, motivating our improved pipeline with verifiable rewards on a larger training set (Section~\ref{sec:grpo}).
+
+\begin{table}[t]
+\centering
+\small
+\caption{SFT ablations on 215 questions (5-fold CV, greedy).}
+\label{tab:ablations}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Variation & $\Delta$ & $p$ \\
+\midrule
+\textbf{Best (LR=$\mathbf{2\!\times\!10^{-4}}$, NEF=5, 4ep)} & $\boldsymbol{+2.3}$ & 0.50 \\
+Lower LR ($1\!\times\!10^{-4}$) & $-0.5$ & 1.0 \\
+Higher NEFTune ($\alpha\!=\!7$) & $-1.3$ & 0.38 \\
+DPO (instead of SFT) & $-1.7$ & 0.63 \\
+SFT + GRPO (early) & $+0.5$ & 0.88 \\
+\bottomrule
+\end{tabular}
+\end{table}
