@@ -145,11 +145,12 @@ Model & Correct & Acc. & Trunc. & $\Delta$ \\
 Qwen3-8B base              & 29 & 53.7\% & 1 & ---     \\
 SFT fold\_4                & 18 & 33.3\% & 2 & $-$20.4 \\
 GRPO from SFT, step 80     & 29 & 53.7\% & 2 & $+$0.0  \\
+GRPO from scratch, step 200 & 30 & 55.6\% & 0 & $+$1.9 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The holdout results show that \textbf{GRPO preserves base-model generalization}: GRPO from SFT at step~80 achieves 53.7\%, matching the base model exactly. While the $+7.5$pp in-distribution gain does not transfer to holdout, crucially it does not regress either. More importantly, GRPO fully recovers the catastrophic forgetting caused by SFT: the SFT fold\_4 alone drops to 33.3\% ($-20.4$pp) on the holdout, while the GRPO-trained model recovers to 53.7\%.
+The holdout results show that \textbf{GRPO preserves base-model generalization}: GRPO from SFT at step~80 achieves 53.7\%, matching the base model exactly. While the $+7.5$pp in-distribution gain does not transfer to holdout, crucially it does not regress either. More importantly, GRPO fully recovers the catastrophic forgetting caused by SFT: the SFT fold\_4 alone drops to 33.3\% ($-20.4$pp) on the holdout, while the GRPO-trained model recovers to 53.7\%. Interestingly, GRPO from scratch at step~200 achieves 55.6\% ($+1.9$pp), though this difference amounts to a single additional question on 54 items and should be interpreted cautiously.
 
 \paragraph{Caveat on holdout size.} With only 54 questions, each question represents $\sim$1.85pp of accuracy, limiting the statistical power of these conclusions. We deliberately chose not to augment the holdout via paraphrasing: while this would increase sample size, it would introduce repeated mathematical content and risk inflating accuracy through surface-level memorization rather than genuine reasoning. A larger holdout composed of \emph{distinct} problems would strengthen these findings.
 
