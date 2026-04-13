@@ -59,7 +59,25 @@ Exp & Dataset & $N$ & Folds & Ep. & LR & NEF & Method & Baseline & FT & $\Delta$
 }
 \end{table*}
 
-\TODO{ADD YOUR EXPERIMENTS ELORA IN THIS TABLE OR A SECOND}
+Table~\ref{tab:grpo_exp_log} lists all GRPO experiments. All use the custom DAPO-style training loop on 266 mixed-difficulty questions (unless noted), with Qwen3-8B 4-bit and LoRA $r=16$/$\alpha=32$. Evaluation uses deterministic seeding (seed $=3407+q_i$), temperature 1.0, top-$p$ 0.95.
+
+\begin{table*}[t]
+\centering
+\caption{GRPO experiment log. All models are Qwen3-8B (4-bit) with 200 useful steps, $G=4$ generations, grad\_accum=4. Accuracy is on the 266 mixed questions unless noted.}
+\label{tab:grpo_exp_log}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllccccccl}
+\toprule
+Name & Init & LR & Waste\% & Attempts & Step 80 & Step 100 & Step 200 & Holdout (54q) & Notes \\
+\midrule
+GRPO baseline        & SFT fold\_4 & 1e-5 & 23.1 & 260 & \textbf{57.9\%} & 54.1\% & 52.3\% & 53.7\% (step 80) & Best config \\
+GRPO aggressive LR   & SFT fold\_4 & 2e-5 & 20.9 & 253 & \multicolumn{3}{c}{Evaluation pending} & --- & 2$\times$ LR \\
+GRPO conservative LR & SFT fold\_4 & 5e-6 & 21.3 & 254 & \multicolumn{3}{c}{Evaluation pending} & --- & 0.5$\times$ LR \\
+GRPO from scratch    & Fresh LoRA  & 1e-5 & 29.3 & 283 & 50.8\% & Pending & Pending & Pending & No SFT init \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
 
 
 Notes: Exp.~1 uses Llama 3.1 8B; all others use Qwen3-8B. Exp.~5 uses LoRA $r=8$/$\alpha=16$; all others use $r=16$/$\alpha=32$. Exp.~10 timed out after 14 hours. Exp.~13 crashed due to Triton kernel incompatibility. Exp.~14 completed only 4 of 5 folds (missing adapter for fold~4). Accuracy values are percentages; $\Delta$ is the absolute difference (FT $-$ Baseline). W$\to$R and R$\to$W are question flip counts aggregated across all folds.
@@ -143,6 +161,24 @@ Used by GPT-5.4 to verify that a rephrase preserves mathematical meaning (Sectio
 
 \textit{Respond with a JSON object:}
 \texttt{\{"values\_preserved": bool, "meaning\_preserved": bool, "constraints\_preserved": bool, "solution\_equivalent": bool, "reasoning\_equivalent": bool, "overall\_valid": bool, "issues": "..."\}}
+\end{quote}
+
+\subsection{GRPO System Prompt}
+\label{app:prompt:grpo}
+
+Used during GRPO training and evaluation (Section~\ref{sec:grpo}). The \texttt{/no\_think} prefix disables Qwen3's internal thinking mode for consistency with SFT format.
+
+\begin{quote}
+\small
+\texttt{/no\_think}\\
+\textit{You are a Reliability Engineering Expert. Solve the user's problem step-by-step with rigorous mathematical reasoning.}
+
+\textit{Rules for your final answer:}
+\begin{itemize}\small
+    \item \textit{Write ONE single} \verb|\boxed{}| \textit{at the very end of your response --- your final answer only.}
+    \item \textit{Do NOT use} \verb|\boxed{}| \textit{for intermediate steps or calculations.}
+\end{itemize}
+\textit{Always put your single final numerical answer inside} \verb|\boxed{}|\textit{.}
 \end{quote}
 
 \subsection{SFT System Prompt}

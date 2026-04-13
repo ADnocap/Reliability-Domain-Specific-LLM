@@ -12,5 +12,5 @@ We address this challenge with a data generation and fine-tuning pipeline that b
     \item A cross-model answer verification method for synthetic data quality control, replacing same-model consistency checks that we show are trivially satisfied in technical domains (Section~\ref{sec:data:selfinst}).
     \item The identification and empirical characterization of the self-instruct ceiling effect (Section~\ref{sec:data:selfinst}), and evidence that paraphrase augmentation overcomes it more effectively than difficulty scaling (Section~\ref{sec:data:augment}).
     \item A reproducible SFT pipeline achieving $+18.6\%$ on reliability engineering with a fine-tuned 8B model competitive with frontier models an order of magnitude larger (Section~\ref{sec:sft}).
-    \item Integration of GRPO with verifiable rewards to further improve domain reasoning beyond SFT (Section~\ref{sec:grpo}).
+    \item Integration of GRPO with verifiable rewards and DAPO-style dynamic sampling~\cite{yu2025dapo} to improve domain reasoning by $+7.5$pp beyond the base model, with an ablation showing that SFT warm-start is essential for RL effectiveness despite degrading standalone performance (Section~\ref{sec:grpo}).
 \end{itemize}

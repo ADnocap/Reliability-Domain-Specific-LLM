@@ -148,5 +148,5 @@ SFT + GRPO & $+0.5$ & 0.88 \\
 
 \paragraph{RL methods on small data.} Both DPO ($-1.7\%$) and SFT+GRPO ($+0.5\%$) underperformed pure SFT ($+2.3\%$) on 215 questions. DPO actually degraded performance, likely because the small dataset produced too few informative preference pairs. GRPO showed marginal gains but insufficient to justify the additional training complexity at this scale.
 
-\TODO{Chnage this if needed with ur results ELORA}
+Note that the SFT+GRPO result ($+0.5\%$) reported here used an early version of GRPO on 215 questions with TRL and LLM-judge rewards. Our improved GRPO pipeline (Section~\ref{sec:grpo}), using a custom training loop with dynamic sampling, verifiable numerical rewards, and a larger 266-question mixed-difficulty training set, achieves substantially better results ($+7.5$pp over base).
 

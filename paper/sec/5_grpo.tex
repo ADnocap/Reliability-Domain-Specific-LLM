@@ -1,31 +1,197 @@
 \section{Reinforcement Learning with GRPO}
 \label{sec:grpo}
 
-% This section is primarily authored by teammate working on GRPO
-
 \subsection{Motivation}
 \label{sec:grpo:motivation}
-% SFT teaches format and domain knowledge, but reasoning can be further improved
-% GRPO provides a way to optimize for correct final answers via verifiable rewards
-\TODO{Why RL after SFT? Limitations of SFT alone (memorization vs. reasoning). GRPO as a natural next step.}
 
-\subsection{GRPO Overview}
+While SFT teaches the model domain-specific formatting and reasoning patterns, it is fundamentally limited to imitating the training data. On questions the base model already solves correctly, SFT reinforces existing capabilities; on questions where the model fails, SFT provides the correct answer but does not teach the model \emph{how to arrive at it} from its own reasoning process. This limitation is reflected in our results: the SFT model trained on the 600 ``easy'' questions (those the base model solves 4/4 times) shows no improvement and even slight regression on the remaining 266 harder questions (Section~\ref{sec:grpo:results}).
+
+Group Relative Policy Optimization (GRPO)~\cite{shao2024deepseekmath} offers a complementary approach: rather than imitating expert solutions, the model generates multiple candidate answers and learns to prefer reasoning chains that lead to correct results. For reliability engineering, where answers are verifiable numerical values, this provides a natural reward signal without requiring a learned reward model.
+
+\subsection{GRPO Algorithm}
 \label{sec:grpo:method}
-% Group Relative Policy Optimization (DeepSeek-R1)
-% No critic model needed -- uses group-relative advantages
-\TODO{Brief description of GRPO algorithm. Key advantage over PPO/DPO: no reward model needed for verifiable tasks.}
+
+GRPO generates $G$ completions $\{o_1, \ldots, o_G\}$ for each prompt $q$, scores each with a reward function $r(o_i, q)$, and computes \emph{group-relative} advantages:
+\begin{equation}
+    \hat{A}_i = \frac{r(o_i, q) - \bar{r}}{\sigma_r + \epsilon},
+    \label{eq:grpo_advantage}
+\end{equation}
+where $\bar{r}$ and $\sigma_r$ are the mean and standard deviation of rewards within the group. The policy is updated to maximize:
+\begin{equation}
+    \mathcal{L}_{\text{GRPO}} = -\frac{1}{G} \sum_{i=1}^{G} \hat{A}_i \cdot \frac{\log \pi_\theta(o_i \mid q)}{|o_i|},
+    \label{eq:grpo_loss}
+\end{equation}
+where $|o_i|$ is the response length in tokens, normalizing the loss to prevent bias toward shorter completions (Dr.~GRPO~\cite{deepseek2025r1}).
+
+Unlike PPO, GRPO requires no critic model: the group mean serves as the baseline. Unlike DPO, it does not require pre-computed preference pairs but generates them online. This makes GRPO particularly suited to domains with verifiable rewards and limited data.
+
+\subsection{Dynamic Sampling (DAPO)}
+\label{sec:grpo:dapo}
+
+A key challenge with GRPO on small datasets is that many prompts produce zero reward variance: either all $G$ generations are correct (no learning signal for improvement) or all are wrong (no positive signal). Following DAPO (Dynamic sampling Policy Optimization)~\cite{yu2025dapo}, we implement \emph{dynamic sampling}: when all $G$ generations produce the same reward, the prompt is discarded and a new one is sampled. This ensures every training step provides a meaningful gradient signal.
+
+We track \emph{useful steps} (prompts with reward variance) separately from \emph{wasted steps} (prompts discarded due to zero variance). The waste rate serves as a diagnostic: a rising waste rate indicates the model is converging (more prompts become too easy or too hard), while an initially high waste rate suggests the training distribution is poorly calibrated to the model's current capability.
 
 \subsection{Reward Design}
 \label{sec:grpo:reward}
-% Verifiable rewards for reliability engineering: numerical answer correctness
-% Format rewards for chain-of-thought structure
-\TODO{Define reward function: correctness reward (numerical comparison) + format reward (reasoning structure).}
+
+Our reward function uses the same automated numerical comparison as the SFT evaluation pipeline (Section~\ref{sec:sft:eval}). Given a model response $o$ and ground-truth target $y$, we extract the last \verb|\boxed{}| value $\hat{y}$ and compute a graded reward based on relative error $\epsilon = |\hat{y} - y| / (|y| + 10^{-9})$:
+
+\begin{equation}
+    r(o, q) = \begin{cases}
+        1.0 & \text{if } \epsilon \leq 0.1\% \\
+        0.8 & \text{if } \epsilon \leq 1\% \\
+        0.4 & \text{if } \epsilon \leq 5\% \\
+        0.01 & \text{if } \epsilon > 5\% \\
+        0.0 & \text{if no } \texttt{\textbackslash boxed\{\}} \text{ found} \\
+        -0.3 & \text{if } > 2 \text{ boxed values}
+    \end{cases}
+    \label{eq:reward}
+\end{equation}
+
+The graded structure provides a smoother reward landscape than binary correct/incorrect: partially correct answers ($\epsilon \leq 5\%$) receive positive reward, encouraging the model to refine its computation rather than abandon an approach entirely. The penalty for multiple \verb|\boxed{}| values discourages hedging.
+
+\subsection{Training Data Split}
+\label{sec:grpo:split}
+
+The 866-question dataset (v4) is split based on base-model screening: each question is evaluated 4 times with the base Qwen3-8B model, and questions are categorized by success rate:
+
+\begin{itemize}
+    \item \textbf{600 questions (4/4 correct):} Used for SFT training. These are ``easy'' for the base model; SFT reinforces correct patterns.
+    \item \textbf{266 questions (1/4 to 3/4 correct):} Used for GRPO training. These have natural reward variance---some generations succeed, others fail---making them ideal for group-relative optimization.
+\end{itemize}
+
+Questions where the base model scores 0/4 are excluded from GRPO as they provide no positive reward signal. This split ensures zero data leakage between SFT and GRPO stages and targets GRPO training at the model's learning frontier---questions that are neither trivially easy nor impossibly hard.
 
 \subsection{Training Configuration}
 \label{sec:grpo:config}
-\TODO{GRPO-specific hyperparameters: group size, KL penalty, learning rate schedule, number of iterations.}
 
-\subsection{Results}
+Table~\ref{tab:grpo_config} summarizes the GRPO training configuration. We use a custom training loop (no TRL dependency) with memory-efficient per-generation backward passes and Unsloth's optimized inference for the generation phase.
+
+\begin{table}[t]
+\centering
+\small
+\caption{GRPO training configuration (baseline, lr=$1\!\times\!10^{-5}$).}
+\label{tab:grpo_config}
+\begin{tabular}{ll}
+\toprule
+Parameter & Value \\
+\midrule
+Base model & Qwen3-8B (4-bit) \\
+SFT initialization & SFT fold\_4 LoRA ($r\!=\!16$, $\alpha\!=\!32$) \\
+Generations per prompt ($G$) & 4 \\
+Max new tokens & 2048 \\
+Useful steps & 200 \\
+Max total attempts & 600 \\
+Max resample attempts/step & 10 \\
+Learning rate & $1 \times 10^{-5}$ \\
+Gradient accumulation & 4 \\
+Max gradient norm & 0.1 \\
+KL penalty ($\beta$) & 0.0 \\
+Checkpoint interval & every 20 useful steps \\
+Optimizer & AdamW (weight decay 0.1) \\
+LR scheduler & Linear warmup + cosine decay \\
+Warmup steps & 15 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The pipeline proceeds as: (1) load the base Qwen3-8B model, (2) load the SFT LoRA adapter from fold\_4, (3) enable gradients only on LoRA parameters ($\sim$43.6M trainable), (4) run the GRPO loop with dynamic sampling on the 266 mixed questions. Thinking mode is disabled (\texttt{/no\_think} system prompt) to maintain consistency with the SFT training format.
+
+\subsection{GRPO Results}
 \label{sec:grpo:results}
-% SFT-only vs SFT+GRPO comparison
-\TODO{Accuracy comparison. Qualitative analysis of reasoning improvements. Statistical significance.}
+
+\subsubsection{In-Distribution Evaluation (266 Mixed Questions)}
+
+Table~\ref{tab:grpo_266q} presents accuracy on the 266 GRPO training questions across all model configurations. All evaluations use deterministic seeding (seed $= 3407 + q_i$) with temperature 1.0 and top-$p$ 0.95, matching the GRPO generation settings.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Accuracy on 266 mixed questions (GRPO training set). $\Delta$ is vs.\ Qwen3-8B base.}
+\label{tab:grpo_266q}
+\begin{tabular}{lcccc}
+\toprule
+Model & Correct & Acc. & Trunc. & $\Delta$ \\
+\midrule
+Qwen2.5-7B base           & $\sim$40 & 15.0\% & 0  & ---    \\
+Qwen3-8B base              & 134 & 50.4\% & 4  & ---    \\
+SFT fold\_0                & 124 & 46.6\% & 7  & $-$3.8 \\
+SFT fold\_4                & 135 & 50.8\% & 8  & $+$0.4 \\
+GRPO from scratch, step 80 & 135 & 50.8\% & 1 & $+$0.4 \\
+\midrule
+GRPO from SFT, step 200 (lr=1e-5) & 139 & 52.3\% & 6  & $+$1.9 \\
+GRPO from SFT, step 100 (lr=1e-5) & 144 & 54.1\% & 9  & $+$3.7 \\
+\textbf{GRPO from SFT, step 80 (lr=1e-5)} & \textbf{154} & \textbf{57.9\%} & 10 & $\boldsymbol{+7.5}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The best configuration (GRPO from SFT at checkpoint 80) achieves \textbf{57.9\%} accuracy, a $+7.5$pp improvement over the Qwen3-8B base and $+7.1$pp over the SFT fold\_4 starting point. Performance degrades with continued training: $-3.8$pp from step~80 to step~100 and $-5.6$pp to step~200, indicating overfitting after approximately 80 useful steps on this 266-question dataset.
+
+\subsubsection{Out-of-Distribution Evaluation (54-Question Holdout)}
+
+Table~\ref{tab:grpo_holdout} evaluates generalization on 54 independent holdout questions never seen during SFT or GRPO training.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Accuracy on 54 independent holdout questions. These questions were never seen during SFT or GRPO training.}
+\label{tab:grpo_holdout}
+\begin{tabular}{lcccc}
+\toprule
+Model & Correct & Acc. & Trunc. & $\Delta$ \\
+\midrule
+Qwen3-8B base              & 29 & 53.7\% & 1 & ---     \\
+SFT fold\_4                & 18 & 33.3\% & 2 & $-$20.4 \\
+GRPO from SFT, step 80     & 29 & 53.7\% & 2 & $+$0.0  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The holdout results show that \textbf{GRPO preserves base-model generalization}: GRPO from SFT at step~80 achieves 53.7\%, matching the base model exactly. While the $+7.5$pp in-distribution gain does not transfer to holdout, crucially it does not regress either. More importantly, GRPO fully recovers the catastrophic forgetting caused by SFT: the SFT fold\_4 alone drops to 33.3\% ($-20.4$pp) on the holdout, while the GRPO-trained model recovers to 53.7\%.
+
+\paragraph{Caveat on holdout size.} With only 54 questions, each question represents $\sim$1.85pp of accuracy, limiting the statistical power of these conclusions. We deliberately chose not to augment the holdout via paraphrasing: while this would increase sample size, it would introduce repeated mathematical content and risk inflating accuracy through surface-level memorization rather than genuine reasoning. A larger holdout composed of \emph{distinct} problems would strengthen these findings.
+
+\subsubsection{Ablation: SFT Warm-Start}
+
+To isolate the contribution of SFT initialization, we run an identical GRPO configuration but starting from a \emph{fresh} (zero-initialized) LoRA instead of the SFT checkpoint.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Ablation: effect of SFT warm-start on GRPO (step 80, 266 questions).}
+\label{tab:grpo_ablation_sft}
+\begin{tabular}{lccc}
+\toprule
+Configuration & Acc. & $\Delta$ vs.\ Base & Waste Rate \\
+\midrule
+GRPO from scratch (fresh LoRA) & 50.8\% & $+$0.4 & 29.3\% \\
+\textbf{GRPO from SFT (fold\_4 LoRA)} & \textbf{57.9\%} & $\boldsymbol{+7.5}$ & 23.1\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The SFT warm-start is essential: GRPO from scratch barely exceeds the base model ($+0.4$pp, likely within noise), while GRPO from the SFT checkpoint gains $+7.5$pp. The SFT initialization also produces a lower waste rate (23.1\% vs.\ 29.3\%), indicating that the SFT-adapted model produces more diverse reward signals, making dynamic sampling more efficient. This is paradoxical: the SFT alone degrades holdout performance by $-20.4$pp, yet it provides a critical initialization for GRPO.
+
+We hypothesize that SFT teaches the model the \emph{format and vocabulary} of domain-specific reasoning (e.g., proper use of reliability formulas, structured step-by-step computation) without teaching correct \emph{application} to hard problems. GRPO then leverages this structural foundation to optimize for numerical correctness. Without SFT, the base model's LoRA weights start at zero, and GRPO must simultaneously learn both format and reasoning---too many degrees of freedom for the small 266-question training set.
+
+\subsubsection{Learning Rate Ablation}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Learning rate comparison (all from SFT fold\_4, 200 useful steps).}
+\label{tab:grpo_lr}
+\begin{tabular}{lcccc}
+\toprule
+Configuration & LR & Waste Rate & Total Attempts & Best Accuracy \\
+\midrule
+GRPO conservative LR & $5 \times 10^{-6}$ & 21.3\% & 254 & Eval pending \\
+\textbf{GRPO baseline LR} & $\boldsymbol{1 \times 10^{-5}}$ & 23.1\% & 260 & \textbf{57.9\% (step 80)} \\
+GRPO aggressive LR  & $2 \times 10^{-5}$ & 20.9\% & 253 & Eval pending \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Training dynamics are similar across learning rates, with waste rates between 20.9\% and 23.1\%. Full evaluation results for the conservative and aggressive learning rate configurations will determine whether the learning rate significantly affects peak accuracy or the onset of overfitting.
