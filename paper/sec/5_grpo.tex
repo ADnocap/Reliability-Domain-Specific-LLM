@@ -108,26 +108,24 @@ Table~\ref{tab:grpo_266q} presents accuracy on the 266 GRPO training questions a
 \begin{table}[t]
 \centering
 \small
-\caption{Accuracy on 266 mixed questions (GRPO training set). $\Delta$ is vs.\ Qwen3-8B base.}
+\caption{Accuracy on 266 mixed questions. $\Delta$ and $p$ (McNemar) are vs.\ SFT fold\_4.}
 \label{tab:grpo_266q}
-\begin{tabular}{lcccc}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Model & Correct & Acc. & Trunc. & $\Delta$ \\
+Model & Acc. & Trunc. & $\Delta$ & $p$ \\
 \midrule
-Qwen2.5-7B base           & $\sim$40 & 15.0\% & 0  & ---    \\
-Qwen3-8B base              & 134 & 50.4\% & 4  & ---    \\
-SFT fold\_0                & 124 & 46.6\% & 7  & $-$3.8 \\
-SFT fold\_4                & 135 & 50.8\% & 8  & $+$0.4 \\
-GRPO from scratch, step 80 & 135 & 50.8\% & 1 & $+$0.4 \\
+Qwen3-8B base              & 50.4\% & 4  & --- & --- \\
+SFT fold\_4                & 50.8\% & 8  & ref. & --- \\
+GRPO from scratch, step 80 & 50.8\% & 1 & $+$0.0 & 1.00 \\
 \midrule
-GRPO from SFT, step 200 (lr=1e-5) & 139 & 52.3\% & 6  & $+$1.9 \\
-GRPO from SFT, step 100 (lr=1e-5) & 144 & 54.1\% & 9  & $+$3.7 \\
-\textbf{GRPO from SFT, step 80 (lr=1e-5)} & \textbf{154} & \textbf{57.9\%} & 10 & $\boldsymbol{+7.5}$ \\
+GRPO from SFT, step 200    & 52.3\% & 6  & $+$1.5 & --- \\
+GRPO from SFT, step 100    & 54.1\% & 9  & $+$3.3 & --- \\
+\textbf{GRPO from SFT, step 80} & \textbf{57.9\%} & 10 & $\boldsymbol{+7.1}$ & 0.056 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The best configuration (GRPO from SFT at checkpoint 80) achieves \textbf{57.9\%} accuracy, a $+7.5$pp improvement over the Qwen3-8B base and $+7.1$pp over the SFT fold\_4 starting point. Performance degrades with continued training: $-3.8$pp from step~80 to step~100 and $-5.6$pp to step~200, indicating overfitting after approximately 80 useful steps on this 266-question dataset.
+The best configuration (GRPO from SFT at step~80) achieves \textbf{57.9\%} accuracy, $+7.1$pp over the SFT fold\_4 starting point (McNemar $p=0.056$, approaching significance with 54 wins vs.\ 35 losses). Performance degrades with continued training: $-3.8$pp from step~80 to step~100 and $-5.6$pp to step~200, indicating overfitting after approximately 80 useful steps on this 266-question dataset.
 
 \subsubsection{Out-of-Distribution and Ablation Results}
 
@@ -136,30 +134,30 @@ Table~\ref{tab:grpo_holdout_ablation} presents two key analyses: (a)~generalizat
 \begin{table}[t!]
 \centering
 \small
-\caption{(a) Holdout accuracy (54 unseen questions) and (b) SFT warm-start ablation (step 80, 266 questions).}
+\caption{(a) Holdout accuracy (54 unseen questions) and (b) SFT warm-start ablation (step 80, 266q). $p$: McNemar test.}
 \label{tab:grpo_holdout_ablation}
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-\multicolumn{4}{@{}l}{\textit{(a) Independent holdout (54 questions)}} \\
+\multicolumn{5}{@{}l}{\textit{(a) Independent holdout (54 questions)}} \\
 \midrule
-Model & Correct & Acc. & $\Delta$ \\
+Model & Cor. & Acc. & $\Delta$ & $p$ \\
 \midrule
-Qwen3-8B base & 29 & 53.7\% & ---     \\
-SFT fold\_4   & 18 & 33.3\% & $-$20.4 \\
-GRPO from SFT, step 80 & 29 & 53.7\% & $+$0.0  \\
-GRPO from scratch, step 200 & 30 & 55.6\% & $+$1.9 \\
+Qwen3-8B base & 29 & 53.7\% & --- & ---    \\
+SFT fold\_4   & 18 & 33.3\% & $-$20.4 & 0.019 \\
+GRPO from SFT, step 80 & 29 & 53.7\% & $+$0.0 & 0.804 \\
+GRPO from scratch, step 200 & 30 & 55.6\% & $+$1.9 & 1.00 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{(b) SFT warm-start ablation (266q, step 80)}} \\
+\multicolumn{5}{@{}l}{\textit{(b) SFT warm-start ablation (266q, step 80)}} \\
 \midrule
-Init & Acc. & $\Delta$ & Waste \\
+Init & Acc. & $\Delta$ & Waste & $p$ \\
 \midrule
-Fresh LoRA & 50.8\% & $+$0.4 & 29.3\% \\
-\textbf{SFT fold\_4} & \textbf{57.9\%} & $\boldsymbol{+7.5}$ & 23.1\% \\
+Fresh LoRA & 50.8\% & ref. & 29.3\% & --- \\
+\textbf{SFT fold\_4} & \textbf{57.9\%} & $\boldsymbol{+7.1}$ & 23.1\% & 0.104 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\paragraph{Holdout generalization.} GRPO from SFT at step~80 achieves 53.7\%, matching the base model exactly. While the $+7.5$pp in-distribution gain does not transfer to holdout, crucially it does not regress either. More importantly, GRPO fully recovers the catastrophic forgetting caused by SFT: the SFT fold\_4 alone drops to 33.3\% ($-20.4$pp), while the GRPO-trained model recovers to 53.7\%. GRPO from scratch at step~200 achieves 55.6\% ($+1.9$pp), though this difference amounts to a single additional question on 54 items and should be interpreted cautiously.
+\paragraph{Holdout generalization.} GRPO from SFT at step~80 achieves 53.7\%, matching the base model exactly ($p=0.804$). While the in-distribution gain does not transfer, crucially it does not regress either. The SFT fold\_4 alone drops to 33.3\% ($-20.4$pp, $p=0.019$), a \emph{statistically significant} degradation. GRPO fully recovers this catastrophic forgetting ($p=0.023$ vs.\ SFT, 11 wins vs.\ 2 losses). GRPO from scratch at step~200 achieves 55.6\% ($+1.9$pp), though this amounts to a single additional question.
 
 \paragraph{Caveat on holdout size.} With only 54 questions, each question represents $\sim$1.85pp of accuracy, limiting statistical power. We deliberately chose not to augment the holdout via paraphrasing: while this would increase sample size, it would introduce repeated mathematical content and risk inflating accuracy through surface-level memorization. A larger holdout composed of \emph{distinct} problems would strengthen these findings.
 
