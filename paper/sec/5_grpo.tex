@@ -129,42 +129,28 @@ GRPO from SFT, step 100 (lr=1e-5) & 144 & 54.1\% & 9  & $+$3.7 \\
 
 The best configuration (GRPO from SFT at checkpoint 80) achieves \textbf{57.9\%} accuracy, a $+7.5$pp improvement over the Qwen3-8B base and $+7.1$pp over the SFT fold\_4 starting point. Performance degrades with continued training: $-3.8$pp from step~80 to step~100 and $-5.6$pp to step~200, indicating overfitting after approximately 80 useful steps on this 266-question dataset.
 
-\subsubsection{Out-of-Distribution Evaluation (54-Question Holdout)}
+\subsubsection{Out-of-Distribution and Ablation Results}
 
-Table~\ref{tab:grpo_holdout} evaluates generalization on 54 independent holdout questions never seen during SFT or GRPO training.
+Table~\ref{tab:grpo_holdout_ablation} presents two key analyses: (a)~generalization on 54 independent holdout questions never seen during SFT or GRPO training, and (b)~the effect of SFT warm-start on GRPO effectiveness.
 
-\begin{table}[t]
+\begin{table}[t!]
 \centering
 \small
-\caption{Accuracy on 54 independent holdout questions. These questions were never seen during SFT or GRPO training.}
-\label{tab:grpo_holdout}
-\begin{tabular}{lcccc}
-\toprule
-Model & Correct & Acc. & Trunc. & $\Delta$ \\
-\midrule
-Qwen3-8B base              & 29 & 53.7\% & 1 & ---     \\
-SFT fold\_4                & 18 & 33.3\% & 2 & $-$20.4 \\
-GRPO from SFT, step 80     & 29 & 53.7\% & 2 & $+$0.0  \\
-GRPO from scratch, step 200 & 30 & 55.6\% & 0 & $+$1.9 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The holdout results show that \textbf{GRPO preserves base-model generalization}: GRPO from SFT at step~80 achieves 53.7\%, matching the base model exactly. While the $+7.5$pp in-distribution gain does not transfer to holdout, crucially it does not regress either. More importantly, GRPO fully recovers the catastrophic forgetting caused by SFT: the SFT fold\_4 alone drops to 33.3\% ($-20.4$pp) on the holdout, while the GRPO-trained model recovers to 53.7\%. Interestingly, GRPO from scratch at step~200 achieves 55.6\% ($+1.9$pp), though this difference amounts to a single additional question on 54 items and should be interpreted cautiously.
-
-\paragraph{Caveat on holdout size.} With only 54 questions, each question represents $\sim$1.85pp of accuracy, limiting the statistical power of these conclusions. We deliberately chose not to augment the holdout via paraphrasing: while this would increase sample size, it would introduce repeated mathematical content and risk inflating accuracy through surface-level memorization rather than genuine reasoning. A larger holdout composed of \emph{distinct} problems would strengthen these findings.
-
-\subsubsection{Ablation: SFT Warm-Start}
-
-To isolate the contribution of SFT initialization, we run an identical GRPO configuration but starting from a \emph{fresh} (zero-initialized) LoRA instead of the SFT checkpoint.
-
-\begin{table}[t]
-\centering
-\small
-\caption{Ablation: SFT warm-start effect on GRPO\\(step 80, 266 questions).}
-\label{tab:grpo_ablation_sft}
+\caption{(a) Holdout accuracy (54 unseen questions) and (b) SFT warm-start ablation (step 80, 266 questions).}
+\label{tab:grpo_holdout_ablation}
 \begin{tabular}{@{}lccc@{}}
 \toprule
+\multicolumn{4}{@{}l}{\textit{(a) Independent holdout (54 questions)}} \\
+\midrule
+Model & Correct & Acc. & $\Delta$ \\
+\midrule
+Qwen3-8B base & 29 & 53.7\% & ---     \\
+SFT fold\_4   & 18 & 33.3\% & $-$20.4 \\
+GRPO from SFT, step 80 & 29 & 53.7\% & $+$0.0  \\
+GRPO from scratch, step 200 & 30 & 55.6\% & $+$1.9 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{(b) SFT warm-start ablation (266q, step 80)}} \\
+\midrule
 Init & Acc. & $\Delta$ & Waste \\
 \midrule
 Fresh LoRA & 50.8\% & $+$0.4 & 29.3\% \\
@@ -173,9 +159,11 @@ Fresh LoRA & 50.8\% & $+$0.4 & 29.3\% \\
 \end{tabular}
 \end{table}
 
-The SFT warm-start is essential: GRPO from scratch barely exceeds the base model ($+0.4$pp, likely within noise), while GRPO from the SFT checkpoint gains $+7.5$pp. The SFT initialization also produces a lower waste rate (23.1\% vs.\ 29.3\%), indicating that the SFT-adapted model produces more diverse reward signals, making dynamic sampling more efficient. This is paradoxical: the SFT alone degrades holdout performance by $-20.4$pp, yet it provides a critical initialization for GRPO.
+\paragraph{Holdout generalization.} GRPO from SFT at step~80 achieves 53.7\%, matching the base model exactly. While the $+7.5$pp in-distribution gain does not transfer to holdout, crucially it does not regress either. More importantly, GRPO fully recovers the catastrophic forgetting caused by SFT: the SFT fold\_4 alone drops to 33.3\% ($-20.4$pp), while the GRPO-trained model recovers to 53.7\%. GRPO from scratch at step~200 achieves 55.6\% ($+1.9$pp), though this difference amounts to a single additional question on 54 items and should be interpreted cautiously.
 
-We hypothesize that SFT teaches the model the \emph{format and vocabulary} of domain-specific reasoning (e.g., proper use of reliability formulas, structured step-by-step computation) without teaching correct \emph{application} to hard problems. GRPO then leverages this structural foundation to optimize for numerical correctness. Without SFT, the base model's LoRA weights start at zero, and GRPO must simultaneously learn both format and reasoning---too many degrees of freedom for the small 266-question training set.
+\paragraph{Caveat on holdout size.} With only 54 questions, each question represents $\sim$1.85pp of accuracy, limiting statistical power. We deliberately chose not to augment the holdout via paraphrasing: while this would increase sample size, it would introduce repeated mathematical content and risk inflating accuracy through surface-level memorization. A larger holdout composed of \emph{distinct} problems would strengthen these findings.
+
+\paragraph{SFT warm-start ablation.} The SFT warm-start is essential: GRPO from scratch barely exceeds the base model ($+0.4$pp, likely within noise), while GRPO from the SFT checkpoint gains $+7.5$pp. The SFT initialization also produces a lower waste rate (23.1\% vs.\ 29.3\%), indicating more diverse reward signals and more efficient dynamic sampling. This is paradoxical: the SFT alone degrades holdout performance by $-20.4$pp, yet it provides a critical initialization for GRPO. We hypothesize that SFT teaches domain-specific \emph{format and vocabulary} (reliability formulas, structured computation) without teaching correct \emph{application} to hard problems. GRPO then leverages this structural foundation to optimize for numerical correctness. Without SFT, the LoRA starts at zero and must simultaneously learn both format and reasoning---too many degrees of freedom for 266 questions.
 
 \subsubsection{Learning Rate Ablation}
 
