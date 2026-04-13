@@ -48,9 +48,9 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 \draw[arrow] (cleanproc) -- (master);
 % verified feeds down into cleaning
 \draw[arrow] (verified.south) -- ++(0,-0.35) -| (cleanproc.east);
-% seed feeds into cleaning via left margin (no crossing)
+% seed feeds into cleaning via far-left margin, entering from the left
 \draw[arrow, rounded corners=5pt]
-    (seed.south) -- ++(0,-0.35) -- ++(-6.8,0) |- (cleanproc.west);
+    (seed.south) -- ++(0,-0.35) -- ++(-9.5,0) |- (cleanproc.west);
 
 % === Row 4: Augmentation (horizontal, below row 3) ===
 \node[model, below=1.2cm of cleanproc, text width=2.2cm] (hard) {Hard generation\\Opus 4.6 + GPT-5.4};
@@ -59,9 +59,9 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 
 \draw[arrow] (hard) -- node[above, font=\scriptsize] {+65} (para);
 \draw[arrow] (para) -| (v4);
-% master feeds down into both augmentation paths
-\draw[arrow] (master.south) -- ++(0,-0.35) -| (hard);
-\draw[arrow] (master.south) -- ++(0,-0.35) -| (para);
+% master feeds down into both augmentation paths (drop well below cleanproc)
+\draw[arrow] (master.south) -- ++(0,-0.7) -| (hard);
+\draw[arrow] (master.south) -- ++(0,-0.7) -| (para);
 
 % === Row 5: Training (below row 4) ===
 \node[train, below=1.0cm of v4] (sft) {SFT (Qwen3-8B, QLoRA)};
@@ -79,8 +79,7 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 
 \end{tikzpicture}%
 }
-\caption{Data pipeline overview. Blue: dataset milestones; orange: processing; green: LLM-based generation/verification; red: training. Seed questions feed both the generation stage and the cleaning stage (routed via the left margin to avoid crossing Stage~2 nodes). \TODO{FIX THE FUCKING ARROWS}
-}
+\caption{Data pipeline overview. Blue: dataset milestones; orange: processing; green: LLM-based generation/verification; red: training. Seed questions feed both the generation stage and the cleaning stage (routed via the left margin to avoid crossing Stage~2 nodes).}
 \label{fig:pipeline}
 \end{figure*}
 
