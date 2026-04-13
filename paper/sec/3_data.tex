@@ -93,12 +93,12 @@ We digitized 32 chapters from two reliability engineering textbooks---\emph{Appl
 \subsection{Cross-Model Verification}
 \label{sec:data:selfinst}
 
-Unlike Self-Instruct~\cite{wang2023selfinstruct}, we use a \emph{stronger} generator (Claude Opus~4) to create training data for the smaller Qwen3-8B target, producing 158 synthetic QRA triplets.
+Unlike Self-Instruct~\cite{wang2023selfinstruct}, we use a \emph{stronger} generator (Claude Opus~4) to create training data for the smaller Qwen3-8B target. Each generation prompt includes 3 randomly sampled seeds and requests 2 new problems with full chain-of-thought reasoning (temperature 0.8). Quality gates filter out short questions, placeholder answers, and near-duplicates. This yielded 158 synthetic QRA triplets.
 
 \subsubsection{Verification Pipeline}
 \label{sec:data:verification}
 
-To ensure correctness, we replace same-model consistency with cross-model verification: (1)~Claude Opus~4 generates $(q,r,a)$ from seeds; (2)~GPT-5.4 independently solves $q$ without seeing the answer; (3)~numerical answers are compared within 5\% tolerance. Only matching items are retained.
+To ensure correctness, we replace same-model consistency with cross-model verification: (1)~Claude Opus~4 generates $(q,r,a)$ from seeds; (2)~GPT-5.4 independently solves $q$ without seeing the answer or reasoning; (3)~numerical answers are compared within 5\% tolerance, with LLM-based semantic comparison as fallback. Only matching items are retained. Because the verifier is a different model with different failure modes, agreement provides a stronger correctness signal than same-model consistency.
 
 \subsubsection{Self-Instruct Ceiling Effect}
 
@@ -107,11 +107,11 @@ We observe that baseline models achieve 92--97\% accuracy on self-instruct-gener
 \subsection{Cleaning and Augmentation}
 \label{sec:data:augment}
 
-The combined data underwent LLM-assisted cleaning (type classification, multi-part splitting, answer standardization, deduplication), yielding \textbf{215 numeric questions}. We then augment via two strategies:
+The combined seed and synthetic data underwent LLM-assisted cleaning using Claude Opus~4.6: type classification, splitting of 107 multi-part questions into self-contained entries, answer standardization (stripping units, normalizing LaTeX), and deduplication by prefix matching. This yielded \textbf{215 numeric questions}. We then augment via two strategies:
 
 \begin{itemize}
     \item \textbf{Hard generation:} 65 new difficult questions (Claude Opus~4.6, verified by GPT-5.4).
-    \item \textbf{Paraphrase augmentation} (inspired by MetaMath~\cite{yu2024metamath}): surface-level rephrases preserving all numerical values, verified by GPT-5.4 for mathematical equivalence.
+    \item \textbf{Paraphrase augmentation} (inspired by MetaMath~\cite{yu2024metamath}): Claude Opus~4.6 generates surface-level rephrases (changing wording, scenario framing) while strictly preserving all numerical values and formulas. Each rephrase is verified by GPT-5.4 for numerical and mathematical equivalence.
 \end{itemize}
 
 The contrast is striking: adding 65 hard questions yields only $+2.0\%$, while 586 paraphrases yield $+18.6\%$ ($p=0.002$), confirming that surface diversity outperforms difficulty scaling.
