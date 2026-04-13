@@ -49,9 +49,9 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 % verified feeds down into cleaning (enters from the top)
 \draw[arrow] (verified.south) -- ++(0,-0.35) -| (cleanproc.north);
 % seed feeds into cleaning via bayonet path: down, left past Stage 3 label, down, then right into .west
-\draw[arrow, rounded corners=5pt]
-    (seed.south) -- ++(0,-0.5)
-    -| ([xshift=-1.8cm]cleanproc.west)
+\draw[arrow, rounded corners=8pt]
+    (seed.south) -- ++(0,-0.6)
+    -- ([xshift=-1.5cm]s3.west)
     |- (cleanproc.west);
 
 % === Row 4: Augmentation (horizontal, below row 3) ===
@@ -75,7 +75,7 @@ Our data pipeline transforms 56 textbook-extracted seed questions into 866 verif
 % === Stage labels (left side) ===
 \node[font=\scriptsize\bfseries, text=black!50, left=0.2cm of ocr, anchor=east] {Stage 1};
 \node[font=\scriptsize\bfseries, text=black!50, left=0.2cm of gen, anchor=east] {Stage 2};
-\node[font=\scriptsize\bfseries, text=black!50, left=0.2cm of cleanproc, anchor=east] {Stage 3};
+\node[font=\scriptsize\bfseries, text=black!50, left=0.2cm of cleanproc, anchor=east] (s3) {Stage 3};
 \node[font=\scriptsize\bfseries, text=black!50, left=0.2cm of hard, anchor=east] {Stage 4};
 \node[font=\scriptsize\bfseries, text=black!50, left=0.2cm of sft, anchor=east] {Stage 5};
 
