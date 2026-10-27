@@ -47,7 +47,7 @@ All experiments use Qwen3-8B (4-bit, LoRA) with 5-fold cross-validation on numer
 
 | # | Method | Dataset | Baseline | Finetuned | Delta | Status |
 |---|--------|---------|----------|-----------|-------|--------|
-| 14 | DPO | 215 | 70.7% | 68.0% | -2.7% | Done (4/5 folds) |
+| 14 | DPO | 215 | 69.8% | 68.0% | -1.7% | Done (4/5 folds; baseline on the same 4 folds, Wilcoxon p = 0.625) |
 | 15 | SFT+GRPO | 215 | 70.7% | 71.2% | +0.5% | Done |
 | 10 | DPO | 280 | 64.3% | -- | -- | Timed out |
 | 13 | SFT+GRPO | 215 | 70.7% | -- | -- | Crashed (Triton) |
@@ -119,7 +119,7 @@ Adding 65 hard questions didn't improve SFT delta (+2.0% vs +2.3%). But adding 2
 The +7.0% from round 2 was inflated by sampling variance. True improvement with greedy decoding is +2.3%. Always use do_sample=False for evaluation.
 
 ### 7. RL Methods Don't Beat SFT
-DPO actually hurt performance (-2.7%), and GRPO gave only +0.5% — well below SFT's +2.3%. Neither method improves on the best SFT config with this dataset size.
+DPO actually hurt performance (-1.7% on the four folds that finished, not significant), and GRPO gave only +0.5% — well below SFT's +2.3%. Neither method improves on the best SFT config with this dataset size.
 
 ---
 
@@ -144,7 +144,7 @@ Result: 63.6% -> 82.2% (+18.6%, p=0.002) on 866 numeric questions, 10-fold CV.
 
 ## Next Steps
 
-- [x] Get DPO results → -2.7% (worse than baseline)
+- [x] Get DPO results → -1.7% on 4 of 5 folds (worse than baseline, not significant)
 - [x] Get GRPO results → +0.5% (marginal, below SFT)
 - [x] Paraphrase augmentation → **+18.1% (p=0.002)** with 866 samples, 10-fold CV
 - [x] Get exp23 (3ep: +11.4%) and exp24 (8ep+ES: +18.6%) — all 4 significant at p=0.002

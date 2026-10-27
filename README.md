@@ -43,6 +43,8 @@ This project develops a domain-specific LLM by:
 
 Config: LR=2e-4, NEFTune=5, LoRA r=16/alpha=32, dropout=0.05, non-thinking mode, early stopping (patience=2, best model at epoch 4).
 
+This is an in-distribution result: the folds were shuffled at the question level, so paraphrases of a training question can sit in the test fold. On a 54-question independent holdout, a fine-tuned adapter did worse than the base model, so no transfer is claimed.
+
 ### Key Findings
 
 1. **Model selection matters most**: Qwen3-8B (70.7% baseline) vs Llama 3.1 8B (37.5%)
@@ -81,5 +83,5 @@ utils/                      # Shared utilities (API client, data I/O)
 ## Setup
 
 1. Install dependencies: `pip install unsloth trl datasets scikit-learn scipy`
-2. Copy `.env.example` to `.env` and add your OpenRouter API key
+2. Create a `.env` file with your OpenRouter API key (`OPENROUTER_API_KEY=...`)
 3. For training on HPC: see SLURM scripts in `training/experiments/`
