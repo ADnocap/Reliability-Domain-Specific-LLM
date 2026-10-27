@@ -33,7 +33,7 @@ Every experiment run, with full configuration and results.
 | **25** | **qwen3-8b-600s-5ep-10f**      | **Qwen3-8B** | **v4 remaining (600, numeric)**   | **540** | **60**  | **5**             | **2e-4** | **5** | **16/32** | **0.05** | **off** | **greedy** | **68.0%** | **79.7%** | **+11.7%** | **108** | **38** | **0.002** | **Done (best on 600 subset, significant)** |
 | 26     | qwen3-8b-600s-5ep-es-10f       | Qwen3-8B     | v4 remaining (600, numeric)       | 540     | 60      | 5 (ES)            | 2e-4     | 5     | 16/32     | 0.05     | off     | greedy     | 68.0%     | 78.8%     | +10.8%     | 100     | 35     | **0.002**  | Done (10-fold, significant)              |
 
-\*Exp 3 delta inflated by stochastic eval — true deterministic improvement is +2.3% (exp 12).
+\*Exp 3 delta inflated by stochastic eval: the same configuration evaluated greedily gave +0.9% (exp 11); the best greedy configuration, with 4 epochs, gave +2.3% (exp 12).
 
 \*\*ES = Early Stopping (patience=2). Format: `max_epochs (ES→best_epoch)`. Training runs up to max_epochs but stops if validation loss doesn't improve for 2 consecutive epochs. The model is loaded from the best checkpoint. The best epoch shown is the median across folds (most folds converged to the same best epoch).
 
@@ -78,7 +78,7 @@ The p-value in the table is computed using the **Wilcoxon signed-rank test** (`s
 ### Greedy vs Stochastic
 
 - **Greedy** (`do_sample=False`): the model always picks the highest-probability token at each step. This is deterministic — running the same question twice always gives the same answer. Used from round 3 onwards for reliable comparisons.
-- **Stochastic** (`do_sample=True`, `temperature>0`): the model samples from the token probability distribution, introducing randomness. The same question can produce different answers across runs. Used in rounds 1-2 but abandoned because it inflated results (exp 3 showed +7.0% under stochastic but only +2.3% under greedy with the same config).
+- **Stochastic** (`do_sample=True`, `temperature>0`): the model samples from the token probability distribution, introducing randomness. The same question can produce different answers across runs. Used in rounds 1-2 but abandoned because it inflated results (exp 3 showed +7.0% under stochastic but only +0.9% under greedy with the same config, exp 11; the best greedy configuration reached +2.3%, exp 12).
 
 Greedy evaluation is preferred because it eliminates variance from the evaluation itself, making it easier to isolate the effect of fine-tuning.
 

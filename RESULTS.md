@@ -116,7 +116,7 @@ NEFTune=5 works, NEFTune=7 hurts (-1.3%), NEFTune=10 marginal (+1.4% stochastic)
 Adding 65 hard questions didn't improve SFT delta (+2.0% vs +2.3%). But adding 221 paraphrased questions boosted it to +6.2%. The model benefits more from seeing the same knowledge expressed differently than from harder problems.
 
 ### 6. Stochastic vs Deterministic Eval
-The +7.0% from round 2 was inflated by sampling variance. True improvement with greedy decoding is +2.3%. Always use do_sample=False for evaluation.
+The +7.0% from round 2 was inflated by sampling variance. Evaluated greedily, the same configuration gave +0.9% (exp 11), and the best greedy configuration, with 4 epochs, gave +2.3% (exp 12). Always use do_sample=False for evaluation.
 
 ### 7. RL Methods Don't Beat SFT
 DPO actually hurt performance (-1.7% on the four folds that finished, not significant), and GRPO gave only +0.5% — well below SFT's +2.3%. Neither method improves on the best SFT config with this dataset size.
